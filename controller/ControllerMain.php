@@ -26,8 +26,8 @@ class ControllerMain extends Controller {
 
             $errors = User::validate_login($mail, $password);
             if (empty($errors)) {
-                //$this->log_user(User::get_user_by_mail($mail));
-                //a(new View("index"))->show();
+            //$this->log_user(User::get_user_by_mail($mail));
+            (new View("index"))->show();
             }
         }
         (new View("login"))->show(["mail" => $mail, "password" => $password, "errors" => $errors]);
