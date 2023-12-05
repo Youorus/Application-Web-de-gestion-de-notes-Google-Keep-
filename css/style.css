@@ -1,0 +1,110 @@
+:root {
+    --couleur-fond: #222529;
+    --couleur-texte: #dee2e6;
+    --couleur-bordure: #495056;
+    --couleur-bouton: #0f6efd;
+    --error-color: #fc545d;
+  }
+
+  *{
+    color: var(--couleur-texte);
+    background-color: var(--couleur-fond);
+  }
+
+
+body {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--couleur-fond);
+  }
+  .input{
+    display: flex;
+  }
+  .icon{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    color:  var(--couleur-texte);
+    font-size: 20px;
+    position: relative;
+    border: 1px solid   var(--couleur-bordure);
+    border-right: none;
+    left: 4%;
+    padding: 20px;
+  }
+
+  .signup-box {
+    background-color: var(--couleur-fond);
+    max-width: 500px;
+    border: 1px solid var(--couleur-bordure);
+    width: 80%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .signup-box h2 {
+    text-align: center;
+    color: var(--couleur-texte);
+  }
+
+  .signup-box hr {
+    margin: 15px 0;
+    color: var(--couleur-texte);
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .form-group input {
+    width: calc(100% - 30px); /* RÃ©duire la largeur de l'input pour accueillir l'icÃ´ne */
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--couleur-bordure);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+   background-color: var(--input-fond);
+    display: inline-block;
+  }
+
+
+  .form-group i {
+    margin-right: 10px;
+  }
+
+  .errors li {
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--error-color);
+  }
+
+  .signup-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--couleur-bouton);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .navbar-nav .nav-link{
+    text-align: start;
+  }
+  .offcanvas-start {
+    width: 220px;
+  }
+
+  .signup-btn:hover {
+    background-color: #0056b3;
+  }

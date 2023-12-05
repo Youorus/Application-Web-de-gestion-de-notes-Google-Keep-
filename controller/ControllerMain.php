@@ -11,7 +11,7 @@ class ControllerMain extends Controller {
             // redirection de lútilisateiur
             (new View("index"))->show();
          } else {
-            (new View("index"))->show();
+            (new View("login"))->show();
         }
     }
 
@@ -26,10 +26,8 @@ class ControllerMain extends Controller {
 
             $errors = User::validate_login($mail, $password);
             if (empty($errors)) {
-                //rediriger si la connexion est OKay
-                //echo '<script>alert("Connexion Reussi");</script>';
-                (new View("index"))->show();
-                $this->log_user(User::get_user_by_mail($mail));
+                //$this->log_user(User::get_user_by_mail($mail));
+                //a(new View("index"))->show();
             }
         }
         (new View("login"))->show(["mail" => $mail, "password" => $password, "errors" => $errors]);

@@ -1,38 +1,8 @@
 <?php
-
 require_once "framework/Model.php";
-
 class User extends Model{
-    public function __construct(public string $mail, public string $hashed_password, public string $full_name, public String $role){
-
+    public function __construct(public string $mail, public string $hashed_password, public string $name, public String $role){
     }
-
-    public function validate() : array {
-        $error = [];
-        
-        return $error;
-    }
-
-    public function persist(){
-
-    }
-
-    public function delete(){
-
-    }
-
-
-    public static function get_user_name(string $fullName){
-        $query = self::execute("SELECT * FROM Users where full_name = :full_name", ["fullName"=>$fullName]);
-        $data = $query->fetch(); // un seul résultat au maximum
-        if ($query->rowCount() == 0) {
-            return false;
-        } else {
-            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
-        }
-    }
-
-
     public static function get_user_by_mail(string $mail) : User|false {
         $query = self::execute("SELECT * FROM Users where mail = :mail", ["mail"=>$mail]);
         $data = $query->fetch(); // un seul résultat au maximum
@@ -45,7 +15,6 @@ class User extends Model{
     private static function check_password(string $clear_password, string $hash) : bool {
         return $hash === Tools::my_hash($clear_password);
     }
-
     public static function validate_login(string $mail, string $password) : array {
         $errors = [];
         $user = User::get_user_by_mail($mail);
