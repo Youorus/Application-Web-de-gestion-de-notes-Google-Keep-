@@ -3,9 +3,33 @@
 require_once "framework/Model.php";
 
 class User extends Model{
+    public function __construct(public string $mail, public string $hashed_password, public string $full_name, public String $role){
 
-    public function __construct(public string $mail, public string $hashed_password, public string $name, public String $role){
+    }
 
+    public function validate() : array {
+        $error = [];
+        
+        return $error;
+    }
+
+    public function persist(){
+
+    }
+
+    public function delete(){
+
+    }
+
+
+    public static function get_user_name(string $fullName){
+        $query = self::execute("SELECT * FROM Users where full_name = :full_name", ["fullName"=>$fullName]);
+        $data = $query->fetch(); // un seul résultat au maximum
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+        }
     }
 
 
