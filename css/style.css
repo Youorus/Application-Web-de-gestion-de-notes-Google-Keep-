@@ -101,9 +101,7 @@ body {
   .navbar-nav .nav-link{
     text-align: start;
   }
-  .offcanvas-start {
-    width: 220px;
-  }
+
 
   .signup-btn:hover {
     background-color: #0056b3;
