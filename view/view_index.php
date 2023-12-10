@@ -12,6 +12,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        body{
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+        .iconBox{
+            border: 1px solid black;
+            border-top: none;
+        }
+
         .offcanvas-start {
             width: 220px;
         }
@@ -46,18 +55,69 @@
 </nav>
 
 <?php
-// Vérifier si $notes est différent de null avant d'itérer
-if ($notes !== null) {
-    foreach ($notes as $note):
+//// Vérifier si $notes est différent de null avant d'itérer
+//if ($notes !== null) {
+//    foreach ($notes as $note):
+//        ?>
+<!--        <p>--><?php //= $note->getTitle() ?><!--</p>-->
+<!--    --><?php
+//    endforeach;
+//} else {
+//    // Traitement en cas de null
+//    echo "La variable \$notes est null.";
+//}
+//?>
+
+<?php
+//// Vérifier si $notes est différent de null avant d'itérer
+//if ($notes_content !== null) {
+//    foreach ($notes_content  as $content):
+//        ?>
+<!--        --><?php //= $content->getContent() ?>
+<!--    --><?php
+//    endforeach;
+//} else {
+//    // Traitement en cas de null
+//    echo "La variable \$notes est null.";
+//}
+//?>
+
+
+
+<div class="container">
+    <div class="row">
+
+        <?php
+        for ($i = 0; $i < count($notes); $i++) {
+            echo '<div class="col-md-4">';
+            echo '<div class="card">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $notes[$i]->getTitle() . '</h5>';
+
+            if (isset($notes_content[$i])) {
+                $content = $notes_content[$i];
+                echo '<p class="card-text">' . ($content->getContent() !== null ? $content->getContent() : 'Note vide') . '</p>';
+            } else {
+                for ($j = 0; $j < count($checklist_Note); $j++) {
+                    echo '<p class="card-text">' . ($checklist_Note[$j]->getContent()) . '</p>';
+                }
+            }
+
+
+
+            echo '</div>';
+            echo '</div>';
+            // Ajoutez vos icônes à l'intérieur de la card
+            echo '<div class="d-flex iconBox justify-content-between">';
+            echo '<span><i class="fa-solid fa-angles-left"></i></span>';
+            echo '<span><i class="fa-solid fa-angles-left"></i></span>';
+            echo '</div>';
+            echo '</div>';
+        }
         ?>
-        <p><?= $note->getTitle() ?></p>
-    <?php
-    endforeach;
-} else {
-    // Traitement en cas de null
-    echo "La variable \$notes est null.";
-}
-?>
+
+    </div>
+</div>
 
 </body>
 </html>
