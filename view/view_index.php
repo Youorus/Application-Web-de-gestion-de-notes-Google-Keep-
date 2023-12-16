@@ -86,29 +86,30 @@
 
 <div class="container">
     <div class="row">
-
         <?php
         for ($i = 0; $i < count($notes); $i++) {
             echo '<div class="col-md-4">';
             echo '<div class="card">';
-            echo '<div class="card-body">';
+            echo '<div class="c   ard-body">';
             echo '<h5 class="card-title">' . $notes[$i]->getTitle() . '</h5>';
 
-            for ($j = 0; $j < count($notes_content); $j++) {
-                if ($notes[$i]->getId() == $notes_content[$j]->getId()) {
-                    echo '<p class="card-text">' . ($notes_content[$j]->getContent() !== null ? $notes_content[$j]->getContent() : 'Note vide') . '</p>';
+            $found = false;
+            foreach ($notes_content as $content) {
+                if ($content->getId() == $notes[$i]->getId()) {
+                    $found = true;
+                    echo '<p class="card-text">' . ($content->getContent() !== null ? $content->getContent() : 'Note vide') . '</p>';
+                    break; // Si une correspondance est trouvée, sortir de la boucle
                 }
             }
-//            if (isset($notes_content[$i])) {
-//                $content = $notes_content[$i];
-//
-//            } else {
-//                for ($j = 0; $j < count($checklist_Note); $j++) {
-//                    echo '<p class="card-text">' . ($checklist_Note[$j]->getContent()) . '</p>';
-//                }
-//            }
 
+            if (!$found) {
+                foreach ($checklist_Note as $checkNote) {
+                    if ($checkNote->getChecklistNote() == $notes[$i]->getId()) {
+                        echo '<p class="card-text">' . $checkNote->getContent() . '</p>';
 
+                    }
+                }
+            }
 
             echo '</div>';
             echo '</div>';
@@ -120,9 +121,7 @@
             echo '</div>';
         }
         ?>
-
     </div>
 </div>
-
 </body>
 </html>

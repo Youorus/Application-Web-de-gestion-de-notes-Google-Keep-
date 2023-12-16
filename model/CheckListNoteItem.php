@@ -18,7 +18,7 @@ class CheckListNoteItem extends Model{
     }
 
     public static function get_All_item_checklist_by_id(int $id): array {
-        $query = self::execute("SELECT * 
+        $query = self::execute("SELECT checklist_note_items.id as id, checklist_note_items.checklist_note as checklist_note, checklist_note_items.content as content, checklist_note_items.checked as checked
 FROM checklist_note_items
 JOIN checklist_notes ON checklist_note_items.checklist_note = checklist_notes.id
 JOIN notes ON notes.id = checklist_notes.id
@@ -36,6 +36,22 @@ WHERE users.id = :id
                 $row["content"],
                 $row["checked"]
             );
+        }
+
+        return $results;
+    }
+
+    public static function get_item_checklist_by_id(int $id): array {
+        $query = self::execute("SELECT distinct content 
+FROM checklist_note_items
+WHERE checklist_note_items.checklist_note = :id
+", ["id" => $id]);
+        $data = $query->fetchAll();
+        $results = [];
+
+        foreach ($data as $row) {
+            // Ajouter une note au tableau
+            $results[] = $row['content'];
         }
 
         return $results;

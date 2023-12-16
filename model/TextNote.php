@@ -14,21 +14,22 @@ class TextNote extends Model{
     }
 
     public static function get_All_note_content_by_id(int $id): array {
-        $query = self::execute("SELECT * 
+        $query = self::execute("SELECT text_notes.id AS text_note_id, text_notes.content AS text_content
 FROM text_notes
 JOIN notes ON text_notes.id = notes.id
 JOIN users ON notes.owner = users.id
-WHERE users.id = :id", ["id" => $id]);
+WHERE users.id = :id order by notes.weight", ["id" => $id]);
         $data = $query->fetchAll();
         $results = [];
 
         foreach ($data as $row) {
-            $content = $row['content'] ?? null;
+            $textNoteId = $row['text_note_id'];
+            $textContent = $row['text_content'] ?? null;
 
-            // Ajouter une note au tableau
+            // Ajouter une note de texte au tableau
             $results[] = new TextNote(
-                $row["id"],
-                $row["content"],
+                $textNoteId,
+                $textContent,
             );
         }
 

@@ -5,6 +5,7 @@ require_once "User.php";
 
 class Note extends Model{
 
+
     private int $id;
     private string $title;
     private int $owner;
@@ -13,7 +14,6 @@ class Note extends Model{
     private int $pinned;
     private int $archived;
     private int $weight;
-
     public function __construct(
         $id,
         $title,
@@ -27,53 +27,42 @@ class Note extends Model{
         $this->id = $id;
         $this->title = $title;
         $this->owner = $owner;
-        $this->dateTime = $dateTime;
-        $this->dateTime_edit = $dateTime_edit;
+        $this->dateTime = $dateTime !== null ? $dateTime : new DateTime();
+        $this->dateTime_edit = $dateTime_edit !== null ? $dateTime_edit : new DateTime();
         $this->pinned = $pinned;
         $this->archived = $archived;
         $this->weight = $weight;
     }
-
-
     public static function get_All_note_by_id(int $id): array {
-        $query = self::execute("SELECT * FROM notes JOIN users ON notes.owner = users.id WHERE users.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
+        $query = self::execute("SELECT notes.id AS note_id, title, owner, created_at, edited_at, pinned, archived, weight FROM notes JOIN users ON notes.owner = users.id WHERE users.id = :id ORDER BY notes.weight", ["id" => $id]);       $data = $query->fetchAll();
         $results = [];
-
         foreach ($data as $row) {
-            $dateTime = isset($row['dateTime']) ? new DateTime($row['dateTime']) : null;
-            $dateTimeEdit = isset($row['dateTime_edit']) ? new DateTime($row['dateTime_edit']) : null;
-
-            // Utiliser les valeurs par défaut si les clés ne sont pas définies
-            $pinned = $row['pinned'] ?? null;
-            $archived = $row['archived'] ?? null;
-            $weight = $row['weight'] ?? null;
-
+//            $dateTime = isset($row['dateTime']) ? new DateTime($row['dateTime']) : null;
+//            $dateTimeEdit = isset($row['dateTime_edit']) ? new DateTime($row['dateTime_edit']) : null;
+//            // Utiliser les valeurs par défaut si les clés ne sont pas définies
+//            $pinned = $row['pinned'] ?? null;
+//            $archived = $row['archived'] ?? null;
+//            $weight = $row['weight'] ?? null;
             // Ajouter une note au tableau
             $results[] = new Note(
-                $row["id"],
+                $row["note_id"], // Utilisez l'alias note_id
                 $row["title"],
                 $row["owner"],
-                $dateTime,
-                $dateTimeEdit,
-                $pinned,
-                $archived,
-                $weight
+                new DateTime($row['created_at']),
+                new DateTime($row['edited_at']),
+                $row['pinned'],
+                $row['archived'],
+                $row['weight']
             );
         }
-
         return $results;
     }
-
-
     public function validate() : array {
         $error = [];
         /*if(!User::get_user_by_mail($this->full_name)){
-
         }*/
         return $error;
     }
-
     public function persist(){
 
     }
