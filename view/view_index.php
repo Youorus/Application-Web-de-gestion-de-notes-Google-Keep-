@@ -94,14 +94,19 @@
             echo '<div class="card-body">';
             echo '<h5 class="card-title">' . $notes[$i]->getTitle() . '</h5>';
 
-            if (isset($notes_content[$i])) {
-                $content = $notes_content[$i];
-                echo '<p class="card-text">' . ($content->getContent() !== null ? $content->getContent() : 'Note vide') . '</p>';
-            } else {
-                for ($j = 0; $j < count($checklist_Note); $j++) {
-                    echo '<p class="card-text">' . ($checklist_Note[$j]->getContent()) . '</p>';
+            for ($j = 0; $j < count($notes_content); $j++) {
+                if ($notes[$i]->getId() == $notes_content[$j]->getId()) {
+                    echo '<p class="card-text">' . ($notes_content[$j]->getContent() !== null ? $notes_content[$j]->getContent() : 'Note vide') . '</p>';
                 }
             }
+//            if (isset($notes_content[$i])) {
+//                $content = $notes_content[$i];
+//
+//            } else {
+//                for ($j = 0; $j < count($checklist_Note); $j++) {
+//                    echo '<p class="card-text">' . ($checklist_Note[$j]->getContent()) . '</p>';
+//                }
+//            }
 
 
 
