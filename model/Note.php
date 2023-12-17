@@ -9,17 +9,18 @@ class Note extends Model{
     private int $id;
     private string $title;
     private int $owner;
-    private ?DateTime $dateTime;
+    private DateTime $dateTime;
     private ?DateTime $dateTime_edit;
     private int $pinned;
     private int $archived;
+
     private int $weight;
     public function __construct(
         $id,
         $title,
         $owner,
-        ?DateTime $dateTime,
-        ?DateTime $dateTime_edit,
+         $dateTime,
+         $dateTime_edit,
         $pinned,
         $archived,
         $weight
@@ -27,8 +28,8 @@ class Note extends Model{
         $this->id = $id;
         $this->title = $title;
         $this->owner = $owner;
-        $this->dateTime = $dateTime !== null ? $dateTime : new DateTime();
-        $this->dateTime_edit = $dateTime_edit !== null ? $dateTime_edit : new DateTime();
+        $this->dateTime = $dateTime;
+        $this->dateTime_edit = $dateTime_edit ;
         $this->pinned = $pinned;
         $this->archived = $archived;
         $this->weight = $weight;
@@ -38,7 +39,7 @@ class Note extends Model{
         $results = [];
         foreach ($data as $row) {
 //            $dateTime = isset($row['dateTime']) ? new DateTime($row['dateTime']) : null;
-//            $dateTimeEdit = isset($row['dateTime_edit']) ? new DateTime($row['dateTime_edit']) : null;
+            $dateTimeEdit = isset($row['edited_at']) ? new DateTime($row['edited_at']) : null;
 //            // Utiliser les valeurs par défaut si les clés ne sont pas définies
 //            $pinned = $row['pinned'] ?? null;
 //            $archived = $row['archived'] ?? null;
@@ -49,7 +50,7 @@ class Note extends Model{
                 $row["title"],
                 $row["owner"],
                 new DateTime($row['created_at']),
-                new DateTime($row['edited_at']),
+                $dateTimeEdit,
                 $row['pinned'],
                 $row['archived'],
                 $row['weight']

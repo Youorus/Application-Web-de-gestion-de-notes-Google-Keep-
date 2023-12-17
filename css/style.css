@@ -8,20 +8,19 @@
 
   *{
     color: var(--couleur-texte);
-    background-color: var(--couleur-fond);
+    /*background-color: var(--couleur-fond);*/
   }
 
 
-body {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: var(--couleur-fond);
-  }
+/*body {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    height: 100vh;*/
+/*    background-color: var(--couleur-fond);*/
+/*  }*/
   .input{
     display: flex;
   }
@@ -73,7 +72,7 @@ body {
     border: 1px solid var(--couleur-bordure);
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-   background-color: var(--input-fond);
+   background-color: var(--couleur-fond);
     display: inline-block;
   }
 
