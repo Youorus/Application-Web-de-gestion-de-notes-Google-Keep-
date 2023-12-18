@@ -18,6 +18,14 @@ class ControllerSetting extends Controller{
     }
 
 
+    public function fullName(): void{
+        $fullName = User::get_user_fullName(1); //changer le 1
+        (new View("setting"))->show(["fullName" => $fullName]);
+    }
+
+
+
+
     
 }
 

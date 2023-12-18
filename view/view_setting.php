@@ -7,35 +7,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
 </head>
     <body>
      
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">My notes</a>
+       
         <!-- menu deroulant -->
-            <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark" tabindex="-5" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark show" style="width:100vw;" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                 <div class="offcanvas-header">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button
-                ><h2 class="offcanvas-title text-warning" id="offcanvasDarkNavbarLabel">Notep</h2>
+                <span class="material-symbols-outlined">
+                    arrow_back_ios
+                </span>
+                <h2 class="offcanvas-title text" id="offcanvasDarkNavbarLabel">Settings</h2>
+                
                 </div>
                 <!-- corps de la liste deroulante  -->
                 <div class="offcanvas-body ">
+                   <div class="message utilisateur">
+                        <p>Hey  </p> <!--ajouter user -->
+                   </div>       
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link moi" aria-current="page" href="#">Home</a>
+                            <a class="nav-link" href="">
+                                <span class="material-symbols-outlined">
+                                    manage_accounts
+                                </span> Edit profile
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">ca mqrche</a>
+                            <a class="nav-link" href="">
+                                <span class="material-symbols-outlined">
+                                    password
+                                </span> Change password
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">
+                                <span class="material-symbols-outlined">
+                                    logout
+                                </span> Logout
+                            </a>
                         </li>
                     </ul>
                 </div>
         </div>
-    </div>
-</nav>
+    
+
     </body>     
 </html> 
    

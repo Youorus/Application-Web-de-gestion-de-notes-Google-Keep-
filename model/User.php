@@ -38,6 +38,16 @@ class User extends Model{
         }
     }
 
+    public static function get_user_fullName(int $id){
+        $query = self::execute("SELECT users.full_name FROM `users` WHERE id = :id", ["id"=>$id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+        }
+    }
+
     public static function get_user_by_mail(string $mail) : User|false {
         $query = self::execute("SELECT * FROM Users where mail = :mail", ["mail"=>$mail]);
         $data = $query->fetch(); // un seul résultat au maximum
