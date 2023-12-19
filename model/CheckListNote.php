@@ -1,8 +1,7 @@
 <?php
 
 require_once "framework/Model.php";
-
-class CheckListNote extends Model{
+class CheckListNote extends Note {
     private int $id;
 
     public function getId(): int
@@ -32,4 +31,11 @@ class CheckListNote extends Model{
     public function delete(){
 
     }
+
+    public function getType(): NoteType
+    {
+        return NoteType::ChecklistNote;
+    }
+
+
 }

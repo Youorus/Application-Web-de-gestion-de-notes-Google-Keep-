@@ -3,7 +3,12 @@
 require_once "framework/Model.php";
 require_once "User.php";
 
-class Note extends Model{
+enum NoteType {
+    case TextNote;
+    case ChecklistNote;
+}
+
+abstract  class Note extends Model{
 
 
     private int $id;
@@ -34,30 +39,47 @@ class Note extends Model{
         $this->archived = $archived;
         $this->weight = $weight;
     }
-    public static function get_All_note_by_id(int $id): array {
-        $query = self::execute("SELECT notes.id AS note_id, title, owner, created_at, edited_at, pinned, archived, weight FROM notes JOIN users ON notes.owner = users.id WHERE users.id = :id ORDER BY notes.weight", ["id" => $id]);       $data = $query->fetchAll();
+    public static function get_All_notes_by_id(int $id, bool $pinned): array {
+        $pinnedValue = $pinned ? 1 : 0;
+        $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id AND notes.pinned = :pinned ORDER BY notes.weight", ["id" => $id, "pinned" => $pinnedValue]);
+        $data = $query->fetchAll();
         $results = [];
+
         foreach ($data as $row) {
-//            $dateTime = isset($row['dateTime']) ? new DateTime($row['dateTime']) : null;
-            $dateTimeEdit = isset($row['edited_at']) ? new DateTime($row['edited_at']) : null;
-//            // Utiliser les valeurs par défaut si les clés ne sont pas définies
-//            $pinned = $row['pinned'] ?? null;
-//            $archived = $row['archived'] ?? null;
-//            $weight = $row['weight'] ?? null;
-            // Ajouter une note au tableau
-            $results[] = new Note(
-                $row["note_id"], // Utilisez l'alias note_id
-                $row["title"],
-                $row["owner"],
-                new DateTime($row['created_at']),
-                $dateTimeEdit,
-                $row['pinned'],
-                $row['archived'],
-                $row['weight']
-            );
+            $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $row['id']]);
+            $dataNote = $queryNote->fetchAll();
+
+            if ($queryNote->rowCount() > 0) {
+                foreach ($dataNote as $rowNote) {
+                    $results[] = new TextNote(
+                        $rowNote['id'],
+                        $rowNote['content']
+                    );
+                }
+            } else {
+                $queryChecklistNote = self::execute("SELECT checklist_note_items.id, checklist_note_items.checklist_note,  checklist_note_items.content, checklist_note_items.checked FROM checklist_note_items WHERE checklist_note_items.checklist_note = :id ", ["id" => $row['id']]);
+                $dataChecklistNote = $queryChecklistNote->fetchAll();
+                if ($queryChecklistNote->rowCount() > 0) {
+                    foreach ($dataChecklistNote as $rowChecklistNote) {
+                        $results[] = new CheckListNoteItem(
+                            $rowChecklistNote['id'],
+                            $rowChecklistNote['checklist_note'],
+                            $rowChecklistNote['content'],
+                            $rowChecklistNote['checked']
+                        );
+                    }
+                }
+            }
         }
+
         return $results;
     }
+
+
+
+    abstract public function getType(): NoteType;
+
+
     public function validate() : array {
         $error = [];
         /*if(!User::get_user_by_mail($this->full_name)){
@@ -77,10 +99,6 @@ class Note extends Model{
         return $this->id;
     }
 
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
 
     public function getOwner(): int
     {
@@ -151,5 +169,11 @@ class Note extends Model{
     {
         $this->weight = $weight;
     }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
 }
 
