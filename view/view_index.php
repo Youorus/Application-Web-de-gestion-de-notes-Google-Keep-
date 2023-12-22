@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
+
+        body{
+            background-color: var(--couleur-fond);
+        }
         .form-check{
             margin: 3%;
         }
@@ -35,15 +39,13 @@
         .card {
             background-color: var(--couleur-fond);
             border: 1px solid var(--couleur-bordure);
-            border-bottom-left-radius: initial;
-            border-bottom-right-radius: initial;
+            border-bottom: none;
         }
         .iconBox{
-            margin-bottom: 4%;
-            border: 1px solid var(--couleur-bordure);
+            border-top: 1px solid var(--couleur-bordure);
+            border-bottom: 1px solid var(--couleur-bordure);
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
-            border-top: none;
         }
 
         .offcanvas-start {
@@ -79,21 +81,24 @@
     </div>
 </nav>
 
+
+
+
+
 <div class="container">
     <h3>Pinned</h3>
     <div class="row">
         <?php
         for ($i = 0; $i < count($notesPinned); $i++) {
-
             echo '<div class="col-md-4">';
             echo '<div class="card">';
             echo '<div class="card-body">';
-            echo '<h5 class="card-title bord">' . 'titre' . '</h5>';
+            echo '<h5 class="card-title bord">' . $notesPinned[$i]->getTitle() . '</h5>';
 
-            if ($notesPinned[$i]->getType() == NoteType::TextNote) {
+          if ($notesPinned[$i]->getType() == NoteType::TextNote) {
                 if ($notesPinned[$i]->getContent() === null) {
                     echo '<p class="card-text">' . 'Note vide' . '</p>';
-                } else {
+                }else {
                     $length_string = strlen($notesPinned[$i]->getContent());
                     if ($length_string > 80) {
                         $tmp_string = "";
@@ -103,19 +108,22 @@
                                 break;
                             }
                         }
-                        echo '<p class="card-text">' . $tmp_string . "..." . '</p>';
+                       echo '<p class="card-text">' . $tmp_string . "..." . '</p>';
                     } else {
                         echo '<p class="card-text">' . $notesPinned[$i]->getContent() . '</p>';
                     }
                 }
-            } else {
-                echo '<div class="form-check">';
-                echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($notesPinned[$i]->getChecked() == 1 ? 'checked' : '') . '>';
+               }else{
+              $items = $notesPinned[$i]->getItems();
+              foreach ($items as $item) {
+                  echo '<div class="form-check">';
+               echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item ->getChecked() == 1 ? 'checked' : '') . '>';
                 echo '  <label class="form-check-label" for="exampleCheckbox">';
-                echo $notesPinned[$i]->getContent();
-                echo '  </label>';
+               echo $item->getContent();
+               echo '  </label>';
                 echo '</div>';
-            }
+              }
+              }
 
             echo '</div>';
             echo '<div class="d-flex iconBox justify-content-between">';
@@ -126,10 +134,10 @@
             echo '</div>';
 
         }
+
         ?>
     </div>
 </div>
-
 
 
 </body>

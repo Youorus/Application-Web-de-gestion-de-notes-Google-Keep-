@@ -2,6 +2,7 @@
 
 require_once "framework/Model.php";
 require_once "User.php";
+require_once "CheckListNote.php";
 
 enum NoteType {
     case TextNote;
@@ -49,6 +50,7 @@ abstract  class Note extends Model{
             $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $row['id']]);
             $dataNote = $queryNote->fetchAll();
 
+
             if ($queryNote->rowCount() > 0) {
                 foreach ($dataNote as $rowNote) {
                     $results[] = new TextNote(
@@ -57,21 +59,17 @@ abstract  class Note extends Model{
                     );
                 }
             } else {
-                $queryChecklistNote = self::execute("SELECT checklist_note_items.id, checklist_note_items.checklist_note,  checklist_note_items.content, checklist_note_items.checked FROM checklist_note_items WHERE checklist_note_items.checklist_note = :id ", ["id" => $row['id']]);
+                        $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes where checklist_notes.id = :id ", ["id" => $row['id']]);
                 $dataChecklistNote = $queryChecklistNote->fetchAll();
                 if ($queryChecklistNote->rowCount() > 0) {
                     foreach ($dataChecklistNote as $rowChecklistNote) {
-                        $results[] = new CheckListNoteItem(
-                            $rowChecklistNote['id'],
-                            $rowChecklistNote['checklist_note'],
-                            $rowChecklistNote['content'],
-                            $rowChecklistNote['checked']
+                        $results[] = new CheckListNote(
+                            $rowChecklistNote['id']
                         );
                     }
                 }
             }
         }
-
         return $results;
     }
 
@@ -170,10 +168,7 @@ abstract  class Note extends Model{
         $this->weight = $weight;
     }
 
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
+
 
 }
 

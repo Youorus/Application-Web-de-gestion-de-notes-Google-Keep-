@@ -12,9 +12,9 @@
   }
 
 
-/*body {*/
-/*    background-color: var(--couleur-fond);*/
-/*  }*/
+*body {
+    background-color: var(--couleur-fond);
+ }
 
   .input{
     display: flex;

@@ -18,21 +18,7 @@ class CheckListNoteItem extends Note {
     }
 
 
-    public static function get_item_checklist_by_id(int $id): array {
-        $query = self::execute("SELECT distinct content 
-FROM checklist_note_items
-WHERE checklist_note_items.checklist_note = :id
-", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = [];
 
-        foreach ($data as $row) {
-            // Ajouter une note au tableau
-            $results[] = $row['content'];
-        }
-
-        return $results;
-    }
     public function validate() : array {
         $error = [];
         
@@ -71,7 +57,7 @@ WHERE checklist_note_items.checklist_note = :id
         $this->checklist_note = $checklist_note;
     }
 
-    public function getContent(): string
+        public function getContent(): string
     {
         return $this->content;
     }
@@ -90,6 +76,5 @@ WHERE checklist_note_items.checklist_note = :id
     {
         $this->checked = $checked;
     }
-
 
 }
