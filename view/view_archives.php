@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Notes</title>
+    <title>My Archives</title>
     <base href="<?= $web_root ?>"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -20,27 +20,12 @@ include "utils/navbar.php";
 ?>
 
 <div class="container">
-    <h3>Pinned</h3>
-    <div class="row">
-       <?php
-       include "utils/pinnedNote.php";
-       ?>
-    </div>
-    <br>
-    <h3>Others</h3>
+    <h3>Archives</h3>
     <div class="row">
         <?php
-        include "utils/othersNote.php";
+        include "utils/archives_notes.php";
         ?>
     </div>
-</div>
-
-
-<div class="fixed-icons">
-    <a href="#"> <i class="fa-regular fa-file"> </i></a>
-    <a href="#"> <i class="fa-solid fa-list-check"></i></a>
-
-</div>
 
 </body>
 </html>

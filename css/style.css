@@ -13,9 +13,58 @@
   }
 
 
-*body {
+
+body{
     background-color: var(--couleur-fond);
- }
+}
+.form-check{
+    margin: 3%;
+}
+.card-text{
+    padding: 3%;
+}
+.card-body{
+    padding: 0;
+}
+.card-title{
+    padding: 3%;
+}
+
+.bord {
+    border-width: 0 0 1px 0;
+    border-color: var(--couleur-bordure);
+    border-style: solid;
+}
+
+.card {
+    background-color: var(--couleur-fond);
+    border: 1px solid var(--couleur-bordure);
+    border-bottom: none;
+}
+.iconBox{
+    border-top: 1px solid var(--couleur-bordure);
+    border-bottom: 1px solid var(--couleur-bordure);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.iconBox span i{
+    color: var(--couleur-bouton);
+}
+
+.offcanvas-start {
+    width: 220px;
+}
+.fixed-icons {
+    position: fixed;
+    top: 80%;
+    right: 5%;
+}
+
+.fixed-icons i {
+    font-size: 40px;
+    margin: 10px;
+    color: var(--couleur-icon);
+}
 
   .input{
     display: flex;

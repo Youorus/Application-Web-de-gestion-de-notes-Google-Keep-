@@ -81,6 +81,45 @@ abstract  class Note extends Model{
     }
 
 
+    public static function get_All_notesArchived_by_id(int $id, int $archive = 1): array {
+
+        $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id  AND notes.archived = :archive ORDER BY notes.weight", [
+            "id" => $id,
+            "archive" => $archive
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+
+        foreach ($data as $row) {
+            $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $row['id']]);
+            $dataNote = $queryNote->fetchAll();
+
+            if ($queryNote->rowCount() > 0) {
+                foreach ($dataNote as $rowNote) {
+                    $results[] = new TextNote(
+                        $rowNote['id'],
+                        $rowNote['content']
+                    );
+                }
+            } else {
+                $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $row['id']]);
+                $dataChecklistNote = $queryChecklistNote->fetchAll();
+
+                if ($queryChecklistNote->rowCount() > 0) {
+                    foreach ($dataChecklistNote as $rowChecklistNote) {
+                        $results[] = new CheckListNote(
+                            $rowChecklistNote['id']
+                        );
+                    }
+                }
+            }
+        }
+
+        return $results;
+    }
+
+
 
     abstract public function getType(): NoteType;
 
