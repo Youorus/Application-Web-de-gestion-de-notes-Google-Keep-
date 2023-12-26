@@ -37,7 +37,7 @@ for ($i = 0; $i < count($notesOthers); $i++) {
 
     echo '</div>';
     echo '<div class="d-flex iconBox justify-content-between">';
-    echo '<span><i class="fa-solid fa-angles-left"></i></span>';
+    echo '<span><i class="fa-solid fa-angles-left "></i></span>';
     echo '<span><i class="fa-solid fa-angles-right"></i></span>';
     echo '</div>';
     echo '</div>';

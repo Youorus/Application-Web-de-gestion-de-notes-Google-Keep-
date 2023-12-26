@@ -40,16 +40,21 @@ abstract  class Note extends Model{
         $this->archived = $archived;
         $this->weight = $weight;
     }
-    public static function get_All_notes_by_id(int $id, bool $pinned): array {
+    public static function get_All_notes_by_id(int $id, bool $pinned, int $archive = 0): array {
         $pinnedValue = $pinned ? 1 : 0;
-        $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id AND notes.pinned = :pinned ORDER BY notes.weight", ["id" => $id, "pinned" => $pinnedValue]);
+
+        $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id AND notes.pinned = :pinned AND notes.archived = :archive ORDER BY notes.weight", [
+            "id" => $id,
+            "pinned" => $pinnedValue,
+            "archive" => $archive
+        ]);
+
         $data = $query->fetchAll();
         $results = [];
 
         foreach ($data as $row) {
             $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $row['id']]);
             $dataNote = $queryNote->fetchAll();
-
 
             if ($queryNote->rowCount() > 0) {
                 foreach ($dataNote as $rowNote) {
@@ -59,8 +64,9 @@ abstract  class Note extends Model{
                     );
                 }
             } else {
-                        $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes where checklist_notes.id = :id ", ["id" => $row['id']]);
+                $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $row['id']]);
                 $dataChecklistNote = $queryChecklistNote->fetchAll();
+
                 if ($queryChecklistNote->rowCount() > 0) {
                     foreach ($dataChecklistNote as $rowChecklistNote) {
                         $results[] = new CheckListNote(
@@ -70,6 +76,7 @@ abstract  class Note extends Model{
                 }
             }
         }
+
         return $results;
     }
 
