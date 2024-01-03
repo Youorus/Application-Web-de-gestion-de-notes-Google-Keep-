@@ -8,10 +8,9 @@ class ControllerIndex extends Controller{
 
     public function index(): void
     {
-        //$checklist_Note = CheckListNoteItem::get_All_item_checklist_by_id(1);
-        $notesPinned = Note::get_All_notes_by_id(1, true);
-        $notesOthers = Note::get_All_notes_by_id(1, false);
-       // $notes_content = TextNote::get_All_note_content_by_id(1);
-        (new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers]);
+            $user = $this->get_user_or_redirect();
+           $notesPinned = $user->get_All_notes(true);
+           $notesOthers = $user->get_All_notes(false);
+           (new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers]);
     }
 }

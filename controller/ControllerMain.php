@@ -7,12 +7,7 @@ class ControllerMain extends Controller {
 
     // verifier si l'utilisateur est connecter si oui le rediriger !
     public function index() : void {
-         if ($this->user_logged()) {
-            // redirection de lútilisateiur
-            (new View("index"))->show();
-         } else {
             (new View("login"))->show();
-        }
     }
 
 
@@ -23,15 +18,12 @@ class ControllerMain extends Controller {
         if (isset($_POST['mail']) && isset($_POST['password'])) { //note : pourraient contenir des chaînes vides
             $mail = $_POST['mail'];
             $password = $_POST['password'];
-
             $errors = User::validate_login($mail, $password);
             if (empty($errors)) {
-                //$this->log_user(User::get_user_by__mail($mail));
-
+                $this->log_user(User::get_user_by_mail($mail), "index");
+            }
         }
         (new View("login"))->show(["mail" => $mail, "password" => $password, "errors" => $errors]);
-       
-    }
 
-    
+    }
 }
