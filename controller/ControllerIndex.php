@@ -11,6 +11,15 @@ class ControllerIndex extends Controller{
             $user = $this->get_user_or_redirect();
            $notesPinned = $user->get_All_notes(true);
            $notesOthers = $user->get_All_notes(false);
-           (new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers]);
+            $title = "My notes";
+       // $notes_content = TextNote::get_All_note_content_by_id(1);
+        (new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title]);
+    }
+
+    public function archive_notes(): void{
+        $user = $this->get_user_or_redirect();
+        $title = "My archives";
+        $notesArchives = $user->get_All_notesArchived();
+        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title]);
     }
 }

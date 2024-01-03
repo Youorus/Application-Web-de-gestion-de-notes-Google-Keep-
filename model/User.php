@@ -80,6 +80,43 @@ class User extends Model{
         return $results;
     }
 
+    public  function get_All_notesArchived(): array {
+
+        $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id  AND notes.archived = 1 ORDER BY notes.weight", [
+            "id" => $this->id,
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+
+        foreach ($data as $row) {
+            $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $row['id']]);
+            $dataNote = $queryNote->fetchAll();
+
+            if ($queryNote->rowCount() > 0) {
+                foreach ($dataNote as $rowNote) {
+                    $results[] = new TextNote(
+                        $rowNote['id'],
+                        $rowNote['content']
+                    );
+                }
+            } else {
+                $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $row['id']]);
+                $dataChecklistNote = $queryChecklistNote->fetchAll();
+
+                if ($queryChecklistNote->rowCount() > 0) {
+                    foreach ($dataChecklistNote as $rowChecklistNote) {
+                        $results[] = new CheckListNote(
+                            $rowChecklistNote['id']
+                        );
+                    }
+                }
+            }
+        }
+
+        return $results;
+    }
+
 
     public function getId(): int
     {
