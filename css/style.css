@@ -4,24 +4,19 @@
     --couleur-bordure: #495056;
     --couleur-bouton: #0f6efd;
     --error-color: #fc545d;
+    --couleur-icon: #ffc107;
   }
 
   *{
     color: var(--couleur-texte);
-    background-color: var(--couleur-fond);
+    /*background-color: var(--couleur-fond);*/
   }
 
 
-body {
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+*body {
     background-color: var(--couleur-fond);
-  }
+ }
+
   .input{
     display: flex;
   }
@@ -73,7 +68,7 @@ body {
     border: 1px solid var(--couleur-bordure);
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-   background-color: var(--input-fond);
+   background-color: var(--couleur-fond);
     display: inline-block;
   }
 
@@ -101,9 +96,7 @@ body {
   .navbar-nav .nav-link{
     text-align: start;
   }
-  .offcanvas-start {
-    width: 220px;
-  }
+
 
   .signup-btn:hover {
     background-color: #0056b3;
