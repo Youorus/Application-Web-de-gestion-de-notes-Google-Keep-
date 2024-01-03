@@ -80,6 +80,11 @@ class User extends Model{
         return $results;
     }
 
+    public function get_User(bool $pinned, int $archive = 0): array
+    {
+
+    }
+
     public  function get_All_notesArchived(): array {
 
         $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id  AND notes.archived = 1 ORDER BY notes.weight", [
@@ -117,6 +122,22 @@ class User extends Model{
         return $results;
     }
 
+
+    public function get_UserShares_Notes(){
+        $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
+select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
+            "id" => $this->id,
+        ]);
+        $data = $query->fetchAll();
+        $results =[];
+        if ($query->rowCount() > 0) {
+            foreach ($data as $row) {
+                $results[] = $row['full_name'];
+
+            }
+        }
+        return $results;
+    }
 
     public function getId(): int
     {

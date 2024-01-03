@@ -19,6 +19,7 @@
                     <li class="nav-item">
                         <a class="nav-link moi" aria-current="page" href="index/archive_notes">My archives</a>
                     </li>
+                   <?php include  "utils/usersSharesNotes.php" ?>
                     <li class="nav-item">
                         <a class="nav-link moi" aria-current="page" href="#">Settings</a>
                     </li>
