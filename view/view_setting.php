@@ -25,7 +25,7 @@
                 <!-- corps de la liste deroulante  -->
                 <div class="offcanvas-body ">
                    <div class="message utilisateur">
-                        <p>Hey  </p> <!--ajouter user -->
+                        <p>Hey </p> <!--ajouter user -->
                    </div>       
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
