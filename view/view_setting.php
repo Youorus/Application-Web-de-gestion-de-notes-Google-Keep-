@@ -19,13 +19,16 @@
                 <span class="material-symbols-outlined">
                     arrow_back_ios
                 </span>
-                <h2 class="offcanvas-title text" id="offcanvasDarkNavbarLabel">Settings</h2>
+                <h2 class="offcanvas-title text" id="offcanvasDarkNavbarLabel"><?php
+               echo  $title 
+                 ?>
+                 </h2>
                 
                 </div>
                 <!-- corps de la liste deroulante  -->
                 <div class="offcanvas-body ">
                    <div class="message utilisateur">
-                        <p>Hey $sql ="select users.full_name from users where id = 1" </p> <!--ajouter user -->
+                        <p>Hey <?php echo $user_name ?>  </p> <!--ajouter user -->
                    </div>       
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">

@@ -123,6 +123,22 @@ class User extends Model{
         return $results;
     }
 
+    public function get_fullname_User(){
+        $query = self::execute("SELECT users.full_name from users WHERE users.id = :id", [
+                        "id" => $this->id,
+                    ]);
+                    $data = $query->fetchAll();
+                    $result ="";
+                    if ($query->rowCount() > 0) {
+                        foreach ($data as $row) {
+                            $result = $row['full_name'];
+            
+                        }
+                    }
+                    return $result;
+
+    }
+
 
     public function get_UserShares_Notes(){
         $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(

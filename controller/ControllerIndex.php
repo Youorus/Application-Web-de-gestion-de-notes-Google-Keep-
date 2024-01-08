@@ -23,4 +23,12 @@ class ControllerIndex extends Controller{
         $notesArchives = $user->get_All_notesArchived();
         (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title]);
     }
+
+    public function setting(): void{
+        $user = $this->get_user_or_redirect();
+        $user_name = $user->get_fullname_User();
+        $title = "Settings";
+        (new View("setting"))->show(["user_name" => $user_name, "title" =>  $title]);
+
+    }
 }
