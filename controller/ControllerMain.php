@@ -29,20 +29,20 @@ class ControllerMain extends Controller {
 
     public function signup(): void {
         $email = '';
-        $fullname = '';
+        $full_name = '';
         $password = '';
         $passwordconfirm = '';
         $errors = [];
         $role = 'user';
 
-        if (isset($_POST['email']) && isset($_POST['fullname']) && isset($_POST['password']) && isset($_POST['passwordconfirm'])) {
+        if (isset($_POST['email']) && isset($_POST['full_name']) && isset($_POST['password']) && isset($_POST['passwordconfirm'])) {
             $email = $_POST['email'];
-            $fullname = trim($_POST['fullname']);
+            $full_name = trim($_POST['full_name']);
             $password = $_POST['password'];
             $passwordconfirm = $_POST['passwordconfirm'];
 
 
-            $user = new User($email, Tools::my_hash($password), $fullname, $role);
+            $user = new User($email, Tools::my_hash($password), $full_name, $role);
             $errors = User::validate_unicity($email);
             $errors = array_merge($errors, $user->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $passwordconfirm));
@@ -55,9 +55,9 @@ class ControllerMain extends Controller {
 
         (new View("signup"))->show([
             "email" => $email,
-            "fullname" => $fullname,
+            "full_name" => $full_name,
             "password" => $password,
-            "confirmpassword" => $passwordconfirm,
+            "passwordconfirm" => $passwordconfirm,
             "errors" => $errors
         ]);
 

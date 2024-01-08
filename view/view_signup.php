@@ -27,7 +27,7 @@
     <form action="main/signup" method="post">
         <div class="form-group input">
             <i class="icon fas fa-user"></i>
-            <input type="text" id="fullname" name="fullname" placeholder="Full Name" value="<?= $fullname ?>" required>
+            <input type="text" id="full_name" name="full_name" placeholder="Full Name" value="<?= $full_name ?>" required>
         </div>
 
         <div class="form-group input">
