@@ -49,6 +49,7 @@
                             <a class="nav-link" href="">
                                 <span class="material-symbols-outlined">
                                     logout
+                                <?php echo $logout ?>
                                 </span> Logout
                             </a>
                         </li>

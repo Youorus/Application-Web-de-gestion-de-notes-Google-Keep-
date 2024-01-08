@@ -27,6 +27,7 @@ class ControllerIndex extends Controller{
     public function setting(): void{
         $user = $this->get_user_or_redirect();
         $user_name = $user->get_fullname_User();
+        $logout = $this->logout();
         $title = "Settings";
         (new View("setting"))->show(["user_name" => $user_name, "title" =>  $title]);
 
