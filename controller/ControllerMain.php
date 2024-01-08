@@ -42,7 +42,7 @@ class ControllerMain extends Controller {
             $passwordconfirm = $_POST['passwordconfirm'];
 
 
-            $user = new User(null, $email, Tools::my_hash($password), $fullname, $role);
+            $user = new User($email, Tools::my_hash($password), $fullname, $role);
             $errors = User::validate_unicity($email);
             $errors = array_merge($errors, $user->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $passwordconfirm));
@@ -50,7 +50,6 @@ class ControllerMain extends Controller {
             if (count($errors) == 0) {
                 $user->persist();
                 $this->log_user($user);
-
             }
         }
 

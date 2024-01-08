@@ -3,14 +3,14 @@ require_once "framework/Model.php";
 class User extends Model{
     private int  $id;
     private string $mail;
-    private string $name;
+    private string $full_name;
     private string $role;
     private String $hashed_password;
-    public function __construct($id, $mail,$hashed_password, $name, $role){
+    public function __construct($mail,$hashed_password, $full_name, $role, $id=NULL){
         $this->id = $id;
         $this->mail = $mail;
         $this->hashed_password = $hashed_password;
-        $this->name = $name;
+        $this->full_name = $full_name;
         $this->role = $role;
 
     }
@@ -20,7 +20,7 @@ class User extends Model{
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["id"],$data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"], $data["id"]);
         }
     }
     private static function check_password(string $clear_password, string $hash) : bool {
@@ -147,6 +147,8 @@ class User extends Model{
         } else {
             self::execute("INSERT INTO users (mail, hashed_password, full_name, role) VALUES (:mail, :hashed_password, :full_name, :role)",
                 ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+
+            $this->id = self::lastInsertId();
         }
         return $this;
     }
@@ -154,16 +156,14 @@ class User extends Model{
 
     {
         $errors = [];
-        if(!strlen($this->name) >= 3) {
+        if(!strlen($this->full_name) >= 3) {
             $errors[] = "Le nom doit contenir au moins 3 caractères";
         }
         return $errors;
 
     }
 
-    public static function validate_unicity($email)
-
-    {
+    public static function validate_unicity($email): array {
         $errors = [];
         $user = self::get_user_by_mail($email);
         if ($user) {
@@ -181,6 +181,8 @@ class User extends Model{
         }
         return $errors;
     }
+
+
 
 
 
