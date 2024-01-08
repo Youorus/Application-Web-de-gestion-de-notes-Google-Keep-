@@ -198,7 +198,7 @@ class User extends Model{
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->full_name;
     }
 
     public function getRole(): string
@@ -221,9 +221,9 @@ class User extends Model{
         $this->mail = $mail;
     }
 
-    public function setName(string $name): void
+    public function setName(string $full_name): void
     {
-        $this->name = $name;
+        $this->full_name = $full_name;
     }
 
     public function setRole(string $role): void
