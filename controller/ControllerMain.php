@@ -34,7 +34,6 @@ class ControllerMain extends Controller {
         $passwordconfirm = '';
         $errors = [];
         $role = 'user';
-        $id = '';
 
         if (isset($_POST['email']) && isset($_POST['fullname']) && isset($_POST['password']) && isset($_POST['passwordconfirm'])) {
             $email = $_POST['email'];
@@ -43,7 +42,7 @@ class ControllerMain extends Controller {
             $passwordconfirm = $_POST['passwordconfirm'];
 
 
-            $user = new User($id, $email, Tools::my_hash($password), $fullname, $role);
+            $user = new User(null, $email, Tools::my_hash($password), $fullname, $role);
             $errors = User::validate_unicity($email);
             $errors = array_merge($errors, $user->validate());
             $errors = array_merge($errors, User::validate_passwords($password, $passwordconfirm));
