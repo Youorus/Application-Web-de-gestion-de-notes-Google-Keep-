@@ -50,6 +50,7 @@
             Already have an account? <a href="main/login">Click here to login!</a>
         </div>
     </form>
+
 </div>
 <!-- Font Awesome pour les icônes -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script> -->
