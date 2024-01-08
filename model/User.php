@@ -125,7 +125,7 @@ class User extends Model{
 
     public function get_UserShares_Notes(){
         $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
-select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
+        select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
             "id" => $this->id,
         ]);
         $data = $query->fetchAll();
@@ -138,6 +138,51 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
         }
         return $results;
     }
+
+    public function persist(): User {
+
+        if (self::get_user_by_mail($this->mail)) {
+            self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE mail = :mail",
+                ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+        } else {
+            self::execute("INSERT INTO users (mail, hashed_password, full_name, role) VALUES (:mail, :hashed_password, :full_name, :role)",
+                ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+        }
+        return $this;
+    }
+    public function validate() : array
+
+    {
+        $errors = [];
+        if(!strlen($this->name) >= 3) {
+            $errors[] = "Le nom doit contenir au moins 3 caractères";
+        }
+        return $errors;
+
+    }
+
+    public static function validate_unicity($email)
+
+    {
+        $errors = [];
+        $user = self::get_user_by_mail($email);
+        if ($user) {
+            $errors[] = "Une adresse email existe déjà";
+        }
+        return $errors;
+
+    }
+
+    public static function validate_passwords ($password, $confirmpassword) : array {
+
+        $errors = [];
+        if($password != $confirmpassword) {
+            $errors[] = "les mots de passes ne correspondent pas";
+        }
+        return $errors;
+    }
+
+
 
     public function getId(): int
     {
@@ -188,4 +233,6 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
     {
         $this->hashedPassword = $hashedPassword;
     }
+
+
 }

@@ -26,4 +26,42 @@ class ControllerMain extends Controller {
         (new View("login"))->show(["mail" => $mail, "password" => $password, "errors" => $errors]);
 
     }
+
+    public function signup(): void {
+        $email = '';
+        $fullname = '';
+        $password = '';
+        $passwordconfirm = '';
+        $errors = [];
+        $role = 'user';
+        $id = '';
+
+        if (isset($_POST['email']) && isset($_POST['fullname']) && isset($_POST['password']) && isset($_POST['passwordconfirm'])) {
+            $email = $_POST['email'];
+            $fullname = trim($_POST['fullname']);
+            $password = $_POST['password'];
+            $passwordconfirm = $_POST['passwordconfirm'];
+
+
+            $user = new User($id, $email, Tools::my_hash($password), $fullname, $role);
+            $errors = User::validate_unicity($email);
+            $errors = array_merge($errors, $user->validate());
+            $errors = array_merge($errors, User::validate_passwords($password, $passwordconfirm));
+
+            if (count($errors) == 0) {
+                $user->persist();
+                $this->log_user($user);
+
+            }
+        }
+
+        (new View("signup"))->show([
+            "email" => $email,
+            "fullname" => $fullname,
+            "password" => $password,
+            "confirmpassword" => $passwordconfirm,
+            "errors" => $errors
+        ]);
+
+    }
 }
