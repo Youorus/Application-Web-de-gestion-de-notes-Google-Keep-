@@ -17,7 +17,8 @@
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
-    <form method="post" action="user/edit_profile">
+
+    <form method="post" action="settings/edit_profile">
         <div>
             <label for="full_name">Nom Complet :</label>
             <input type="text" id="full_name" name="full_name"  value="<?= $user->full_name ?>"  required>
@@ -30,6 +31,7 @@
             <button type="submit">Mettre à jour le profil</button>
         </div>
     </form>
+
 <?php endif; ?>
 </body>
 </html>
