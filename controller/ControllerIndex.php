@@ -32,4 +32,9 @@ class ControllerIndex extends Controller{
         (new View("setting"))->show(["user_name" => $user_name, "title" =>  $title]);
 
     }
+
+    public function view_open_text_note(): void{
+        $title = "title";
+        (new View("open_text_note"))->show(["title" => $title]);
+    }
 }
