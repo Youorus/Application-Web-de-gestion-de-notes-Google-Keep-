@@ -26,13 +26,13 @@ class ControllerSettings extends Controller
         $newpassword = '';
         $confirmpassword = '';
 
-        if(isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
+        if (isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
             $currentpassword = $_POST['currentpassword'];
             $newpassword = $_POST['newpassword'];
             $confirmpassword = $_POST['confirmpassword'];
 
             // Vérifier si le mot de passe actuel est correct
-            if (!User::check_password($currentpassword, $user->hashed_password)) {
+            if (!$user->verifyPassword($currentpassword)) {
                 $errors[] = "Le mot de passe actuel est incorrect.";
             }
 
@@ -43,7 +43,8 @@ class ControllerSettings extends Controller
 
             // Si aucune erreur, mettre à jour le mot de passe
             if (empty($errors)) {
-                $user->updatePassword($newpassword);
+                $user->setHashedPassword(Tools::my_hash($newpassword));
+                $user->persist();
                 $success = true;
             }
         }
@@ -51,6 +52,7 @@ class ControllerSettings extends Controller
         // Afficher la vue avec les erreurs potentielles et le message de succès
         (new View("change_password"))->show(["errors" => $errors, "success" => $success]);
     }
+
 
 
     public function edit_profile(): void {

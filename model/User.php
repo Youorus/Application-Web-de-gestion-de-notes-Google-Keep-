@@ -173,6 +173,11 @@ class User extends Model{
 
     }
 
+    public function verifyPassword(string $password): bool {
+        return self::check_password($password, $this->hashed_password);
+    }
+
+
     public static function validate_passwords ($password, $confirmpassword) : array {
 
         $errors = [];
