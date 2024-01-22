@@ -23,14 +23,14 @@ include "utils/navbar.php";
     <h3>Pinned</h3>
     <div class="row">
        <?php
-       include "utils/pinnedNote.php";
+       include "pinnedNote.php";
        ?>
     </div>
     <br>
     <h3>Others</h3>
     <div class="row">
         <?php
-        include "utils/othersNote.php";
+        include "othersNote.php";
         ?>
     </div>
 </div>
