@@ -55,7 +55,7 @@ class ControllerSettings extends Controller
 
 
 
-    public function edit_profile(): void {
+    function edit_profile(): void {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $success = "";
@@ -64,28 +64,14 @@ class ControllerSettings extends Controller
             $full_name = trim($_POST['full_name']);
             if($full_name != $user->full_name) {
                 $user->full_name = $full_name;
-                $errors_fullname = $user->validate();
+                $errors_fullname = $user->validate_full_name();
                 $errors = array_merge($errors, $errors_fullname);
-            }
-
-        }
-
-        if(isset($_POST['mail'])) {
-            $mail = trim($_POST['mail']);
-            if($mail != $user->mail) {
-                $user->mail = $mail;
-                $errors_mail = User::validate_unicity($mail);
-                $errors = array_merge($errors, $errors_mail);
             }
         }
 
         if (count($_POST) > 0 && count($errors) == 0) {
-            $user->persist();
-            $this->redirect("user", "edit_profile", "ok");
-        }
-
-        if (isset($_GET['param1']) && $_GET['param1'] === "ok") {
-            $success = "Your profile has been successfully updated.";
+            $user->update_full_name();
+            $success = "Your full name has been successfully updated.";
         }
 
         (new View("edit_profile"))->show([
@@ -94,6 +80,8 @@ class ControllerSettings extends Controller
             "success" => $success
         ]);
     }
+
+
 
     
 
