@@ -3,14 +3,14 @@ require_once "framework/Model.php";
 class User extends Model{
     private int  $id;
     private string $mail;
-    private string $name;
+    private string $full_name;
     private string $role;
     private String $hashed_password;
-    public function __construct($id, $mail,$hashed_password, $name, $role){
+    public function __construct($mail,$hashed_password, $full_name, $role, $id=NULL){
         $this->id = $id;
         $this->mail = $mail;
         $this->hashed_password = $hashed_password;
-        $this->name = $name;
+        $this->full_name = $full_name;
         $this->role = $role;
 
     }
@@ -21,7 +21,7 @@ class User extends Model{
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["id"],$data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"], $data["id"]);
         }
     }
     private static function check_password(string $clear_password, string $hash) : bool {
@@ -142,7 +142,7 @@ class User extends Model{
 
     public function get_UserShares_Notes(){
         $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
-select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
+        select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
             "id" => $this->id,
         ]);
         $data = $query->fetchAll();
@@ -156,6 +156,58 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
         return $results;
     }
 
+    public function persist(): User {
+
+        if (self::get_user_by_mail($this->mail)) {
+            self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE mail = :mail",
+                ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+        } else {
+            self::execute("INSERT INTO users (mail, hashed_password, full_name, role) VALUES (:mail, :hashed_password, :full_name, :role)",
+                ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+
+            $this->id = self::lastInsertId();
+        }
+        return $this;
+    }
+    public function validate() : array
+
+    {
+        $errors = [];
+        if(!strlen($this->full_name) >= 3) {
+            $errors[] = "Le nom doit contenir au moins 3 caractères";
+        }
+        return $errors;
+
+    }
+
+    public static function validate_unicity($email): array {
+        $errors = [];
+        $user = self::get_user_by_mail($email);
+        if ($user) {
+            $errors[] = "Une adresse email existe déjà";
+        }
+        return $errors;
+
+    }
+
+    public function verifyPassword(string $password): bool {
+        return self::check_password($password, $this->hashed_password);
+    }
+
+
+    public static function validate_passwords ($password, $confirmpassword) : array {
+
+        $errors = [];
+        if($password != $confirmpassword) {
+            $errors[] = "les mots de passes ne correspondent pas";
+        }
+        return $errors;
+    }
+
+
+
+
+
     public function getId(): int
     {
         return $this->id;
@@ -168,7 +220,7 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->full_name;
     }
 
     public function getRole(): string
@@ -191,9 +243,9 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
         $this->mail = $mail;
     }
 
-    public function setName(string $name): void
+    public function setName(string $full_name): void
     {
-        $this->name = $name;
+        $this->full_name = $full_name;
     }
 
     public function setRole(string $role): void
@@ -205,4 +257,6 @@ select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note
     {
         $this->hashedPassword = $hashedPassword;
     }
+
+
 }

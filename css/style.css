@@ -7,11 +7,18 @@
     --couleur-icon: #ffc107;
   }
 
+a{
+    text-decoration: none;
+}
   *{
     color: var(--couleur-texte);
     /*background-color: var(--couleur-fond);*/
   }
 
+  title{
+      color: var(--couleur-texte);
+      font-style: italic;
+  }
 
 
 body{

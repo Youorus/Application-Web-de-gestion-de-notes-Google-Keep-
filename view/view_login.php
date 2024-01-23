@@ -3,7 +3,7 @@
 require_once "utils/head.php";
 ?>
 <div class="signup-box">
-  <h2>Sign Up</h2>
+  <h2>Log In</h2>
   <hr>
 
   <form action="main/login" method="post">    
@@ -20,7 +20,7 @@ require_once "utils/head.php";
     <button type="submit" class="signup-btn">Login</button>
     <br>
     <br>
-    <a href="#">New here? Click here to subcribe !</a>
+    <a href="main/signup">New here? Click here to subcribe !</a>
   </form>
   <br>
 
