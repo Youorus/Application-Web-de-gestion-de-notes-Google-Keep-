@@ -42,4 +42,9 @@ class ControllerIndex extends Controller{
         $title = "title";
         (new View("edit_text_note"))->show(["title" => $title]);
     }
+
+    public function view_add_text_note(): void{
+        $title = "title";
+        (new View("add_text_note"))->show(["title" => $title]);
+    }
 }
