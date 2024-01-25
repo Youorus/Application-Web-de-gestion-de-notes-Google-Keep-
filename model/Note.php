@@ -64,6 +64,7 @@ abstract  class Note extends Model{
     public function getId(): int
     {
         return $this->id;
+        
     }
 
 
@@ -79,8 +80,15 @@ abstract  class Note extends Model{
 
     public function getDateTimeEdit(): DateTime
     {
-        return $this->dateTime_edit;
+        $query = self::execute("SELECT notes.create_at from notes where notes.id = :id", ["id" => $this->id]);
+        $data = $query->fetch();
+        if ($data) {
+            return new DateTime($data['create_at']);
+        } else {
+            return new DateTime();
+        }
     }
+    
 
     public function getPinned(): int
     {
@@ -138,6 +146,6 @@ abstract  class Note extends Model{
     }
 
 
+    
 
 }
-

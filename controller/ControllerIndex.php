@@ -39,8 +39,11 @@ class ControllerIndex extends Controller{
     }
 
     public function view_edit_text_note(): void{
+        $user = $this->get_user_or_redirect();
         $title = "title";
-        (new View("edit_text_note"))->show(["title" => $title]);
+        
+        $dateCreation = $note->getDateTimeEdit();
+        (new View("edit_text_note"))->show(["title" => $title,"dateCreation" => $dateCreation]);
     }
 
     public function view_add_text_note(): void{

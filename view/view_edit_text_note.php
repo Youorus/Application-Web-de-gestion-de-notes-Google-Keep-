@@ -47,6 +47,7 @@
 
             </div>   
             
+            <?= $dateCreation ?>
             <!-- la je dois rajouter du php pour afficher la date de création et d'edition de la note (infosText)-->
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
