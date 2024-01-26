@@ -17,8 +17,9 @@
             <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark show" style="width:100vw;" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                 <div class="offcanvas-header">
                 <span class="material-symbols-outlined">
-                    arrow_back_ios
+                    arrow_back_ios 
                 </span>
+                
                 <h2 class="offcanvas-title text" id="offcanvasDarkNavbarLabel"><?php
                echo  $title 
                  ?>

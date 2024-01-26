@@ -27,8 +27,13 @@ class TextNote extends Note {
     }
 
     public function persist(){
+        if(self::getTitleNote($this->id)){
+            self::execute("UPDATE notes SET content = :content  WHERE id = :id",
+        ["id" => $this->id, "content" => $this->content]);
+       return $this;
 
     }
+}
 
     public function delete(){
 
@@ -107,4 +112,7 @@ class TextNote extends Note {
         }
         return $results;
     }
+
+
+
 }
