@@ -71,17 +71,5 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         return $results;
     }
 
-    public function getMaxwheight(): int
-    {
-        $query = self::execute("SELECT MAX(wheight) as maxwheight from Notes");
-        $data = $query->fetch();
-        return $data["maxwheight"];
-    }
 
-    public function getMinwheight(): int
-    {
-        $query = self::execute("SELECT MIN(wheight) as minwheight from Notes where notes.owner", ["owner" => $this->getOwner()]);
-        $data = $query->fetch();
-        return $data["minwheight"];
-    }
 }

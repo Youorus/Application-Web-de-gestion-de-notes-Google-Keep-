@@ -258,5 +258,18 @@ class User extends Model{
         $this->hashedPassword = $hashedPassword;
     }
 
+    public function getMaxweight(): int
+    {
+        $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
+        $data = $query->fetch();
+        return $data["maxwheight"];
+    }
+
+    public function getMinweight(): int
+    {
+        $query = self::execute("SELECT MIN(weight) as minwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
+        $data = $query->fetch();
+        return $data["minwheight"];
+    }
 
 }

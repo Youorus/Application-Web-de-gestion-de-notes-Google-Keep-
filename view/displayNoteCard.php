@@ -1,6 +1,6 @@
 <?php
 
-function displayNoteCard($note) {
+function displayNoteCard($note, $min, $max) {
 $href = ($note->getType() == NoteType::TextNote) ?
 'index/open_text_note/' . $note->getId() :
 'index/open_checkList_note/' . $note->getId();
@@ -42,8 +42,13 @@ echo '<a href="' . $href . '" class="card-link">';
         echo '</div>';
     echo '</a>';
 echo '<div class="d-flex iconBox justify-content-between">';
-    echo '<span><i class="fa-solid fa-angles-left"></i></span>';
-    echo '<span><i class="fa-solid fa-angles-right"></i></span>';
+        if($note->getWeight() != $min) {
+            echo '<span><i class="fa-solid fa-angles-left"></i></span>';
+        }
+        if($note->getWeight() != $max) {
+            echo '<span><i class="fa-solid fa-angles-right"></i></span>';
+        }
+
     echo '</div>';
 }
 

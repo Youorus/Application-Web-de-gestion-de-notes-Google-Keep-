@@ -111,6 +111,11 @@ class TextNote extends Note {
         return $results;
     }
 
+    public function getWeight(): int
+    {
+        return parent::getWeight();
+    }
+
 
 
 }

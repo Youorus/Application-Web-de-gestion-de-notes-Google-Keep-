@@ -62,11 +62,14 @@ class ControllerIndex extends Controller{
            $notesPinned = $user->get_All_notes(true);
            $notesOthers = $user->get_All_notes(false);
            $userSharesNotes = $user->get_UserShares_Notes();
-            $title = "My notes";
-            echo "$title";
-            $maxwheight = new CheckListNote()
+           $title = "My notes";
+
+           $maxweight = $user->getMaxweight();
+           $minweight = $user->getMinweight();
+
+
        // $notes_content = TextNote::get_All_note_content_by_id(1);
-        //(new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
+        (new View("index"))->show(["maxweight" => $maxweight, "minweight" => $minweight, "notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
     }
 
     public function archive_notes(): void{
