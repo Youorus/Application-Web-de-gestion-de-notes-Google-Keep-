@@ -27,8 +27,11 @@
         }
         .form-control {
             background-color: var(--couleur-bordure) !important;
-            color: var(--couleur-texte);
+            color: white;
             border-color: var(--couleur-bordure);
+        }
+        .form-control:focus{
+            color: white;
         }
         .material-icons{
             color: white;
@@ -39,20 +42,20 @@
     <body>
     <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark show" style="width:100vw;" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
             <div class="offcanvas-header">
-                <a href="//////////.php">
-                <i class="material-icons">
-                <span class="material-symbols-outlined">
-                    arrow_back_ios 
-                </span>
-                </i>
+                <a href="index/index.php">
+                    <i class="material-icons">
+                    <span class="material-symbols-outlined">
+                        arrow_back_ios 
+                    </span>
+                    </i>
                 </a>
                 <i class="material-icons" style="margin-left: auto;">
                 <form action="path/to/controller_method.php" method="post">
                 <button type="submit" class="material-icons" style="background:none; border:none;">
-                <span class="material-symbols-outlined">
-                    save_as
-                </span>
-    </form>
+                    <span class="material-symbols-outlined">
+                        save_as
+                    </span>
+                </form>
                 </i>
 
             </div>   
