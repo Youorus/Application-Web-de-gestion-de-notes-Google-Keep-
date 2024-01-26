@@ -74,7 +74,7 @@ class ControllerIndex extends Controller{
         $content = TextNote::getContentNote($idNote);
         $createDate = new DateTime(TextNote::getCreateDateTime($idNote));
         $editDate = (TextNote::getEditDateTime($idNote) != null) ? new DateTime(TextNote::getEditDateTime($idNote)) : null;
-
+        
         $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
 
@@ -83,4 +83,25 @@ class ControllerIndex extends Controller{
 
         
     }
+
+    public function save_note(): void{
+        $user = $this->get_user_or_redirect();
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['note_id']) && isset($_POST['content'])) {
+        $idNote = $_POST['note_id'];
+        $content = $_POST['content'];
+
+        $note = new TextNote();
+        $note->id = $idNote;
+        $note->content = $content;
+
+            if ($note->persist()) {
+                header('Location: index/open_text_note.php');
+                exit();
+
+            
+            }
+        }
+    }
+}
 }
