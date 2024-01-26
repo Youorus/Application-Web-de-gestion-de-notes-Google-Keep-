@@ -34,6 +34,8 @@
 </head>
 <body>
 
+<?php include "open_note_navbar.php"?>
+
 <div class=" open-text">
 <div class="mb-3">
     <h5 class="infoText"> Created <?= $messageCreate ?>. Edited <?= $messageEdit ?>.  </h5>

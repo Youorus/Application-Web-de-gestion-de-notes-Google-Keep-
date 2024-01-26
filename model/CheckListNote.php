@@ -1,7 +1,7 @@
 <?php
-require_once "Note.php";
+require_once "model/Note.php";
 
-class CheckListNote extends Model {
+class CheckListNote extends Note {
     private int $id;
 
     public function getId(): int
