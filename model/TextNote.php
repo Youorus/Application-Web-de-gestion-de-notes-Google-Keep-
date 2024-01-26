@@ -1,10 +1,8 @@
 <?php
 
-require_once "framework/Model.php";
 
 class TextNote extends Note {
 
-    private int $id;
     private ?string $content;
 
     public function getContent(): ?string
@@ -12,11 +10,11 @@ class TextNote extends Note {
         return $this->content;
     }
 
-    public function __construct(int $id, ?string $content)
-    {
-        $this->id = $id;
+    public function __construct(int $id, ?string $content) {
+        parent::__construct($id, "", 0, new DateTime(), null, 0, 0, 0);
         $this->content = $content;
     }
+
 
 
 
@@ -36,7 +34,7 @@ class TextNote extends Note {
 
     public function getId(): int
     {
-        return $this->id;
+       return parent::getId();
     }
 
     public function setId(int $id): void
@@ -99,7 +97,7 @@ class TextNote extends Note {
 
     public function getTitle(): string
     {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
+        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->getId()]);
         $data = $query->fetchAll();
         $results = "";
         foreach ($data as $row){
