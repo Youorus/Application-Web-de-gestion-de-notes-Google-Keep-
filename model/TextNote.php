@@ -66,6 +66,28 @@ class TextNote extends Note {
         return $results;
     }
 
+    public static function getTitleNote(int $id): string{
+        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $id]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['title'];
+        }
+        return $results;
+    }
+
+    public static function getContentNote(int $id): string|null{
+        $query = self::execute("SELECT text_notes.content from text_notes WHERE text_notes.id = :id", ["id" => $id]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['content'];
+        }
+        return $results;
+    }
+
+   
+
     public static function getCreateDateTime(int $id): string{
         $query = self::execute("SELECT notes.created_at FROM notes WHERE notes.id = :id", ["id" => $id]);
         $data = $query->fetchAll();
