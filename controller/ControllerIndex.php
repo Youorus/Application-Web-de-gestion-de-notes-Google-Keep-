@@ -75,12 +75,12 @@ class ControllerIndex extends Controller{
         $createDate = new DateTime(TextNote::getCreateDateTime($idNote));
         $editDate = (TextNote::getEditDateTime($idNote) != null) ? new DateTime(TextNote::getEditDateTime($idNote)) : null;
 
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+        $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
 
 
-        (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit]);
+        (new View("edit_text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit]);
 
-        (new View("edit_text_note"))->show(["title" => $title]);
+        
     }
 }

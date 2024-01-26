@@ -20,6 +20,7 @@
             font-weight: normal;
             font-size: initial;
             margin-bottom: 2%;
+            margin-left: 1%;
         }
         .form-label{
             font-size: larger;
