@@ -6,6 +6,31 @@ require_once "model/CheckListNoteItem.php";
 
 class ControllerIndex extends Controller{
 
+    function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string {
+        // Calcul de la différence en mois
+        if ($compareDate == null){
+            return "Not yet";
+        }
+        $interval = $referenceDate->diff($compareDate);
+        $nombreMoisEcart = $interval->y * 12 + $interval->m;
+    
+    
+        // Vérification si le nombre de mois d'écart est le même mois
+        if ($nombreMoisEcart == 0) {
+            // Vérification du nombre de jours d'écart
+            $nombreJoursEcart = $interval->d;
+    
+            if ($nombreJoursEcart == 0) {
+                return "Today";
+            } else {
+                return  $nombreJoursEcart . " days ago";
+            }
+        } else {
+            return  $nombreMoisEcart . " month ago";
+        }
+    }
+
+
     public function index(): void
     {
             $user = $this->get_user_or_redirect();
