@@ -78,15 +78,17 @@ abstract  class Note extends Model{
         return $this->dateTime;
     }
 
-    public function getDateTimeEdit(): DateTime
+    public function getDateTimeCreate(): DateTime
     {
         $query = self::execute("SELECT notes.create_at from notes where notes.id = :id", ["id" => $this->id]);
-        $data = $query->fetch();
-        if ($data) {
-            return new DateTime($data['create_at']);
-        } else {
-            return new DateTime();
+        $data = $query->fetchAll();
+        $results ="";
+        foreach ($data as $row){
+            $results = $row['create_at'];
         }
+       return $results;
+            
+        
     }
     
 
