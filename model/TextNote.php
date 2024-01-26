@@ -65,4 +65,26 @@ class TextNote extends Note {
         }
         return $results;
     }
+
+    public static function getCreateDateTime(int $id): string{
+        $query = self::execute("SELECT notes.created_at FROM notes WHERE notes.id = :id", ["id" => $id]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['created_at'];
+        }
+        return $results;
+    }
+
+    public static function geteditDateTime(int $id): string|null{
+        $query = self::execute("SELECT notes.edited_at FROM notes WHERE notes.id = :id", ["id" => $id]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['edited_at'];
+        }
+        return $results;
+    }
+
+
 }

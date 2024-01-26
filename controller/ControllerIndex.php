@@ -34,12 +34,28 @@ class ControllerIndex extends Controller{
     }
 
     public function view_open_text_note(): void{
+        $user = $this->get_user_or_redirect();
+        $actualDate = new DateTime();
         $title = "title";
+
         (new View("open_text_note"))->show(["title" => $title]);
     }
 
     public function view_edit_text_note(): void{
-        $title = "title";
+        $user = $this->get_user_or_redirect();
+        $actualDate = new DateTime();
+        $idNote = intval($_GET['param1']);
+        $title = TextNote::getTitleNote($idNote);
+        $content = TextNote::getContentNote($idNote);
+        $createDate = new DateTime(TextNote::getCreateDateTime($idNote));
+        $editDate = (TextNote::getEditDateTime($idNote) != null) ? new DateTime(TextNote::getEditDateTime($idNote)) : null;
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+
+        (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit]);
+
         (new View("edit_text_note"))->show(["title" => $title]);
     }
 }
