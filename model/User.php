@@ -14,6 +14,7 @@ class User extends Model{
         $this->role = $role;
 
     }
+
     public static function get_user_by_mail(string $mail) : User|false {
         $query = self::execute("SELECT * FROM Users where mail = :mail", ["mail"=>$mail]);
         $data = $query->fetch(); // un seul résultat au maximum
@@ -120,6 +121,22 @@ class User extends Model{
         }
 
         return $results;
+    }
+
+    public function get_fullname_User(){
+        $query = self::execute("SELECT users.full_name from users WHERE users.id = :id", [
+                        "id" => $this->id,
+                    ]);
+                    $data = $query->fetchAll();
+                    $result ="";
+                    if ($query->rowCount() > 0) {
+                        foreach ($data as $row) {
+                            $result = $row['full_name'];
+            
+                        }
+                    }
+                    return $result;
+
     }
 
 

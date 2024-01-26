@@ -21,11 +21,7 @@
     <form method="post" action="settings/edit_profile">
         <div>
             <label for="full_name">Nom Complet :</label>
-            <input type="text" id="full_name" name="full_name"  value="<?= $user->full_name ?>"  required>
-        </div>
-        <div>
-            <label for="mail">Adresse Email :</label>
-            <input type="email" id="mail" name="mail" value="<?= $user->mail ?>" required>
+            <input type="text" id="full_name" name="full_name" value="<?= $user->full_name ?>" required>
         </div>
         <div>
             <button type="submit">Mettre à jour le profil</button>

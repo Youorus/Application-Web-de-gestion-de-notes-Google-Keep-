@@ -1,6 +1,6 @@
 <?php
-require_once "model/Note.php";
 
+require_once "Note.php";
 class CheckListNote extends Note {
     private int $id;
 
@@ -13,14 +13,16 @@ class CheckListNote extends Note {
     {
         $this->id = $id;
     }
-    public function __construct(int $id){
+    public function __construct(int $id) {
+        parent::__construct($id, "", 0, new DateTime(), null, 0, 0, 0);
         $this->id = $id;
     }
 
 
+
     public function validate() : array {
         $error = [];
-        
+
         return $error;
     }
 
