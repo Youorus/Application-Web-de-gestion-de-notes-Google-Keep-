@@ -108,6 +108,7 @@ class ControllerIndex extends Controller{
 
     public function view_edit_text_note(): void{
         $user = $this->get_user_or_redirect();
+
         $actualDate = new DateTime();
         $idNote = intval($_GET['param1']);
         $title = TextNote::getTitleNote($idNote);
@@ -143,5 +144,25 @@ class ControllerIndex extends Controller{
                 }
             }
         }
+
+        $title = "title";
+        // $actualDate = new DateTime();
+        $idNote = intval($_GET['param1']);
+        $dateCreation = new DateTime(Note::getDateTimeCreate($idNote));
+        //$messageCreate = getMessageForDate($actualDate, $dateCreation);
+        (new View("edit_text_note"))->show(["title" => $title,"dateCreation" => $dateCreation]);
+
     }
+
+    public function view_add_text_note(): void{
+        $content = '';
+        $id = '';
+        if(isset($_POST['content'])){
+            $content = $_POST['content'];
+            $note = new TextNote($content, $id);
+        }
+        (new View("add_text_note"))->show(["content" => $content]);
+    }
+
+     
 }

@@ -25,13 +25,24 @@ class TextNote extends Note {
     }
 
     public function persist(){
+
         if($this->getId()){
             self::execute("UPDATE notes SET content = :content  WHERE id = :id",
         ["id" => $this->getId(), "content" => $this->content]);
-       return $this;
+       
 
+        }else{
+            self::execute("INSERT INTO notes(content) VALUES (:content)",
+            ["content" => $this->content]);
+    
+            $this->setId(self::lastInsertId());
         }
+        return $this;
     }
+
+   
+
+        
 
     public function delete(){
 
