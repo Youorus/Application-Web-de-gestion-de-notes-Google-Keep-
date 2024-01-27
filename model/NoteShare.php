@@ -51,9 +51,15 @@ public function setEditor(int $editor): void {
 $this->editor = $editor;
 }
 
-public function getType(): NoteType {
+public function getType(): string {
+        $noteId = $this->note->getId();
 
-return $this->note->getType();
+        $query = "SELECT COUNT(*) FROM checklist_note_items WHERE note_id = :id";
+        $result = self::execute($query, ["id" => $noteId]);
+        $count = $result->fetchColumn();
+
+        return $count > 0 ? 'checklist' : 'standard';
+        
 }
 
 }

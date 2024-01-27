@@ -164,5 +164,9 @@ class ControllerIndex extends Controller{
         (new View("add_text_note"))->show(["content" => $content]);
     }
 
+    public function view_shares_note(): void{
+        
+    }
+
      
 }
