@@ -52,4 +52,23 @@ class ControllerIndex extends Controller{
         $title = "title";
         (new View("add_text_note"))->show(["title" => $title]);
     }
+
+    public function save_note(): void{
+        $user = $this->get_user_or_redirect();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (isset($_POST['note_id']) && isset($_POST['content'])) {
+            $idNote = $_POST['note_id'];
+            $content = $_POST['content'];
+
+            $note = new TextNote();
+            $note->setId($idNote);
+            $note->setContent($content);
+
+                if ($note->persist()) {
+                    header('Location: index/open_text_note.php');
+                    exit();
+                }        
+            }
+        } 
+    }       
 }
