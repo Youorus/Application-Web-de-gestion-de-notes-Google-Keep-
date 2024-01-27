@@ -22,7 +22,6 @@ class TextNote extends Note {
     }
 
     public function persist(){
-
     }
 
     public function delete(){

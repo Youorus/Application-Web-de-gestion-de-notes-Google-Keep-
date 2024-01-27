@@ -15,14 +15,28 @@
         .mb-3{
             margin: 4% 5% 0 5%;
         }
+        .infoText{
+            font-style: italic;
+            font-weight: normal;
+            font-size: initial;
+            margin-bottom: 2%;
+            margin-left: 1%;
+        }
         .form-label{
             font-size: larger;
         }
         .form-control {
             background-color: var(--couleur-bordure) !important;
-            color: var(--couleur-texte);
+            color: white;
             border-color: var(--couleur-bordure);
         }
+        .form-control:focus{
+            color: white;
+        }
+        .material-icons{
+            color: white;
+        }
+
     </style>
 </head>
 
