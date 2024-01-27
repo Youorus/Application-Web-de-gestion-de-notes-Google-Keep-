@@ -22,7 +22,15 @@ class TextNote extends Note {
     }
 
     public function persist(){
-    }
+        if(!self::getId($this->id)){
+            self::execute("INSERT INTO notes(content) VALUES (:content)",
+        ["content" => $this->content]);
+
+        $this->id = self::lastInsertId();
+
+        }
+        return $this;
+    }   
 
     public function delete(){
 

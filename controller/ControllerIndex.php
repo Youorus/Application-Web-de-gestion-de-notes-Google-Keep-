@@ -49,8 +49,13 @@ class ControllerIndex extends Controller{
     }
 
     public function view_add_text_note(): void{
-        $title = "title";
-        (new View("add_text_note"))->show(["title" => $title]);
+        $content = '';
+        $id = '';
+        if(isset($_POST['content'])){
+            $content = $_POST['content'];
+            $note = new TextNote($content, $id);
+        }
+        (new View("add_text_note"))->show(["content" => $content]);
     }
 
     public function save_note(): void{
