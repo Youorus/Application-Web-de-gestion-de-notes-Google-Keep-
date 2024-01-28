@@ -55,6 +55,7 @@ abstract class Note extends Model {
 
     public function getId(): int {
         return $this->id;
+        
     }
 
     public function getOwner(): int {
@@ -65,9 +66,25 @@ abstract class Note extends Model {
         return $this->dateTime;
     }
 
+
     public function getDateTimeEdit(): ?DateTime {
         return $this->dateTime_edit;
     }
+
+    public function getDateTimeCreate(): DateTime
+    {
+        $query = self::execute("SELECT notes.create_at from notes where notes.id = :id", ["id" => $this->id]);
+        $data = $query->fetchAll();
+        $results ="";
+        foreach ($data as $row){
+            $results = $row['create_at'];
+        }
+       return $results;
+            
+        
+
+    }
+    
 
     public function getPinned(): int {
         return $this->pinned;
@@ -112,4 +129,12 @@ abstract class Note extends Model {
     public function setWeight(int $weight): void {
         $this->weight = $weight;
     }
+
 }
+
+
+
+    
+
+
+
