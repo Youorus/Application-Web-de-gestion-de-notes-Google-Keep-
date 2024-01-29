@@ -28,6 +28,15 @@ function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compare
     }
 }
 
+ function open_note(int $id_note): string{
+    $note = "normal";
+    if (Note::isArchived($id_note))
+        $note = "archived";
+    elseif (Note::isShared($id_note))
+        $note = "share";
+    return $note;
+}
+
 
 class ControllerIndex extends Controller{
 
@@ -61,20 +70,52 @@ class ControllerIndex extends Controller{
 
 
 
+
     public function open_text_note(): void{
-        $user = $this->get_user_or_redirect();
-        $actualDate = new DateTime();
         $idNote = intval($_GET['param1']);
-        $title = TextNote::getTitleNote($idNote);
-        $content = TextNote::getContentNote($idNote);
-        $createDate = new DateTime(TextNote::getCreateDateTime($idNote));
-        $editDate = (TextNote::getEditDateTime($idNote) != null) ? new DateTime(TextNote::getEditDateTime($idNote)) : null;
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+        $content = $note->getContent();
+        //$createDate = new DateTime(TextNote::getCreateDateTime($idNote));
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
 
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
+        $noteType = open_note($idNote);
 
-        (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit]);
+
+        (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
 
     }
+
+    public function unpin(): void {
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+        if ($note) {
+            $note->setPinned(0);
+            $note->persist();
+            echo "Donne";
+        }else{
+            var_dump($note);
+            echo "je n'ai pas la note ";
+        }
+
+    }
+
+    public function pin(): void {
+        $user = $this->get_user_or_redirect();
+        $idNote = intval($_GET['param1']);
+        $note = $user->get_One_note_by_id($idNote);
+        $note->setPinned(1);
+        $note->persist();
+        $this->redirect("index", "open_text_note",$note);
+    }
+
+
 }

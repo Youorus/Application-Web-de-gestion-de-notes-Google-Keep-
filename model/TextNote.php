@@ -24,8 +24,25 @@ class TextNote extends Note {
         return $error;
     }
 
-    public function persist(){
+    public function persist(): TextNote
+    {
+        // Vérifier si la note existe déjà dans la base de données
+        $existingNote = self::execute("SELECT * FROM text_notes WHERE id = :id", ["id" => $this->getId()])->fetch();
 
+        if ($existingNote) {
+            // Si la note existe, mettez à jour les informations, y compris le contenu
+            self::execute("UPDATE text_notes SET content = :content WHERE id = :id", [
+                "content" => $this->content,
+                "id" => $this->getId()
+            ]);
+        } else {
+            // Si la note n'existe pas, insérez une nouvelle ligne
+            self::execute("INSERT INTO text_notes (id, content) VALUES (:id, :content)", [
+                "id" => $this->getId(),
+                "content" => $this->content
+            ]);
+        }
+        return $this;
     }
 
     public function delete(){
@@ -55,54 +72,6 @@ class TextNote extends Note {
     }
 
 
-    public static function getTitleNote(int $id): string{
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['title'];
-        }
-        return $results;
-    }
 
-    public static function getContentNote(int $id): string|null{
-        $query = self::execute("SELECT text_notes.content from text_notes WHERE text_notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['content'];
-        }
-        return $results;
-    }
 
-    public static function getCreateDateTime(int $id): string{
-        $query = self::execute("SELECT notes.created_at FROM notes WHERE notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['created_at'];
-        }
-        return $results;
-    }
-
-    public static function geteditDateTime(int $id): string|null{
-        $query = self::execute("SELECT notes.edited_at FROM notes WHERE notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['edited_at'];
-        }
-        return $results;
-    }
-
-    public function getTitle(): string
-    {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->getId()]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['title'];
-        }
-        return $results;
-    }
 }

@@ -34,11 +34,11 @@
 </head>
 <body>
 
-<?php include "open_note_navbar.php"?>
+<?php include "utils/open_note_navbar.php"?>
 
 <div class=" open-text">
 <div class="mb-3">
-    <h5 class="infoText"> Created <?= $messageCreate ?>. Edited <?= $messageEdit ?>.  </h5>
+    <h5 class="infoText"> Created <?= $messageCreate ?>. Edited <?= $messageEdit ?> </h5>
         <label  class="form-label">Title</label>
     <input type="text" class="form-control" readonly value="<?= $title ?>">
 </div>
