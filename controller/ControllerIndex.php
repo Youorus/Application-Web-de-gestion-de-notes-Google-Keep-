@@ -55,7 +55,8 @@ class ControllerIndex extends Controller{
         $user = $this->get_user_or_redirect();
         $title = "My archives";
         $notesArchives = $user->get_All_notesArchived();
-        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title]);
+        $userSharesNotes = $user->get_UserShares_Notes();
+        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title,"userSharesNotes" => $userSharesNotes]);
     }
 
 

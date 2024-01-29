@@ -81,9 +81,14 @@ class TextNote extends Note {
     }
 
 
-    public function delete(){
+    public function delete(): void {
+        $sql = "DELETE FROM text_notes WHERE id = :id";
+        $params = ['id' => $this->id];
+        self::execute($sql, $params);
 
     }
+
+
 
     public function getId(): int
     {

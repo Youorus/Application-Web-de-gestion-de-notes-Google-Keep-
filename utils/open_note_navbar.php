@@ -2,7 +2,7 @@
     <div class="container">
         <!-- Première div avec l'icône de retour -->
         <div class="navbar-icon">
-            <a href="#">
+            <a href="index/index">
                 <i class="fas fa-arrow-left fs-1"></i>
             </a>
         </div>
@@ -16,9 +16,7 @@
             echo ' <i class="fa-solid fa-calendar-xmark"></i>';
             echo '</a>';
             //unarchived
-                echo '<a href="#">';
-                echo '<i class="fa-solid fa-arrow-up-from-ground-water"></i> ';
-                echo '</a>';
+                echo '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid fa-box-open"></i></a>';
             }elseif ($noteType == "shared"){
                 // edite share
                 echo '<a href="#">';
