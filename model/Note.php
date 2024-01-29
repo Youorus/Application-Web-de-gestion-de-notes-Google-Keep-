@@ -39,20 +39,8 @@ abstract class Note extends Model {
 
     abstract public function getType(): NoteType;
 
-    public static function isArchived(int $id): bool{
-        $query = self::execute("SELECT notes.archived from notes WHERE notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['archived'];
-        }
-        if (intval($results) == 0 )
-            return false;
-        return true;
-    }
-
-    public static function isShared(int $id): bool{
-        $query = self::execute("SELECT COUNT(*) FROM `note_shares` WHERE note_shares.note = :id", ["id" => $id]);
+    public function isArchived(): bool{
+        $query = self::execute("SELECT notes.archived FROM notes  WHERE notes.id = :id", ["id" => $this->id]);
         $data = $query->fetch();
         $result = false;
         if ($data[0] > 0){
@@ -61,7 +49,17 @@ abstract class Note extends Model {
         return $result;
     }
 
-    public function ispinned(): bool{
+    public function isShared(): bool{
+        $query = self::execute("SELECT COUNT(*) FROM `note_shares` WHERE note_shares.note = :id", ["id" => $this->id]);
+        $data = $query->fetch();
+        $result = false;
+        if ($data[0] > 0){
+            $result = true;
+        }
+        return $result;
+    }
+
+    public function isPinned(): bool{
         $query = self::execute("SELECT notes.pinned FROM notes  WHERE notes.id = :id", ["id" => $this->id]);
         $data = $query->fetch();
         $result = false;

@@ -30,12 +30,11 @@
                 echo '  <i class="fa-solid fa-share-nodes"></i>';
                 echo '</a>';
                 //pinned
-                echo $note->ispinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid fa-toggle-on"></i></a>' : '<a href="index/pin/' . $note->getId() . '"><i class="fa-solid fa-thumbtack"></i></a>';
+                echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid fa-toggle-on"></i></a>' : '<a href="index/pin/' . $note->getId() . '"><i class="fa-solid fa-thumbtack"></i></a>';
 
                 //archived
-                echo '<a href="#">';
-                echo ' <i class="fa-solid fa-box-archive"></i>';
-                echo '</a>';
+                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid fa-box-open"></i></a>' : '<a href="index/archive/' . $note->getId() . '"><i class="fa-solid fa-box-archive"></i></a>';
+
                 //edited
                 echo '<a href="#">';
                 echo ' <i class="fa-regular fa-pen-to-square"></i>';

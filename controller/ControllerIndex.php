@@ -28,13 +28,13 @@ function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compare
     }
 }
 
- function open_note(int $id_note): string{
-    $note = "normal";
-    if (Note::isArchived($id_note))
-        $note = "archived";
-    elseif (Note::isShared($id_note))
-        $note = "share";
-    return $note;
+ function open_note(Note $note): string{
+    $type = "normal";
+    if ($note->isArchived())
+        $type = "archived";
+    elseif ($note->isShared())
+        $type = "share";
+    return $type;
 }
 
 
@@ -85,7 +85,7 @@ class ControllerIndex extends Controller{
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
-        $noteType = open_note($idNote);
+        $noteType = open_note($note);
 
 
         (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
@@ -111,6 +111,32 @@ class ControllerIndex extends Controller{
 
         if ($note) {
             $note->setPinned(1);
+            $note->persist();
+        }
+
+        $this->redirect("index", "open_text_note", $_GET['param1']);
+    }
+
+    public function unarchive(){
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+        if ($note) {
+            $note->setArchived(0);
+            $note->persist();
+        }
+
+        $this->redirect("index", "open_text_note", $_GET['param1']);
+    }
+
+    public function archive(){
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+        if ($note) {
+            $note->setArchived(1);
             $note->persist();
         }
 
