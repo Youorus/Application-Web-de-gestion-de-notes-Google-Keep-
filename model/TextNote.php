@@ -24,26 +24,62 @@ class TextNote extends Note {
         return $error;
     }
 
-    public function persist(): TextNote
-    {
-        // Vérifier si la note existe déjà dans la base de données
-        $existingNote = self::execute("SELECT * FROM text_notes WHERE id = :id", ["id" => $this->getId()])->fetch();
 
-        if ($existingNote) {
-            // Si la note existe, mettez à jour les informations, y compris le contenu
-            self::execute("UPDATE text_notes SET content = :content WHERE id = :id", [
-                "content" => $this->content,
-                "id" => $this->getId()
-            ]);
-        } else {
-            // Si la note n'existe pas, insérez une nouvelle ligne
-            self::execute("INSERT INTO text_notes (id, content) VALUES (:id, :content)", [
-                "id" => $this->getId(),
-                "content" => $this->content
-            ]);
+
+
+    public function persist(): TextNote | array {
+        $errors = $this->validate();
+        if (!empty($errors)) {
+            return $errors;
         }
+
+        if (!parent::get_textnote_by_id($this->getId())) {
+            // Insérer une nouvelle note dans 'notes'
+            parent::execute(
+                "INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight) 
+             VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                [
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]
+            );
+            $this->setId(parent::lastInsertId());
+
+            // Insérer dans 'text_notes'
+            parent::execute(
+                "INSERT INTO text_notes (id, content) VALUES (:id, :content)",
+                ['id' => $this->getId(), 'content' => $this->content]
+            );
+        } else {
+            // Mettre à jour la note existante
+            parent::execute(
+                "UPDATE notes SET title = :title, edited_at = :editedAt, 
+             pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
+                [
+                    'id' => $this->getId(),
+                    'title' => $this->getTitle(),
+                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]
+            );
+
+            // Mettre à jour le contenu dans 'text_notes'
+            parent::execute(
+                "UPDATE text_notes SET content = :content WHERE id = :id",
+                ['id' => $this->getId(), 'content' => $this->content]
+            );
+        }
+
         return $this;
     }
+
 
     public function delete(){
 

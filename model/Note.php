@@ -77,71 +77,8 @@ abstract class Note extends Model {
         return $error;
     }
 
-    public function persist(): Note {
-
-        if (self::getNoteById($this->id)) {
-            // Si la note existe, mettez à jour les informations
-            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :created_at, edited_at = :edited_at, pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id", [
-                "title" => $this->title,
-                "owner" => $this->owner,
-                "created_at" => $this->dateTime,
-                " edited_at" => $this->dateTime_edit,
-                "pinned" => $this->pinned,
-                "archived" => $this->archived,
-                "weight" => $this->weight,
-                "id" => $this->id
-            ]);
-        } else {
-            // Si la note n'existe pas
-            self::execute("INSERT INTO notes (id, title, owner, created_at, edited_at, pinned, archived, weight) VALUES (:id, :title, :owner, :created_at, NULL, :pinned, :archived, :weight)", [
-                "id" => $this->id,
-                "title" => $this->title,
-                "owner" => $this->owner,
-                "created_at" => $this->dateTime->format('Y-m-d H:i:s'), // Formatage de la date
-                "pinned" => $this->pinned,
-                "archived" => $this->archived,
-                "weight" => $this->weight
-            ]);
-        }
-
-        return $this;
-    }
 
 
-    public static function getNoteById(int $noteId): ?Note {
-        $query = self::execute("SELECT * FROM notes WHERE id = :id", ["id" => $noteId]);
-        $data = $query->fetch();
-
-        if ($data) {
-            $note = null;
-
-            // Vérifier le type de la note (TextNote ou ChecklistNote)
-            if ($data['type'] === NoteType::TextNote) {
-                $note = new TextNote(
-                    $data['id'],
-                    $data['content']
-                );
-            } elseif ($data['type'] === NoteType::ChecklistNote) {
-                $note = new CheckListNote(
-                    $data['id']
-                );
-            }
-
-            // Remplir les propriétés communes
-            $note->setTitle($data['title']);
-            $note->setOwner($data['owner']);
-            $note->setDateTime(new DateTime($data['created_at']));
-            $note->setDateTimeEdit($data['edited_at'] ? new DateTime($data['edited_at']) : null);
-            $note->setPinned($data['pinned']);
-            $note->setArchived($data['archived']);
-            $note->setWeight($data['weight']);
-
-            return $note;
-        }
-
-        // Si la note n'est pas trouvée, retourner null
-        return null;
-    }
 
 
     public function delete() {
@@ -173,6 +110,27 @@ abstract class Note extends Model {
         return new DateTime();
     }
 
+    public static function get_textnote_by_id(int $id): TextNote | false {
+        $query = self::execute("SELECT * FROM text_notes WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new TextNote($data["id"], $data["content"]
+            );
+        }
+    }
+
+
+    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
+        $data = $query->fetch(); // un seul résultat au maximum
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new CheckListNote($data["id"], $data["title"], User::get_user_by_id($data["owner"]), $data["created_at"], $data["edited_at"], $data["pinned"], $data["archived"], $data["weight"]);
+        }
+    }
 
     public function getDateTimeEdit(): ?DateTime {
         $query = self::execute("SELECT notes.edited_at FROM notes WHERE notes.id = :id", ["id" => $this->id]);

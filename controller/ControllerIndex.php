@@ -100,21 +100,21 @@ class ControllerIndex extends Controller{
         if ($note) {
             $note->setPinned(0);
             $note->persist();
-            echo "Donne";
-        }else{
-            var_dump($note);
-            echo "je n'ai pas la note ";
         }
-
+        $this->redirect("index", "open_text_note", $_GET['param1']);
     }
 
     public function pin(): void {
-        $user = $this->get_user_or_redirect();
         $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
-        $note->setPinned(1);
-        $note->persist();
-        $this->redirect("index", "open_text_note",$note);
+
+        if ($note) {
+            $note->setPinned(1);
+            $note->persist();
+        }
+
+        $this->redirect("index", "open_text_note", $_GET['param1']);
     }
 
 

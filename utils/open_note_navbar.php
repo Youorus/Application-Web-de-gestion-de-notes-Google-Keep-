@@ -30,7 +30,7 @@
                 echo '  <i class="fa-solid fa-share-nodes"></i>';
                 echo '</a>';
                 //pinned
-                echo $note->ispinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid fa-thumbtack"></i></a>' : '<a href="index/pin"><i class="fa-solid fa-thumbtack"></i></a>';
+                echo $note->ispinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid fa-toggle-on"></i></a>' : '<a href="index/pin/' . $note->getId() . '"><i class="fa-solid fa-thumbtack"></i></a>';
 
                 //archived
                 echo '<a href="#">';
