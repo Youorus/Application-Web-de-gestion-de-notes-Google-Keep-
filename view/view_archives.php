@@ -19,11 +19,12 @@
 include "utils/navbar.php";
 ?>
 
+
 <div class="container">
     <h3>Archives</h3>
     <div class="row">
         <?php
-        include "utils/archives_notes.php";
+        include "archives_notes.php";
         ?>
     </div>
 
