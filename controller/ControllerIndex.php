@@ -127,7 +127,27 @@ class ControllerIndex extends Controller
 
 
         (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
+    }
 
+    public function open_checklist_note()
+    {
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+        $content = $note->getItems();
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+<<<<<<< HEAD
+=======
+
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note]);
+>>>>>>> open_checklist_note
     }
 
 
@@ -278,4 +298,9 @@ class ControllerIndex extends Controller
     }
 
 
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> open_checklist_note
