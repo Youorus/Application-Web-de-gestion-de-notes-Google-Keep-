@@ -12,30 +12,30 @@
             <?php
             if ($noteType == "archived"){
                 //delete
-            echo '<a href="#">';
-            echo ' <i class="fa-solid fa-calendar-xmark"></i>';
+            echo '<a href="index/deleteNote/'. $note->getId() .'">';
+            echo ' <i class="fa-solid fs-1 fa-calendar-xmark"></i>';
             echo '</a>';
             //unarchived
-                echo '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid fa-box-open"></i></a>';
+                echo '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid fs-1 fa-box-open"></i></a>';
             }elseif ($noteType == "shared"){
                 // edite share
                 echo '<a href="#">';
-                echo ' <i class="fa-regular fa-pen-to-square"></i>';
+                echo ' <i class="fa-regular fs-1 fa-pen-to-square"></i>';
                 echo '</a>';
             }else{
                 //share
                 echo '<a href="index/view-share">';
-                echo '  <i class="fa-solid fa-share-nodes"></i>';
+                echo '  <i class="fa-solid fs-1 fa-share-nodes"></i>';
                 echo '</a>';
                 //pinned
-                echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid fa-toggle-on"></i></a>' : '<a href="index/pin/' . $note->getId() . '"><i class="fa-solid fa-thumbtack"></i></a>';
+                echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '"><i class="fa-solid  fs-1 fa-toggle-on"></i></a>' : '<a href="index/pin/' . $note->getId() . '"><i class="fa-solid  fs-1 fa-thumbtack"></i></a>';
 
                 //archived
-                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid fa-box-open"></i></a>' : '<a href="index/archive/' . $note->getId() . '"><i class="fa-solid fa-box-archive"></i></a>';
+                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '"><i class="fa-solid  fs-1 fa-box-open"></i></a>' : '<a href="index/archive/' . $note->getId() . '"><i class="fa-solid fs-1 fa-box-archive"></i></a>';
 
                 //edited
                 echo '<a href="#">';
-                echo ' <i class="fa-regular fa-pen-to-square"></i>';
+                echo ' <i class="fa-regular fs-1 fa-pen-to-square"></i>';
                 echo '</a>';
             }
             ?>

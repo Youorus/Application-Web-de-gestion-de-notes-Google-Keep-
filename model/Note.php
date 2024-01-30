@@ -75,12 +75,9 @@ abstract class Note extends Model {
         return $error;
     }
 
+    public function delete(): void {
+        self::execute("DELETE FROM notes WHERE id = :id", ["id" => $this->getId()]);
 
-
-
-
-    public function delete() {
-        // Logique de suppression ici si nécessaire
     }
 
     public function getId(): int {

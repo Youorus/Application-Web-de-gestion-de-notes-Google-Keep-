@@ -55,9 +55,6 @@ class CheckListNoteItem extends CheckListNote {
     }
 
 
-    public function delete(){
-
-    }
     public function getId(): int
     {
         return $this->id;

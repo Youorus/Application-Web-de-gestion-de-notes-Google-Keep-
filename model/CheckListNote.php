@@ -19,6 +19,11 @@ class CheckListNote extends Note {
     }
 
 
+    public function delete(): void
+    {
+        self::execute("DELETE FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $this->getId()]);
+        parent::delete();
+    }
 
     public function validate() : array {
         $error = [];
@@ -48,10 +53,6 @@ class CheckListNote extends Note {
             ]);
         }
         return $this;
-    }
-
-    public function delete(){
-
     }
 
     public function getType(): NoteType

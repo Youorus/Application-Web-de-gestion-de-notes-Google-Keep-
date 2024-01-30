@@ -144,5 +144,18 @@ class ControllerIndex extends Controller{
         $this->redirect("index", "open_text_note", $_GET['param1']);
     }
 
+    public function deleteNote(){
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+        if ($note) {
+            $note->delete();
+            $note->persist();
+        }
+
+        $this->redirect("index");
+    }
+
 
 }
