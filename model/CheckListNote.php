@@ -36,21 +36,7 @@ class CheckListNote extends Note
     }
 
     public function persist(): CheckListNote {
-        if ($this->id === null) {
-            self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
-                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
-                [
-                    'title' => $this->getTitle(),
-                    'owner' => $this->getOwner(),
-                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
-                    'pinned' => $this->getPinned(),
-                    'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
-                ]);
-            $this->id = self::lastInsertId();
-            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)", ['id' => $this->id]);
-        } else {
+        if (self::get_checklistnote_by_id($this->id)) {
             self::execute("UPDATE notes SET title = :title, owner = :owner, edited_at = :editedAt, 
                                        pinned = :pinned, archived = :archived, weight = :weight
                        WHERE id = :id",
@@ -58,14 +44,29 @@ class CheckListNote extends Note
                     'id' => $this->id,
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
                 ]);
+        } else {
+            self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
+                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                [
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]);
+            $this->id = self::lastInsertId();
+            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)", ['id' => $this->id]);
         }
         return $this;
     }
+
 
 
     public function getType(): NoteType
@@ -106,6 +107,18 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         }
         return $results;
     }
+
+    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new CheckListNote($data["id"]);
+        }
+    }
+
+    
 }
 
 

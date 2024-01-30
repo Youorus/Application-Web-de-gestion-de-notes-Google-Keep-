@@ -118,15 +118,7 @@ abstract class Note extends Model {
     }
 
 
-    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
-        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
-        $data = $query->fetch(); // un seul résultat au maximum
-        if ($query->rowCount() == 0) {
-            return false;
-        } else {
-            return new CheckListNote($data["id"], $data["title"], User::get_user_by_id($data["owner"]), $data["created_at"], $data["edited_at"], $data["pinned"], $data["archived"], $data["weight"]);
-        }
-    }
+
 
 
     public function getDateTimeEdit(): ?DateTime {
