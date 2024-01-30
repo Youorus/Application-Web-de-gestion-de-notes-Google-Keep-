@@ -3,6 +3,7 @@ require_once "framework/Controller.php";
 require_once "model/Note.php";
 require_once "model/TextNote.php";
 require_once "model/CheckListNoteItem.php";
+require_once "model/NoteShare.php";
 
 function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string {
     // Calcul de la différence en mois
@@ -77,8 +78,12 @@ class ControllerIndex extends Controller{
 
     public function setting(): void{
         $user = $this->get_user_or_redirect();
+        if (isset($_GET['logout'])) {
+            $this->logout();
+            header('Location: index.php');
+            exit;
+        }
         $user_name = $user->get_fullname_User();
-        $logout = $this->logout();
         $title = "Settings";
         (new View("setting"))->show(["user_name" => $user_name, "title" =>  $title]);
 
@@ -165,7 +170,72 @@ class ControllerIndex extends Controller{
     }
 
     public function view_shares_note(): void{
+        $noteId = null;
         
+        if(isset($_GET['id'])){
+            $noteId = $_GET['id'];
+            $noteType = getType($noteId);
+            
+
+            if ($noteType == 'checklist') {
+                header('Location: view_checklist_note.php?id=' . $noteId); //mettre le vrai nom de la vue de open check list note de anass
+            } else {
+                header('Location: index/open_text_note.php?id=' . $noteId);
+            }
+
+           
+        }
+
+        
+       
+
+        (new View("shares"))->show(["id" => $noteId]);
+    }
+
+    public function add_share() {
+        $user = $this->get_user_or_redirect(); // S'assure que l'utilisateur est connecté
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Récupération des données du formulaire
+            $noteId = $_POST['note_id'];
+            $shareUserId = $_POST['user_id'];
+            $permission = $_POST['permission'] === 'editor' ? 1 : 0;
+    
+            // Obtenez l'objet Note à partir de son ID
+            $note = Note::getId($noteId);
+            if ($note instanceof Note) {
+                // Création de l'objet NoteShare et sauvegarde dans la base de données
+                $share = new NoteShare($note, $permission, $shareUserId);
+                $share->persist();
+    
+                // Redirection avec un message de succès ou d'erreur
+                $this->redirect('index.php?action=view_shares_note&id=' . $noteId); // Assurez-vous que la méthode redirect accepte cette syntaxe
+            } else {
+                // Gérez l'erreur si l'objet Note n'est pas récupéré correctement
+            }
+        }
+    }
+
+    public function delete_share(){
+
+        $user = $this->get_user_or_redirect();
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Récupération des données du formulaire
+            $noteId = $_POST['note_id'];
+            $shareUserId = $_POST['user_id'];
+
+            $note = Note::getId($noteId);
+            if ($note instanceof Note) {
+                $share = new NoteShare($note,$user->getId(),$shareUserId);
+                $share->delete();
+                $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
+            }
+            //suppression du partage
+            
+    } 
+}
+
+    public function toggle_share_permission(){
+       
     }
 
      

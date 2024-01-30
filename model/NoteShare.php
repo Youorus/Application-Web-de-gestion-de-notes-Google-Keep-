@@ -1,6 +1,6 @@
 <?php
 require_once "framework/Model.php";
-require_once "path_to/Note.php"; // Assurez-vous de spécifier le bon chemin vers votre classe Note
+require_once "model/Note.php"; 
 
 class NoteShare extends Model {
 private Note $note;
@@ -20,11 +20,14 @@ return $error;
 }
 
 public function persist() {
-
+    $query = "INSERT INTO note_shares (note, user, editor) VALUES (:note, :user, :editor) ON DUPLICATE KEY UPDATE editor = :editor";
+        self::execute($query, ['note' => $this->note->getId(), 'user' => $this->user, 'editor' => $this->editor]);
+        return $this;
 }
 
 public function delete() {
-
+    $query = "DELETE FROM note_shares WHERE note = :note AND user = :user";
+    self::execute($query, ['note' => $this->note->getId(), 'user' => $this->user]);
 }
 
 public function getNote(): Note {
@@ -61,5 +64,7 @@ public function getType(): string {
         return $count > 0 ? 'checklist' : 'standard';
         
 }
+
+
 
 }
