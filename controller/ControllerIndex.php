@@ -106,7 +106,7 @@ class ControllerIndex extends Controller
 
 
 
-    public function open_text_note(): void{
+    public function open_text_note(): void {
 
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
@@ -123,7 +123,6 @@ class ControllerIndex extends Controller
         $noteType = open_note($note);
 
 
-        (new View("text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit]);
 
 
         (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
@@ -143,17 +142,15 @@ class ControllerIndex extends Controller
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
-<<<<<<< HEAD
-=======
 
         (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note]);
->>>>>>> open_checklist_note
     }
 
 
     public function view_edit_text_note(): void
     {
         $user = $this->get_user_or_redirect();
+    }
 
 
     public function edit_text_note(): void{
@@ -216,10 +213,6 @@ class ControllerIndex extends Controller
 
     }
 
-    public function open_checklist_note () {
-        
-    }
-}
 
     public function view_add_text_note(): void{
         $content = '';
@@ -297,10 +290,4 @@ class ControllerIndex extends Controller
         $this->redirect("index");
     }
 
-
-<<<<<<< HEAD
 }
-=======
-
-}
->>>>>>> open_checklist_note
