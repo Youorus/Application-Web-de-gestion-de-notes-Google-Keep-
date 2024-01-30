@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
+
+        .icon-link {
+            margin-right: 20px;
+        }
+
         .open-text{
             margin: 4% 5% 0 5%;
         }
