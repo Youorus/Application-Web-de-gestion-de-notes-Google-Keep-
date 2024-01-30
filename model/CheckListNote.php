@@ -1,4 +1,5 @@
 <?php
+
 require_once "Note.php";
 class CheckListNote extends Note {
     private int $id;
@@ -18,6 +19,11 @@ class CheckListNote extends Note {
     }
 
 
+    public function delete(): void
+    {
+        self::execute("DELETE FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $this->getId()]);
+        parent::delete();
+    }
 
     public function validate() : array {
         $error = [];
@@ -25,12 +31,28 @@ class CheckListNote extends Note {
         return $error;
     }
 
-    public function persist(){
+    public function persist(): CheckListNote {
+        // Vérifier si la note existe déjà dans la base de données
+        $existingNote = self::execute("SELECT * FROM checklist_notes WHERE id = :id", ["id" => $this->getId()])->fetch();
 
-    }
-
-    public function delete(){
-
+        if ($existingNote) {
+            // Si la note existe, mettez à jour les informations
+            self::execute("UPDATE checklist_notes SET title = :title, owner = :owner, created_at = :created_at, edited_at = NOW() WHERE id = :id", [
+                "title" => $this->getTitle(),
+                "owner" => $this->getOwner(),
+                "created_at" => $this->getDateTime()->format('Y-m-d H:i:s'),
+                "id" => $this->getId()
+            ]);
+        } else {
+            // Si la note n'existe pas, insérez une nouvelle ligne
+            self::execute("INSERT INTO checklist_notes (id, title, owner, created_at, edited_at) VALUES (:id, :title, :owner, :created_at, NULL)", [
+                "id" => $this->getId(),
+                "title" => $this->getTitle(),
+                "owner" => $this->getOwner(),
+                "created_at" => $this->getDateTime()->format('Y-m-d H:i:s')
+            ]);
+        }
+        return $this;
     }
 
     public function getType(): NoteType
@@ -59,6 +81,7 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         return $results;
     }
 
+<<<<<<< HEAD
 
     public function getTitle(): string
     {
@@ -72,4 +95,6 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
     }
 
 
+=======
+>>>>>>> d1ff3b1e32113b559aacb9adb05e8a848debcb11
 }

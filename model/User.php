@@ -86,6 +86,35 @@ class User extends Model{
 
     }
 
+    public function get_One_note_by_id(int $noteId)
+    {
+        // Récupérer les détails de la note textuelle
+        $queryNote = self::execute("SELECT text_notes.id, text_notes.content FROM text_notes WHERE text_notes.id = :id", ["id" => $noteId]);
+        $rowNote = $queryNote->fetch();
+
+        if ($rowNote) {
+            return new TextNote(
+                $rowNote['id'],
+                $rowNote['content']
+            );
+        }
+
+        // Si la note textuelle n'est pas trouvée, essayer avec une note de liste de contrôle
+        $queryChecklistNote = self::execute("SELECT checklist_notes.id FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $noteId]);
+        $rowChecklistNote = $queryChecklistNote->fetch();
+
+        if ($rowChecklistNote) {
+            return new CheckListNote(
+                $rowChecklistNote['id']
+            );
+        }
+
+        return null; // Aucune note trouvée
+    }
+
+
+
+
     public  function get_All_notesArchived(): array {
 
         $query = self::execute("SELECT notes.id FROM notes JOIN users ON users.id = notes.owner WHERE users.id = :id  AND notes.archived = 1 ORDER BY notes.weight", [
@@ -123,6 +152,7 @@ class User extends Model{
         return $results;
     }
 
+
     public function get_fullname_User(){
         $query = self::execute("SELECT users.full_name from users WHERE users.id = :id", [
                         "id" => $this->id,
@@ -132,7 +162,6 @@ class User extends Model{
                     if ($query->rowCount() > 0) {
                         foreach ($data as $row) {
                             $result = $row['full_name'];
-            
                         }
                     }
                     return $result;
