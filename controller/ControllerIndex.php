@@ -162,6 +162,10 @@ class ControllerIndex extends Controller
         (new View("edit_text_note"))->show(["title" => $title, "dateCreation" => $dateCreation]);
 
     }
+
+    public function open_checklist_note () {
+        
+    }
 }
 /*
 <<<<<<< HEAD
