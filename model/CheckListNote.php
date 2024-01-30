@@ -35,30 +35,38 @@ class CheckListNote extends Note
         return $error;
     }
 
-    public function persist(): CheckListNote
-    {
-        // Vérifier si la note existe déjà dans la base de données
-        $existingNote = self::execute("SELECT * FROM checklist_notes WHERE id = :id", ["id" => $this->getId()])->fetch();
-
-        if ($existingNote) {
-            // Si la note existe, mettez à jour les informations
-            self::execute("UPDATE checklist_notes SET title = :title, owner = :owner, created_at = :created_at, edited_at = NOW() WHERE id = :id", [
-                "title" => $this->getTitle(),
-                "owner" => $this->getOwner(),
-                "created_at" => $this->getDateTime()->format('Y-m-d H:i:s'),
-                "id" => $this->getId()
-            ]);
+    public function persist(): CheckListNote {
+        if ($this->id === null) {
+            self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
+                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                [
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]);
+            $this->id = self::lastInsertId();
+            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)", ['id' => $this->id]);
         } else {
-            // Si la note n'existe pas, insérez une nouvelle ligne
-            self::execute("INSERT INTO checklist_notes (id, title, owner, created_at, edited_at) VALUES (:id, :title, :owner, :created_at, NULL)", [
-                "id" => $this->getId(),
-                "title" => $this->getTitle(),
-                "owner" => $this->getOwner(),
-                "created_at" => $this->getDateTime()->format('Y-m-d H:i:s')
-            ]);
+            self::execute("UPDATE notes SET title = :title, owner = :owner, edited_at = :editedAt, 
+                                       pinned = :pinned, archived = :archived, weight = :weight
+                       WHERE id = :id",
+                [
+                    'id' => $this->id,
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]);
         }
         return $this;
     }
+
 
     public function getType(): NoteType
     {
