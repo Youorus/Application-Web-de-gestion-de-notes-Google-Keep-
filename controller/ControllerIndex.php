@@ -290,6 +290,59 @@ class ControllerIndex extends Controller
         $this->redirect("index");
     }
 
+    public function add_checklistnote(): void {
+        $user = $this->get_user_or_redirect();
+        $errors = [];
+        $title = '';
+
+        if (isset($_POST['title'])) {
+            $title = $_POST['title'];
+            $ownerId = $user->getId();
+            $createdAt = new DateTime();
+            $weight = 1.0;
+
+            $checklistNote = new CheckListNote(
+                0,
+            );
+            $checklistNote->setTitle($title);
+            $checklistNote->setOwner($ownerId);
+            $checklistNote->setDateTime($createdAt);
+            $checklistNote->setWeight($weight);
+
+
+            $errors = $checklistNote->validate_checklistnote();
+
+            $items = [];
+            for ($i = 1; $i <= 5; $i++) {
+                if (!empty($_POST["item$i"])) {
+                    $itemContent = $_POST["item$i"];
+                    $item = new CheckListNoteItem(
+                        id: 0,
+                        checklist_note: 0,
+                        content: $itemContent,
+                        checked: false
+                    );
+
+                    $items[] = $item;
+                }
+            }
+
+            if (empty($errors)) {
+                $checklistNote->persist();
+                foreach ($items as $item) {
+                    $item->setChecklistNote($checklistNote->getId());
+                    $item->persist();
+                }
+                $this->redirect("index", "index", $checklistNote->getId());
+            }
+        }
+
+        (new View("add_checklist_note"))->show([
+            "title" => $title,
+            "errors" => $errors
+        ]);
+    }
+
 
 
 }
