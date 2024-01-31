@@ -103,6 +103,30 @@ body{
     color: var(--couleur-texte);
   }
 
+
+.icon-link {
+    margin-right: 20px;
+}
+
+.open-text{
+    margin: 1% 5% 0 5%;
+}
+.infoText{
+    font-style: italic;
+    font-weight: normal;
+    font-size: initial;
+    margin-left: 5%;
+    margin-top: 3%;
+}
+.form-label{
+    font-size: larger;
+}
+.form-control {
+    background-color: var(--couleur-bordure) !important;
+    color: var(--couleur-texte);
+    border-color: var(--couleur-bordure);
+}
+
   .signup-box hr {
     margin: 15px 0;
     color: var(--couleur-texte);
