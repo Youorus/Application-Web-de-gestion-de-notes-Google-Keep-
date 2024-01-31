@@ -142,8 +142,9 @@ class ControllerIndex extends Controller
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
+        $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note]);
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
     }
 
 
