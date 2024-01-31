@@ -97,7 +97,7 @@ class ControllerIndex extends Controller
     {
         $user = $this->get_user_or_redirect();
         $user_name = $user->get_fullname_User();
-        $logout = $this->logout();
+        //$logout = $this->logout();
         $title = "Settings";
         (new View("setting"))->show(["user_name" => $user_name, "title" => $title]);
 
@@ -107,7 +107,6 @@ class ControllerIndex extends Controller
 
 
     public function open_text_note(): void{
-
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
@@ -122,31 +121,13 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-
-        (new View("text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit]);
-
-
         (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
 
     }
 
 
-    public function view_edit_text_note(): void
-    {
-        $user = $this->get_user_or_redirect();
-
-
     public function edit_text_note(): void{
         $idNote = intval($_GET['param1']);
-
-        $title = TextNote::getTitleNote($idNote);
-        $content = TextNote::getContentNote($idNote);
-        $createDate = new DateTime(TextNote::getCreateDateTime($idNote));
-        $editDate = (TextNote::getEditDateTime($idNote) != null) ? new DateTime(TextNote::getEditDateTime($idNote)) : null;
-
-        $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
-
         $user = $this->get_user_or_redirect();
         $actualDate = new DateTime();
         $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
@@ -158,9 +139,6 @@ class ControllerIndex extends Controller
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
         $noteType = "edited";
-
-
-        (new View("edit_text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit]);
 
         (new View("edit_text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
 
@@ -199,7 +177,7 @@ class ControllerIndex extends Controller
     public function open_checklist_note () {
         
     }
-}
+
 
     public function view_add_text_note(): void{
         $content = '';

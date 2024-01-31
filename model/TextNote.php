@@ -128,7 +128,6 @@ public function delete(): void
     }
 
 
-<<<<<<< HEAD
     public static function getTitleNote(int $id): string{
         $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $id]);
         $data = $query->fetchAll();
@@ -187,6 +186,4 @@ public function delete(): void
 
 
 
-=======
->>>>>>> d1ff3b1e32113b559aacb9adb05e8a848debcb11
 }
