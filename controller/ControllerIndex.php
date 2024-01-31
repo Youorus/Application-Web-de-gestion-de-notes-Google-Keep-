@@ -110,7 +110,7 @@ class ControllerIndex extends Controller
 
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
+        $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
         $title = $note->getTitle();
         $content = $note->getContent();
