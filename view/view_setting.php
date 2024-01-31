@@ -3,8 +3,6 @@
 
 <?php include "head.php"?>
     <body>
-     
-       
         <!-- menu deroulant -->
             <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark show" style="width:100vw;" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                 <div class="offcanvas-header">
@@ -43,7 +41,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="login">
+                            <a class="nav-link" href="index/logout">
                                 <span class="material-symbols-outlined">
                                     logout
                                 

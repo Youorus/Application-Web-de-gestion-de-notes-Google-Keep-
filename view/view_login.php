@@ -1,11 +1,11 @@
 <!-- importation de l'entete de page  -->
 <?php
-require_once "utils/head.php";
+require_once "head.php";
 ?>
+<div class="box-login">
 <div class="signup-box">
   <h2>Log In</h2>
   <hr>
-
   <form action="main/login" method="post">    
     <div class="form-group input">
     <i class="fa-regular fa-user icon"></i>
@@ -33,6 +33,7 @@ require_once "utils/head.php";
                     </ul>
                 </div>
             <?php endif; ?>
+</div>
 </div>
 
 <!-- Font Awesome pour les icônes -->

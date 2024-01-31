@@ -12,7 +12,6 @@ a{
 }
   *{
     color: var(--couleur-texte);
-    /*background-color: var(--couleur-fond);*/
   }
 
   title{
@@ -88,15 +87,23 @@ body{
     left: 4%;
     padding: 20px;
   }
-
+.box-login{
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+.box-signup{
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
   .signup-box {
+      text-align: center;
     background-color: var(--couleur-fond);
-    max-width: 500px;
+      width: 35%;
     border: 1px solid var(--couleur-bordure);
-    width: 80%;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
   .signup-box h2 {
@@ -182,3 +189,5 @@ body{
   .signup-btn:hover {
     background-color: #0056b3;
   }
+
+
