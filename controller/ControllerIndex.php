@@ -206,7 +206,11 @@ class ControllerIndex extends Controller
             $note->setPinned(0);
             $note->persist();
         }
-        $this->redirect("index", "open_text_note", $_GET['param1']);
+        if($note->getType() == NoteType::TextNote){
+            $this->redirect("index", "open_text_note", $_GET['param1']);
+        }else{
+            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+        }
     }
 
     public function pin(): void {
@@ -216,10 +220,15 @@ class ControllerIndex extends Controller
 
         if ($note) {
             $note->setPinned(1);
+            var_dump($note);
             $note->persist();
         }
+        if($note->getType() == NoteType::TextNote){
+            $this->redirect("index", "open_text_note", $_GET['param1']);
+        }else{
+            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+        }
 
-        $this->redirect("index", "open_text_note", $_GET['param1']);
     }
 
     public function unarchive(){
@@ -232,7 +241,11 @@ class ControllerIndex extends Controller
             $note->persist();
         }
 
-        $this->redirect("index", "open_text_note", $_GET['param1']);
+        if($note->getType() == NoteType::TextNote){
+            $this->redirect("index", "open_text_note", $_GET['param1']);
+        }else{
+            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+        }
     }
 
     public function archive(){
@@ -245,7 +258,11 @@ class ControllerIndex extends Controller
             $note->persist();
         }
 
-        $this->redirect("index", "open_text_note", $_GET['param1']);
+        if($note->getType() == NoteType::TextNote){
+            $this->redirect("index", "open_text_note", $_GET['param1']);
+        }else{
+            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+        }
     }
 
     public function deleteNote(){

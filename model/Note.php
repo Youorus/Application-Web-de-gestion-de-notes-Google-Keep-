@@ -124,7 +124,7 @@ abstract class Note extends Model {
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new CheckListNote($data["id"], $data["title"], User::get_user_by_id($data["owner"]), $data["created_at"], $data["edited_at"], $data["pinned"], $data["archived"], $data["weight"]);
+            return new CheckListNote($data["id"]);
         }
     }
 
