@@ -35,23 +35,25 @@ class CheckListNote extends Note
         return $error;
     }
 
-    public function persist(): CheckListNote {
+    public function persist() {
         if (self::get_checklistnote_by_id($this->id)) {
-            self::execute("UPDATE notes SET title = :title, owner = :owner, edited_at = :editedAt, 
-                                       pinned = :pinned, archived = :archived, weight = :weight
-                       WHERE id = :id",
+            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
+                           edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
+                           WHERE id = :id",
                 [
                     'id' => $this->id,
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
                     'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
                 ]);
         } else {
+            // Insertion d'une nouvelle note dans 'notes'
             self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
-                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                           VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
@@ -62,8 +64,16 @@ class CheckListNote extends Note
                     'weight' => $this->getWeight()
                 ]);
             $this->id = self::lastInsertId();
-            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)", ['id' => $this->id]);
+            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
+                ['id' => $this->id]);
         }
+
+
+        foreach ($this->getItems() as $item) {
+            $item->setChecklistNote($this->id);
+            $item->persist();
+        }
+
         return $this;
     }
 
