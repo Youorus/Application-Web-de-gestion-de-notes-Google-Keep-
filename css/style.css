@@ -181,3 +181,19 @@ body{
   .signup-btn:hover {
     background-color: #0056b3;
   }
+
+.note-container {
+    margin: 20px;
+}
+.note-title {
+    margin-bottom: 20px;
+}
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.checklist-item input[type="checkbox"]:checked + label {
+    text-decoration-line-through;
+    color: #6c757d;
+}

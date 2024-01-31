@@ -31,17 +31,14 @@ class ControllerSettings extends Controller
             $newpassword = $_POST['newpassword'];
             $confirmpassword = $_POST['confirmpassword'];
 
-            // Vérifier si le mot de passe actuel est correct
             if (!$user->verifyPassword($currentpassword)) {
                 $errors[] = "Le mot de passe actuel est incorrect.";
             }
 
-            // Vérifier si les nouveaux mots de passe correspondent
             if ($newpassword !== $confirmpassword) {
                 $errors[] = "Le nouveau mot de passe et la confirmation ne correspondent pas.";
             }
 
-            // Si aucune erreur, mettre à jour le mot de passe
             if (empty($errors)) {
                 $user->setHashedPassword(Tools::my_hash($newpassword));
                 $user->persist();
@@ -55,7 +52,7 @@ class ControllerSettings extends Controller
 
 
 
-    function edit_profile(): void {
+    public function edit_profile(): void {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $success = "";
@@ -64,7 +61,7 @@ class ControllerSettings extends Controller
             $full_name = trim($_POST['full_name']);
             if($full_name != $user->full_name) {
                 $user->full_name = $full_name;
-                $errors_fullname = $user->validate_full_name();
+                $errors_fullname = $user->validate();
                 $errors = array_merge($errors, $errors_fullname);
             }
         }

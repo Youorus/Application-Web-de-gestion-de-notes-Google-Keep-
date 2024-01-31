@@ -94,4 +94,14 @@ class CheckListNoteItem extends Model {
         }
     }
 
+    public function check_uncheck(): void {
+        if($this->getChecked() == 0) {
+            $this->setChecked(1);
+        } else {
+            $this->setChecked(0);
+        }
+    }
+
+
+
 }
