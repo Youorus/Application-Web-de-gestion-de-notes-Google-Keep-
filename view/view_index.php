@@ -38,7 +38,7 @@ include "utils/navbar.php";
 
 <div class="fixed-icons">
     <a href="#"> <i class="fa-regular fa-file"> </i></a>
-    <a href="add_checklistnote"> <i class="fa-solid fa-list-check"></i></a>
+    <a href="index/add_checklistnote"> <i class="fa-solid fa-list-check"></i></a>
 
 </div>
 
