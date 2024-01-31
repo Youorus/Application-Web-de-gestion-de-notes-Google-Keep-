@@ -3,7 +3,7 @@
         <!-- Première div avec l'icône de retour -->
         <div class="navbar-icon">
             <a href="index/index">
-                <i class="fas fa-arrow-left "></i>
+               <span class="material-symbols-outlined"> arrow_back_ios </span>
             </a>
         </div>
 
@@ -13,10 +13,12 @@
             if ($noteType == "archived"){
                 // delete
                 echo '<a href="index/deleteNote/'. $note->getId() .'" class="icon-link">';
-                echo ' <i class="fa-solid  fa-calendar-xmark"></i>';
+                echo ' <span style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
                 echo '</a>';
                 // unarchived
-                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><i class="fa-solid fa-box-open"></i></a>';
+                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
+unarchive
+</span></a>';
             } elseif ($noteType == "shared"){
                 // edite share
                 echo '<a href="#" class="icon-link">';
@@ -30,19 +32,17 @@
             } else {
                 // share
                 echo '<a href="index/view-share" class="icon-link">';
-                echo '  <i class="fa-solid  fa-share-nodes"></i>';
+                echo ' <span class="material-symbols-outlined"> share </span>';
                 echo '</a>';
                 // pinned
-                echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><i class="fas fa-toggle-on "></i></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><i class="fas fa-thumbtack "></i></a>';
+                echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><span style="font-variation-settings: \'FILL\' 1, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24;" class="material-symbols-outlined"> push_pin </span></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> push_pin </span></a>';
 
                 // archived
-                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
-archive
-</span></a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><i class="fa-solid  fa-box-archive"></i></a>';
+                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> unarchive </span> </a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> archive </span></a>';
 
                 // edited
                 echo '<a href="index/edit_text_note/'. $note->getId() .'" class="icon-link">';
-                echo ' <i class="fa-regular  fa-pen-to-square"></i>';
+                echo ' <span class="material-symbols-outlined"> edit </span>';
                 echo '</a>';
             }
             ?>
