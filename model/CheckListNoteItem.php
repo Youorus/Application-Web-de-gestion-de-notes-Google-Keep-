@@ -30,29 +30,7 @@ class CheckListNoteItem extends Model {
         return  NoteType::ChecklistNote;
     }
 
-    public function persist(): CheckListNoteItem {
-        // Logique de persistance ici si nécessaire
-        if ($this->id) {
-            // Si l'élément de la liste de contrôle a déjà un ID, il existe déjà dans la base de données
-            // Vous pouvez mettre à jour l'élément existant
-            self::execute("UPDATE checklist_note_items SET content = :content, checked = :checked WHERE id = :id", [
-                "content" => $this->content,
-                "checked" => $this->checked,
-                "id" => $this->id
-            ]);
-        } else {
-            // Sinon, il s'agit d'un nouvel élément, vous pouvez l'insérer dans la base de données
-            self::execute("INSERT INTO checklist_note_items (checklist_note, content, checked) VALUES (:checklist_note, :content, :checked)", [
-                "checklist_note" => $this->checklist_note,
-                "content" => $this->content,
-                "checked" => $this->checked
-            ]);
-
-            // Mettez à jour l'ID de l'objet avec l'ID généré par la base de données
-            $this->id = self::lastInsertId();
-        }
-        return $this;
-    }
+    
 
 
     public function getId(): int
@@ -93,6 +71,27 @@ class CheckListNoteItem extends Model {
     public function setChecked(int $checked): void
     {
         $this->checked = $checked;
+    }
+
+    public function persist(): void {
+        if ($this->id) {
+            // Mise à jour de l'item existant
+            self::execute("UPDATE checklist_note_items SET checklist_note = :checklist_note, content = :content, checked = :checked WHERE id = :id",
+                [
+                    'id' => $this->id,
+                    'checklist_note' => $this->checklist_note,
+                    'content' => $this->content,
+                    'checked' => $this->checked
+                ]);
+        } else {
+            self::execute("INSERT INTO checklist_note_items (checklist_note, content, checked) VALUES (:checklist_note, :content, :checked)",
+                [
+                    'checklist_note' => $this->checklist_note,
+                    'content' => $this->content,
+                    'checked' => $this->checked
+                ]);
+            $this->id = self::lastInsertId();
+        }
     }
 
 }

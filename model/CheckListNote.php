@@ -67,8 +67,6 @@ class CheckListNote extends Note
             self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
                 ['id' => $this->id]);
         }
-
-
         foreach ($this->getItems() as $item) {
             $item->setChecklistNote($this->id);
             $item->persist();
