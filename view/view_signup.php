@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <base href="<?= $web_root ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup Form</title>
-    <!-- Importation du fichier CSS -->
-    <link rel="stylesheet" href="chemin/vers/votre/fichier.css">
-    <!-- Importation de l'entête de page -->
-    <?php require_once "utils/head.php"; ?>
-</head>
+<?php include "head.php"?>
 <body>
 <div class="signup-box">
     <h2>Signup</h2>

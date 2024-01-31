@@ -36,7 +36,9 @@
                 echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><i class="fas fa-toggle-on "></i></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><i class="fas fa-thumbtack "></i></a>';
 
                 // archived
-                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><i class="fa-solid   fa-box-open"></i></a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><i class="fa-solid  fa-box-archive"></i></a>';
+                echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
+archive
+</span></a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><i class="fa-solid  fa-box-archive"></i></a>';
 
                 // edited
                 echo '<a href="index/edit_text_note/'. $note->getId() .'" class="icon-link">';

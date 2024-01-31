@@ -4,9 +4,20 @@ require_once "model/Note.php";
 require_once "model/TextNote.php";
 require_once "model/CheckListNoteItem.php";
 
-function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string {
+
+ function open_note(Note $note): string{
+    $type = "normal";
+    if ($note->isArchived())
+        $type = "archived";
+    elseif ($note->isShared())
+        $type = "share";
+    return $type;
+}
+
+function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
+{
     // Calcul de la différence en mois
-    if ($compareDate == null){
+    if ($compareDate == null) {
         return "Not yet";
     }
     $interval = $referenceDate->diff($compareDate);
@@ -21,50 +32,18 @@ function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compare
         if ($nombreJoursEcart == 0) {
             return "Today";
         } else {
-            return  $nombreJoursEcart . " days ago";
+            return $nombreJoursEcart . " days ago";
         }
     } else {
-        return  $nombreMoisEcart . " month ago";
+        return $nombreMoisEcart . " month ago";
     }
 }
 
- function open_note(Note $note): string{
-    $type = "normal";
-    if ($note->isArchived())
-        $type = "archived";
-    elseif ($note->isShared())
-        $type = "share";
-    return $type;
-}
 
 
 class ControllerIndex extends Controller
 {
 
-    function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
-    {
-        // Calcul de la différence en mois
-        if ($compareDate == null) {
-            return "Not yet";
-        }
-        $interval = $referenceDate->diff($compareDate);
-        $nombreMoisEcart = $interval->y * 12 + $interval->m;
-
-
-        // Vérification si le nombre de mois d'écart est le même mois
-        if ($nombreMoisEcart == 0) {
-            // Vérification du nombre de jours d'écart
-            $nombreJoursEcart = $interval->d;
-
-            if ($nombreJoursEcart == 0) {
-                return "Today";
-            } else {
-                return $nombreJoursEcart . " days ago";
-            }
-        } else {
-            return $nombreMoisEcart . " month ago";
-        }
-    }
 
 
     public function index(): void
@@ -96,8 +75,15 @@ class ControllerIndex extends Controller
     public function setting(): void
     {
         $user = $this->get_user_or_redirect();
+        if (isset($_GET['logout'])&& $_GET['logout'] == 'true'){
+            $this->logout();
+            header('Location: main/login.php');
+            exit;
+        }
         $user_name = $user->get_fullname_User();
+
         //$logout = $this->logout();
+
         $title = "Settings";
         (new View("setting"))->show(["user_name" => $user_name, "title" => $title]);
 
@@ -106,7 +92,7 @@ class ControllerIndex extends Controller
 
 
 
-    public function open_text_note(): void{
+    public function open_text_note(): void {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
@@ -122,8 +108,27 @@ class ControllerIndex extends Controller
         $noteType = open_note($note);
 
         (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
-
     }
+
+    public function open_checklist_note()
+    {
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+        $content = $note->getItems();
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+        $noteType = open_note($note);
+
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+    }
+
 
 
     public function edit_text_note(): void{
@@ -174,9 +179,10 @@ class ControllerIndex extends Controller
 
     }
 
-    public function open_checklist_note () {
-        
-    }
+//    public function open_checklist_note () {
+//
+//    }
+
 
 
     public function view_add_text_note(): void{
@@ -254,6 +260,5 @@ class ControllerIndex extends Controller
 
         $this->redirect("index");
     }
-
 
 }

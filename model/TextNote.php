@@ -128,6 +128,7 @@ public function delete(): void
     }
 
 
+
     public static function getTitleNote(int $id): string{
         $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $id]);
         $data = $query->fetchAll();
@@ -179,10 +180,6 @@ public function delete(): void
         return $results;
     }
 
-    public function getWeight(): int
-    {
-        return parent::getWeight();
-    }
 
 
 

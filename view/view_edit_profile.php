@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier le Profile <?= $user->full_name ?></title>
-    <base href="<?= $web_root ?>">
-</head>
+<?php include "head.php"?>
 <body>
 <?php if (!empty($success)): ?>
     <p><?= $success ?></p>
