@@ -295,22 +295,25 @@ class ControllerIndex extends Controller
         $errors = [];
         $title = '';
 
-        if (isset($_POST['title'])) {
-            $title = $_POST['title'];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = $_POST['title'] ?? '';
             $ownerId = $user->getId();
             $createdAt = new DateTime();
-            $weight = 1.0;
+            $weight = 1.0; // ou une autre logique pour définir le poids
 
             $checklistNote = new CheckListNote(
-                0,
+                0
             );
+
             $checklistNote->setTitle($title);
             $checklistNote->setOwner($ownerId);
             $checklistNote->setDateTime($createdAt);
+            $checklistNote->setPinned(false);
+            $checklistNote->setArchived(false);
             $checklistNote->setWeight($weight);
 
-
             $errors = $checklistNote->validate_checklistnote();
+
 
             $items = [];
             for ($i = 1; $i <= 5; $i++) {
@@ -322,7 +325,7 @@ class ControllerIndex extends Controller
                         content: $itemContent,
                         checked: false
                     );
-
+                    $errors = array_merge($errors, $item->validate());
                     $items[] = $item;
                 }
             }
@@ -333,7 +336,8 @@ class ControllerIndex extends Controller
                     $item->setChecklistNote($checklistNote->getId());
                     $item->persist();
                 }
-                $this->redirect("index", "index", $checklistNote->getId());
+
+                $this->redirect("checklistnote", "open_checklist_note", $checklistNote->getId());
             }
         }
 
