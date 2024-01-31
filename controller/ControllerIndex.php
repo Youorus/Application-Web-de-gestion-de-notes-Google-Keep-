@@ -272,7 +272,6 @@ class ControllerIndex extends Controller
 
         if ($note) {
             $note->delete();
-            $note->persist();
         }
 
         $this->redirect("index");

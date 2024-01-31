@@ -24,6 +24,8 @@ class CheckListNote extends Note
 
     public function delete(): void
     {
+
+        self::execute("DELETE FROM checklist_note_items WHERE checklist_note_items.checklist_note = :id", ["id" => $this->getId()]);
         self::execute("DELETE FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $this->getId()]);
         parent::delete();
     }
@@ -109,6 +111,7 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
 
         return $results;
     }
+
 
 
     public function getTitle(): string
