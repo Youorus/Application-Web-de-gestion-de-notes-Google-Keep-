@@ -126,6 +126,16 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         }
     }
 
+    public  function validate_checklistnote () : array {
+
+        $errors = [];
+        if(strlen($this->getTitle()) < 3 || strlen($this->getTitle())> 25) {
+            $errors[] = "title must be beetween 3 and 25";
+        }
+
+        return $errors;
+    }
+
     
 }
 
