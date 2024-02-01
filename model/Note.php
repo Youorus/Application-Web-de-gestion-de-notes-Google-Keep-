@@ -118,6 +118,7 @@ abstract class Note extends Model {
     }
 
 
+
     public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
         $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
         $data = $query->fetch(); // un seul résultat au maximum

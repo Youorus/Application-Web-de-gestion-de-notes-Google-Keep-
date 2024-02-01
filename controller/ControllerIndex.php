@@ -44,8 +44,6 @@ function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compare
 class ControllerIndex extends Controller
 {
 
-
-
     public function index(): void
     {
         $user = $this->get_user_or_redirect();
@@ -54,7 +52,8 @@ class ControllerIndex extends Controller
         $userSharesNotes = $user->get_UserShares_Notes();
         $title = "My notes";
 
-        (new View("index"))->show([ "notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
+        (new View("index"))->show(["notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
+
     }
 
     public function archive_notes(): void
@@ -77,7 +76,6 @@ class ControllerIndex extends Controller
         }
         $user_name = $user->getFullName();
 
-        //$logout = $this->logout();
 
         $title = "Settings";
         (new View("setting"))->show(["user_name" => $user_name, "title" => $title]);
@@ -90,7 +88,7 @@ class ControllerIndex extends Controller
     public function open_text_note(): void {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
+        $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
         $title = $note->getTitle();
         $content = $note->getContent();
@@ -113,6 +111,9 @@ class ControllerIndex extends Controller
         $actualDate = new DateTime();
         $title = $note->getTitle();
         $content = $note->getItems();
+
+        $sortedItems = $this->sort_items($content);
+
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
 
@@ -121,7 +122,32 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+    }
+
+    public function check_uncheck(): void {
+
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $itemId = $_POST['item_id'];
+            $checked = isset($_POST['checked']) ? 1 : 0;
+
+            $item = CheckListNoteItem::get_item_by_id($itemId);
+            if ($item) {
+                $item->setChecked($checked);
+                $item->persist();
+            }
+
+
+        }
+        $this->redirect("index", "open_checklist_note");
+    }
+
+    public function sort_items(array $items): array {
+        usort($items, function($a, $b) {
+            return $a->getChecked() <=> $b->getChecked();
+        });
+        return $items;
+
     }
 
 
@@ -283,6 +309,64 @@ class ControllerIndex extends Controller
         }
 
         $this->redirect("index");
+    }
+
+
+    public function add_checklist_note(): void {
+        $user = $this->get_user_or_redirect();
+        $errors = [];
+        $title = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = $_POST['title'] ?? '';
+            $ownerId = $user->getId();
+            $createdAt = new DateTime();
+            $weight = 1.0; // ou une autre logique pour définir le poids
+
+            $checklistNote = new CheckListNote(
+                0
+            );
+
+            $checklistNote->setTitle($title);
+            $checklistNote->setOwner($ownerId);
+            $checklistNote->setDateTime($createdAt);
+            $checklistNote->setPinned(false);
+            $checklistNote->setArchived(false);
+            $checklistNote->setWeight($weight);
+
+            $errors = $checklistNote->validate_checklistnote();
+
+
+            $items = [];
+            for ($i = 1; $i <= 5; $i++) {
+                if (!empty($_POST["item$i"])) {
+                    $itemContent = $_POST["item$i"];
+                    $item = new CheckListNoteItem(
+                        id: 0,
+                        checklist_note: 0,
+                        content: $itemContent,
+                        checked: false
+                    );
+                    $errors = array_merge($errors, $item->validate());
+                    $items[] = $item;
+                }
+            }
+
+            if (empty($errors)) {
+                $checklistNote->persist();
+                foreach ($items as $item) {
+                    $item->setChecklistNote($checklistNote->getId());
+                    $item->persist();
+                }
+
+                $this->redirect("checklistnote", "open_checklist_note", $checklistNote->getId());
+            }
+        }
+
+        (new View("add_checklist_note"))->show([
+            "title" => $title,
+            "errors" => $errors
+        ]);
     }
 
 

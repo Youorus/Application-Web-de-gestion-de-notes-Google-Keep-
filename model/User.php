@@ -1,14 +1,14 @@
 <?php
 require_once "framework/Model.php";
 class User extends Model{
-    private int  $id;
+    private ?int  $id;
     private string $mail;
     private string $full_name;
 
 
     private string $role;
     private String $hashed_password;
-    public function __construct( $id,$mail,$hashed_password, $full_name, $role){
+    public function __construct($mail,$hashed_password, $full_name, $role, $id=null){
         $this->id = $id;
         $this->mail = $mail;
         $this->hashed_password = $hashed_password;
@@ -23,7 +23,7 @@ class User extends Model{
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"], $data["id"]);
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
         }
     }
     private static function check_password(string $clear_password, string $hash) : bool {
@@ -286,10 +286,7 @@ WHERE notes.owner = :id", [
 
 
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+
 
     public function getMail(): string
     {
@@ -336,6 +333,7 @@ WHERE notes.owner = :id", [
         $this->hashedPassword = $hashedPassword;
     }
 
+    /*
     public function getMaxweight(): int
     {
         $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
@@ -350,4 +348,5 @@ WHERE notes.owner = :id", [
         return $data["minwheight"];
     }
 
+    */
 }

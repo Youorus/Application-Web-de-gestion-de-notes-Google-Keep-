@@ -37,53 +37,48 @@ class CheckListNote extends Note
         return $error;
     }
 
-    public function persist(): CheckListNote | array {
-        $errors = $this->validate();
-        if (!empty($errors)) {
-            return $errors;
-        }
 
-        if (!parent::get_checklistnote_by_id($this->getId())) {
-            // Insérer une nouvelle note dans 'notes'
-            parent::execute(
-                "INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight) 
-             VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+    public function persist() {
+        if (self::get_checklistnote_by_id($this->id)) {
+            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
+                           edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
+                           WHERE id = :id",
+                [
+                    'id' => $this->id,
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]);
+        } else {
+            // Insertion d'une nouvelle note dans 'notes'
+            self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
+                           VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
-                ]
-            );
-            $this->setId(parent::lastInsertId());
-
-            // Insére dans 'checklist_notes'
-            parent::execute(
-                "INSERT INTO checklist_notes (id) VALUES (:id)",
-                ['id' => $this->getId()]
-            );
-        } else {
-            // Mettre à jour la note existante
-            parent::execute(
-                "UPDATE notes SET title = :title, edited_at = :editedAt, 
-             pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
-                [
-                    'id' => $this->getId(),
-                    'title' => $this->getTitle(),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
-                    'pinned' => $this->getPinned(),
-                    'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
-                ]
-            );
-
+                ]);
+            $this->id = self::lastInsertId();
+            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
+                ['id' => $this->id]);
+        }
+        foreach ($this->getItems() as $item) {
+            $item->setChecklistNote($this->id);
+            $item->persist();
         }
 
         return $this;
     }
+
+
 
     public function getType(): NoteType
     {
@@ -124,6 +119,28 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         }
         return $results;
     }
+
+    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new CheckListNote($data["id"]);
+        }
+    }
+
+    public  function validate_checklistnote () : array {
+
+        $errors = [];
+        if(strlen($this->getTitle()) < 3 || strlen($this->getTitle())> 25) {
+            $errors[] = "title must be beetween 3 and 25";
+        }
+
+        return $errors;
+    }
+
+
 }
 
 
