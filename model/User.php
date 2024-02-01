@@ -109,6 +109,44 @@ class User extends Model{
         return null; // Aucune note trouvée
     }
 
+    public function get_All_shared_notes(int $userShare): array
+    {
+        $query = self::execute("SELECT notes.id FROM note_shares JOIN notes ON notes.id = note_shares.note WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
+            "loggedInUserId" => $this->id,
+            "userShare"=> $userShare
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+
+        foreach ($data as $row) {
+            $queryNote = self::execute("SELECT notes.id, notes.title, text_notes.content
+                                    FROM notes
+                                    LEFT JOIN text_notes ON notes.id = text_notes.id
+                                    WHERE notes.id = :id", ["id" => $row['id']]);
+            $dataNote = $queryNote->fetch();
+
+            if ($dataNote) {
+                if ($dataNote['content'] !== null) {
+                    // Note textuelle
+                    $results[] = new TextNote(
+                        $dataNote['id'],
+                        $dataNote['title'],
+                        $dataNote['content']
+                    );
+                } else {
+                    // Note de liste de contrôle
+                    $results[] = new CheckListNote(
+                        $dataNote['id'],
+                        $dataNote['title']
+                    );
+                }
+            }
+        }
+
+        return $results;
+    }
+
 
 
 

@@ -126,13 +126,15 @@ class ControllerIndex extends Controller
 
 
     public function share_notes(){
+        $userId = $_GET['param1'];
         $user = $this->get_user_or_redirect();
         $userSharesNotes = $user->get_UserShares_Notes();
-        $userName = User::getFullNameById($_GET['param1']);
+        $userName = User::getFullNameById($userId);
         $title = "Shared by ". $userName;
+        $notesShares = $user->get_All_shared_notes($userId);
 
 
-        (new View("share_notes"))->show(["title" => $title,"userSharesNotes" => $userSharesNotes]);
+        (new View("share_notes"))->show(["title" => $title,"userSharesNotes" => $userSharesNotes, "notesShares"=> $notesShares]);
     }
 
 
