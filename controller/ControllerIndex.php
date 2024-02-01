@@ -137,6 +137,7 @@ class ControllerIndex extends Controller
         $title = $note->getTitle();
         $content = $note->getItems();
 
+        $sortedItems = $this->sort_items($content);
 
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
@@ -146,7 +147,7 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
     }
 
     public function check_uncheck(): void {
@@ -159,8 +160,17 @@ class ControllerIndex extends Controller
                 $item->setChecked($checked);
                 $item->persist();
             }
+
+
         }
         $this->redirect("index", "open_text_note");
+    }
+
+    public function sort_items(array $items): array {
+        usort($items, function($a, $b) {
+            return $a->getChecked() <=> $b->getChecked();
+        });
+        return $items;
     }
 
 
