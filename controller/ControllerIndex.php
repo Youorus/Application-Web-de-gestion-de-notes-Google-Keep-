@@ -54,12 +54,7 @@ class ControllerIndex extends Controller
         $userSharesNotes = $user->get_UserShares_Notes();
         $title = "My notes";
 
-        $maxweight = $user->getMaxweight();
-        $minweight = $user->getMinweight();
-
-
-        // $notes_content = TextNote::get_All_note_content_by_id(1);
-        (new View("index"))->show(["maxweight" => $maxweight, "minweight" => $minweight, "notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
+        (new View("index"))->show([ "notesPinned" => $notesPinned, "notesOthers" => $notesOthers, "title" => $title, "userSharesNotes" => $userSharesNotes]);
     }
 
     public function archive_notes(): void
@@ -68,7 +63,7 @@ class ControllerIndex extends Controller
         $title = "My archives";
         $notesArchives = $user->get_All_notesArchived();
         $userSharesNotes = $user->get_UserShares_Notes();
-        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title,"userSharesNotes" => $userSharesNotes]);
+        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title,"userSharesNotes" => $userSharesNotes,]);
     }
 
 
@@ -80,7 +75,7 @@ class ControllerIndex extends Controller
             header('Location: main/login.php');
             exit;
         }
-        $user_name = $user->get_fullname_User();
+        $user_name = $user->getFullName();
 
         //$logout = $this->logout();
 
@@ -127,6 +122,17 @@ class ControllerIndex extends Controller
         $noteType = open_note($note);
 
         (new View("checklist_note"))->show(["title" => $title, "content"=> $content, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+    }
+
+
+    public function share_notes(){
+        $user = $this->get_user_or_redirect();
+        $userSharesNotes = $user->get_UserShares_Notes();
+        $userName = User::getFullNameById($_GET['param1']);
+        $title = "Shared by ". $userName;
+
+
+        (new View("share_notes"))->show(["title" => $title,"userSharesNotes" => $userSharesNotes]);
     }
 
 

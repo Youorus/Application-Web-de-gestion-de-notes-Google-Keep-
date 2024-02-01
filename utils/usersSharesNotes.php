@@ -2,7 +2,7 @@
 if (!empty($userSharesNotes)) {
     foreach ($userSharesNotes as $user) {
         echo ' <li class="nav-item">';
-        echo '<a class="nav-link moi" aria-current="page" href="index/archive_notes">' ."Shared by ". $user . '</a>';
+        echo '<a class="nav-link moi" aria-current="page" href="index/share_notes/'.$user->getId().'">' ."Shared by ". $user->getFullName() . '</a>';
         echo '</li>';
     }
 } else {

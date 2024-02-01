@@ -27,14 +27,14 @@
                    </div>       
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="settings/edit_profile">
                                 <span class="material-symbols-outlined">
                                     manage_accounts
                                 </span> Edit profile
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="settings/change_password">
                                 <span class="material-symbols-outlined">
                                     password
                                 </span> Change password

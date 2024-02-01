@@ -4,9 +4,11 @@ class User extends Model{
     private int  $id;
     private string $mail;
     private string $full_name;
+
+
     private string $role;
     private String $hashed_password;
-    public function __construct($mail,$hashed_password, $full_name, $role, $id=NULL){
+    public function __construct( $id,$mail,$hashed_password, $full_name, $role){
         $this->id = $id;
         $this->mail = $mail;
         $this->hashed_password = $hashed_password;
@@ -81,11 +83,6 @@ class User extends Model{
         return $results;
     }
 
-    public function get_User(bool $pinned, int $archive = 0): array
-    {
-
-    }
-
     public function get_One_note_by_id(int $noteId)
     {
         // Récupérer les détails de la note textuelle
@@ -152,36 +149,50 @@ class User extends Model{
         return $results;
     }
 
+    public function getFullName(): string
+    {
+        return $this->full_name;
+    }
 
-    public function get_fullname_User(){
-        $query = self::execute("SELECT users.full_name from users WHERE users.id = :id", [
-                        "id" => $this->id,
-                    ]);
-                    $data = $query->fetchAll();
-                    $result ="";
-                    if ($query->rowCount() > 0) {
-                        foreach ($data as $row) {
-                            $result = $row['full_name'];
-                        }
-                    }
-                    return $result;
+    public static function getFullNameById(int $userId): string|null {
+        $query = self::execute("SELECT full_name FROM users WHERE id = :id", ["id" => $userId]);
+        $data = $query->fetch();
 
+        if ($query->rowCount() > 0) {
+            return $data["full_name"];
+        } else {
+            return null;
+        }
     }
 
 
-    public function get_UserShares_Notes(){
-        $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
-        select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
+
+
+    public function get_UserShares_Notes(): array {
+        $query = self::execute("SELECT DISTINCT users.*
+FROM note_shares
+JOIN notes ON notes.id = note_shares.note
+JOIN users ON users.id = note_shares.user
+WHERE notes.owner = :id", [
             "id" => $this->id,
         ]);
-        $data = $query->fetchAll();
-        $results =[];
-        if ($query->rowCount() > 0) {
-            foreach ($data as $row) {
-                $results[] = $row['full_name'];
 
+        $data = $query->fetchAll();
+        $results = [];
+
+        if ($query->rowCount() > 0) {
+            foreach ($data as $userData) {
+                $user = new User(
+                    $userData['id'],
+                    $userData['mail'],
+                    $userData['hashed_password'],
+                    $userData['full_name'],
+                    $userData['role']
+                );
+                $results[] = $user;
             }
         }
+
         return $results;
     }
 

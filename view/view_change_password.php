@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Changer le mot de passe</title>
-    <base href="<?= $web_root ?>">
-</head>
+<?php include "head.php"?>
 <body>
 <?php if (!empty($successMessage)): ?>
     <p><?= $successMessage ?></p>
