@@ -102,6 +102,23 @@ class CheckListNoteItem extends Model {
         }
     }
 
+    public static function get_item_by_id(int $id): CheckListNoteItem | false {
+        $query = self::execute("SELECT * FROM checklist_note_items WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch();
+        if ($data) {
+            return new CheckListNoteItem(
+                id: $data['id'],
+                checklist_note: $data['checklist_note'],
+                content: $data['content'],
+                checked: $data['checked']
+            );
+        } else {
+            return false;
+        }
+    }
+
+
+
 
 
 }

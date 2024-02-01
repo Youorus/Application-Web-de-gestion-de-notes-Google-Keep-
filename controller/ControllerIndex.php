@@ -150,14 +150,17 @@ class ControllerIndex extends Controller
     }
 
     public function check_uncheck(): void {
-        $idNote = intval($_GET['param1']);
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
-        $title = $note->getTitle();
-        $content = $note->getItems();
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $itemId = $_POST['item_id'];
+            $checked = isset($_POST['checked']) ? 1 : 0;
 
-
+            $item = CheckListNoteItem::get_item_by_id($itemId);
+            if ($item) {
+                $item->setChecked($checked);
+                $item->persist();
+            }
+        }
+        $this->redirect("index", "open_text_note");
     }
 
 
