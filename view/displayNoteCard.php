@@ -42,12 +42,10 @@ echo '<a href="' . $href . '" class="card-link">';
         echo '</div>';
     echo '</a>';
 echo '<div class="d-flex iconBox justify-content-between">';
-        if($note->getWeight() != $min) {
             echo '<span><i class="fa-solid fa-angles-left"></i></span>';
-        }
-        if($note->getWeight() != $max) {
+
             echo '<span><i class="fa-solid fa-angles-right"></i></span>';
-        }
+
 
     echo '</div>';
 }

@@ -1,7 +1,7 @@
 <?php
 require_once "framework/Model.php";
 class User extends Model{
-    private int  $id;
+    private ?int  $id;
     private string $mail;
     private string $full_name;
     private string $role;
@@ -21,7 +21,7 @@ class User extends Model{
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"], $data["id"]);
+            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
         }
     }
     private static function check_password(string $clear_password, string $hash) : bool {
@@ -237,10 +237,7 @@ class User extends Model{
 
 
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+
 
     public function getMail(): string
     {
@@ -287,6 +284,7 @@ class User extends Model{
         $this->hashedPassword = $hashedPassword;
     }
 
+    /*
     public function getMaxweight(): int
     {
         $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
@@ -301,4 +299,5 @@ class User extends Model{
         return $data["minwheight"];
     }
 
+    */
 }
