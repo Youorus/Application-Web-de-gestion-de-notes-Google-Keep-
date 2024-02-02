@@ -7,34 +7,33 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
-
 <body class="bg-dark">
 <div class="container position-relative mt-5">
+    <form id="addChecklistForm" action="add_checklistnote" method="post" class="bg-dark p-4 rounded">
     <div class="position-absolute top-0 end-0">
-        <button form="addChecklistForm" type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
-    <form id="addChecklistForm" action="index/add_checklist_note" method="post" class="bg-light p-4 rounded">
+
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" required>
-            <!-- Error display for title, if any -->
-            <div class="text-danger">
-                <!-- PHP code to display error if title is not valid -->
-            </div>
+            <?php if (!empty($errors['title'])): ?>
+                <div class="text-danger"><?= htmlspecialchars($errors['title']); ?></div>
+            <?php endif; ?>
         </div>
         <div class="mb-3">
             <label class="form-label">Items</label>
-            <!-- PHP loop to display 5 input fields for items -->
-            <?php for ($i = 1; $i <= 5; $i++): ?>
-                <input type="text" class="form-control mb-2" id="items[]" name="items[]" placeholder="Item <?= $i ?>">
+            <?php for ($i = 0; $i <= 4; $i++): ?>
+                <div class="mb-2">
+                    <input type="text" class="form-control" id="items[]" name="items[]" placeholder="Item <?= $i ?>">
+                    <?php if (!empty($errors["item$i"])): ?>
+                        <div class="text-danger"><?= htmlspecialchars($errors["item$i"]); ?></div>
+                    <?php endif; ?>
+                </div>
             <?php endfor; ?>
-            <!-- Error display for items, if any -->
-            <div class="text-danger">
-                <!-- PHP code to display error if items are not unique or any other error -->
-            </div>
         </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

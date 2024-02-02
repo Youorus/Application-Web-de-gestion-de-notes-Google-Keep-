@@ -139,7 +139,8 @@ class ControllerIndex extends Controller
 
 
         }
-        $this->redirect("index", "open_checklist_note");
+        //$this->redirect("index", "open_checklist_note");
+        header('Refresh:2');
     }
 
     public function sort_items(array $items): array {
@@ -312,18 +313,18 @@ class ControllerIndex extends Controller
     }
 
 
-    public function add_checklistnote(): void {
+    public function add_checklistnote() {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $title = '';
-        $items = [];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['title'])) {
+
             $title = $_POST['title'] ?? '';
             $items = $_POST['items[]'] ?? '';
             $ownerId = $user->getId();
             $createdAt = new DateTime();
-            $weight = 1.0; // Déterminer la logique du poids si nécessaire
+            $weight = 1.0;
 
             $checklistNote = new CheckListNote(0);
             $checklistNote->setTitle($title);
@@ -335,19 +336,25 @@ class ControllerIndex extends Controller
 
             $errors = $checklistNote->validate_checklistnote();
 
-
-            for ($i = 1; $i <= 5; $i++) {
-                if (!empty($_POST["item$i"])) {
-                    $itemContent = $_POST["item$i"];
+            $items = [];
+            $listitems = [];
+            for ($i = 0; $i <= 4; $i++) {
+                if (!empty($_POST["items"][$i])) {
+                    $itemContent = $_POST["items"][$i];
                     $item = new CheckListNoteItem(
                         id: 0,
                         checklist_note: 0,
                         content: $itemContent,
                         checked: false
                     );
+                    if (in_array($itemContent, $listitems)) {
+                        $errors = array_merge($errors, ['item'.$i => 'Item names must be unique']);
+                    }
+                    $listitems[] = $itemContent;
                     $items[] = $item;
                 }
             }
+            
 
             if (empty($errors)) {
                 $checklistNote = $checklistNote->persist();
