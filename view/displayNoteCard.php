@@ -29,14 +29,22 @@ echo '<a href="' . $href . '" class="card-link">';
         }
         } else {
         $items = $note->getItems();
-        foreach ($items as $item) {
-        echo '<div class="form-check">';
-            echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
-            echo '  <label class="form-check-label" for="exampleCheckbox">';
-                echo $item->getContent();
-                echo '  </label>';
-            echo '</div>';
-        }
+        $cpt = 0;
+            foreach ($items as $item) {
+                if ($cpt < 3){
+                    $cpt++;
+                    echo '<div class="form-check">';
+                    echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
+                    echo '  <label class="form-check-label" for="exampleCheckbox">';
+                    echo $item->getContent();
+                    echo '  </label>';
+                    echo '</div>';
+                }else{
+                    echo '<p class="checkBoxFinish">' . "...". '</p>';
+                    break;
+                }
+
+            }
         }
 
         echo '</div>';

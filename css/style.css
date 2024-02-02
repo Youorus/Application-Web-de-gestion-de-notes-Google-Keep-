@@ -127,7 +127,6 @@ body{
 .infoText{
     font-style: italic;
     font-weight: normal;
-    font-size: initial;
     margin-left: 5%;
     margin-top: 3%;
 }
@@ -165,6 +164,9 @@ body{
     display: inline-block;
   }
 
+.checkBoxFinish{
+    margin-left: 15px;
+}
 
   .form-group i {
     margin-right: 10px;

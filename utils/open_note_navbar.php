@@ -16,14 +16,12 @@
                 echo ' <span style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
                 echo '</a>';
                 // unarchived
-                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
-unarchive
+                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive
 </span></a>';
             } elseif ($noteType == "share"){
                 // edite share
-                echo '<a href="index/" class="icon-link">';
-                echo ' <span class="material-symbols-outlined"> edit </span>';
-                echo '</a>';
+                echo $note->isEditor() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> edit </span> </a>' : '';
+
             } elseif ($noteType == "edited"){
                 // Save
                 echo '<a href="#" class="icon-link">';

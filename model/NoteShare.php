@@ -2,13 +2,14 @@
 require_once "framework/Model.php";
 require_once "path_to/Note.php"; // Assurez-vous de spécifier le bon chemin vers votre classe Note
 
-class NoteShare extends Model {
-private Note $note;
+class NoteShare extends Note {
+private int $noteid;
 private int $user;
 private int $editor;
 
-public function __construct(Note $note, int $editor, int $user) {
-$this->note = $note;
+public function __construct(int $note, int $editor, int $user) {
+    parent::__construct($note, "", 0, new DateTime(), null, 0, 0, 0);
+$this->noteid = $note;
 $this->editor = $editor;
 $this->user = $user;
 }

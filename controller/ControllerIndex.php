@@ -160,7 +160,7 @@ class ControllerIndex extends Controller
         $notesShares = $user->get_All_shared_notes($userId);
 
 
-        (new View("share_notes"))->show(["title" => $title,"userSharesNotes" => $userSharesNotes, "notesShares"=> $notesShares]);
+        (new View("share_notes"))->show(["title" => $title, "userName"=> $userName,"userSharesNotes" => $userSharesNotes, "notesShares"=> $notesShares]);
     }
 
 

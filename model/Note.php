@@ -49,6 +49,19 @@ abstract class Note extends Model {
         return $result;
     }
 
+    public function isEditor(): bool
+    {
+        $query = self::execute("SELECT note_shares.editor FROM note_shares WHERE note_shares.note = :id", ["id" => $this->id]);
+        $data = $query->fetch();
+
+        $result = false;
+        if ($data[0] > 0){
+            $result = true;
+        }
+        return $result;
+    }
+
+
     public function isShared(): bool{
         $query = self::execute("SELECT COUNT(*) FROM `note_shares` WHERE note_shares.note = :id", ["id" => $this->id]);
         $data = $query->fetch();

@@ -117,9 +117,12 @@ class User extends Model{
 
     public function get_All_shared_notes(int $userShare): array
     {
-        $query = self::execute("SELECT notes.id FROM note_shares JOIN notes ON notes.id = note_shares.note WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
+        $query = self::execute("SELECT notes.id, note_shares.editor
+                            FROM note_shares
+                            JOIN notes ON notes.id = note_shares.note
+                            WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
             "loggedInUserId" => $this->id,
-            "userShare"=> $userShare
+            "userShare" => $userShare
         ]);
 
         $data = $query->fetchAll();
@@ -138,13 +141,15 @@ class User extends Model{
                     $results[] = new TextNote(
                         $dataNote['id'],
                         $dataNote['title'],
-                        $dataNote['content']
+                        $dataNote['content'],
+                        $row['editor'] // Ajoutez l'éditeur à la création de la note
                     );
                 } else {
                     // Note de liste de contrôle
                     $results[] = new CheckListNote(
                         $dataNote['id'],
-                        $dataNote['title']
+                        $dataNote['title'],
+                        $row['editor'] // Ajoutez l'éditeur à la création de la note
                     );
                 }
             }
