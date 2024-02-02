@@ -139,7 +139,7 @@ class ControllerIndex extends Controller
 
 
         }
-        $this->redirect("index", "open_checklist_note");
+        $this->redirect("index", "open_checklist_note", $_GET['param1']);
     }
 
     public function sort_items(array $items): array {
