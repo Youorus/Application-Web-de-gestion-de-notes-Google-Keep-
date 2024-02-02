@@ -27,7 +27,7 @@
             <label class="form-label">Items</label>
             <!-- PHP loop to display 5 input fields for items -->
             <?php for ($i = 1; $i <= 5; $i++): ?>
-                <input type="text" class="form-control mb-2" name="items[]" placeholder="Item <?= $i ?>">
+                <input type="text" class="form-control mb-2" id="items[]" name="items[]" placeholder="Item <?= $i ?>">
             <?php endfor; ?>
             <!-- Error display for items, if any -->
             <div class="text-danger">

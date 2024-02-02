@@ -312,21 +312,20 @@ class ControllerIndex extends Controller
     }
 
 
-    public function add_checklist_note(): void {
+    public function add_checklistnote(): void {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $title = '';
+        $items = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $title = $_POST['title'] ?? '';
+            $items = $_POST['items[]'] ?? '';
             $ownerId = $user->getId();
             $createdAt = new DateTime();
-            $weight = 1.0; // ou une autre logique pour définir le poids
+            $weight = 1.0; // Déterminer la logique du poids si nécessaire
 
-            $checklistNote = new CheckListNote(
-                0
-            );
-
+            $checklistNote = new CheckListNote(0);
             $checklistNote->setTitle($title);
             $checklistNote->setOwner($ownerId);
             $checklistNote->setDateTime($createdAt);
@@ -337,7 +336,6 @@ class ControllerIndex extends Controller
             $errors = $checklistNote->validate_checklistnote();
 
 
-            $items = [];
             for ($i = 1; $i <= 5; $i++) {
                 if (!empty($_POST["item$i"])) {
                     $itemContent = $_POST["item$i"];
@@ -347,19 +345,19 @@ class ControllerIndex extends Controller
                         content: $itemContent,
                         checked: false
                     );
-                    $errors = array_merge($errors, $item->validate());
                     $items[] = $item;
                 }
             }
 
             if (empty($errors)) {
-                $checklistNote->persist();
+                $checklistNote = $checklistNote->persist();
+
                 foreach ($items as $item) {
                     $item->setChecklistNote($checklistNote->getId());
                     $item->persist();
                 }
 
-                $this->redirect("checklistnote", "open_checklist_note", $checklistNote->getId());
+                $this->redirect("index", "open_checklist_note", $checklistNote->getId());
             }
         }
 
