@@ -19,10 +19,10 @@
                 echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
 unarchive
 </span></a>';
-            } elseif ($noteType == "shared"){
+            } elseif ($noteType == "share"){
                 // edite share
-                echo '<a href="#" class="icon-link">';
-                echo ' <i class="fa-regular  fa-pen-to-square"></i>';
+                echo '<a href="index/" class="icon-link">';
+                echo ' <span class="material-symbols-outlined"> edit </span>';
                 echo '</a>';
             } elseif ($noteType == "edited"){
                 // Save

@@ -48,6 +48,11 @@ body{
     border: 1px solid var(--couleur-bordure);
     border-bottom: none;
 }
+.card-other {
+    background-color: var(--couleur-fond);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 5px;
+}
 .iconBox{
     border-top: 1px solid var(--couleur-bordure);
     border-bottom: 1px solid var(--couleur-bordure);
