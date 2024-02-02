@@ -130,11 +130,18 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         }
     }
 
-    public  function validate_checklistnote () : array {
-
+    public function validate_checklistnote(): array {
         $errors = [];
-        if(strlen($this->getTitle()) < 3 || strlen($this->getTitle())> 25) {
-            $errors[] = "title must be beetween 3 and 25";
+        if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
+            $errors[] = "The title must be between 3 and 25 characters.";
+        }
+
+        $itemNames = [];
+        foreach ($this->getItems() as $item) {
+            if (in_array($item->getContent(), $itemNames)) {
+                $errors[] = "Item names must be unique.";
+            }
+            $itemNames[] = $item->getContent();
         }
 
         return $errors;
