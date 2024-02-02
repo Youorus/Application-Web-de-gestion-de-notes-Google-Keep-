@@ -11,6 +11,7 @@ require_once "model/CheckListNoteItem.php";
         $type = "archived";
     elseif ($note->isShared())
         $type = "share";
+
     return $type;
 }
 
@@ -354,7 +355,7 @@ class ControllerIndex extends Controller
                     $items[] = $item;
                 }
             }
-            
+
 
             if (empty($errors)) {
                 $checklistNote = $checklistNote->persist();
@@ -374,6 +375,27 @@ class ControllerIndex extends Controller
         ]);
     }
 
+    public function edit_checklistnote() {
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+        $content = $note->getItems();
+
+        $sortedItems = $this->sort_items($content);
+
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+        $noteType = open_note($note);
+
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+
+    }
 
 
 }
