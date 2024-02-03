@@ -54,6 +54,8 @@ class ControllerSettings extends Controller
 
     public function edit_profile(): void {
         $user = $this->get_user_or_redirect();
+        $user_name = $user->getFullName();
+        $user_mail = $user->getMail();
         $errors = [];
         $success = "";
 
@@ -74,12 +76,16 @@ class ControllerSettings extends Controller
         (new View("edit_profile"))->show([
             "user" => $user,
             "errors" => $errors,
-            "success" => $success
+            "success" => $success,
+            "user_name" => $user_name,
+            "user_mail" => $user_mail,
         ]);
     }
 
 
-
+public function cancel(){
+        $this->redirect("index","setting" );
+}
     
 
 

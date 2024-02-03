@@ -1,29 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<?php include "head.php"?>
-<body>
-<?php if (!empty($success)): ?>
-    <p><?= $success ?></p>
-<?php else: ?>
-    <h1>Modifier le Profile</h1>
-    <?php if (!empty($errors)): ?>
-        <ul>
-            <?php foreach ($errors as $error): ?>
-                <li><?= $error ?></li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
+<!-- importation de l'entete de page  -->
+<?php
+require_once "head.php";
+?>
+<div class="box-login">
+    <div class="signup-box">
+        <h2>Edit Profile</h2>
+        <hr>
 
-    <form method="post" action="settings/edit_profile">
-        <div>
-            <label for="full_name">Nom Complet :</label>
-            <input type="text" id="full_name" name="full_name" value="<?= $user->full_name ?>" required>
-        </div>
-        <div>
-            <button type="submit">Mettre à jour le profil</button>
-        </div>
-    </form>
+        <form action="#" method="post">
+            <div class="form-group input">
+                <i class="fa-regular fa-user icon"></i>
+                <input type="text" id="mail"  value="<?= $user_name ?>"  name="fullname"  ">
+            </div>
 
-<?php endif; ?>
+            <div class="form-group input">
+                <i class="fa-regular fa-envelope icon"></i>
+                <input type="email" id="password" value="<?= $user_mail ?>" name="email"  ">
+            </div>
+
+            <div class="btn-editProfile">
+                <span ><a href="settings/cancel" class="btn-danger edit-cancel" >Cancel</a></span>
+            <button type="submit" class="btn-success edit-save">Save</button>
+            </div>
+        </form>
+
+        <?php if (count($errors) != 0): ?>
+            <div class="errors">
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= $error ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Font Awesome pour les icônes -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+
 </body>
 </html>
