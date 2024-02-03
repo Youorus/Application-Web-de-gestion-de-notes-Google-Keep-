@@ -1,17 +1,15 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Checklist Note</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="bg-dark">
+<?php include "head.php"?>
+<body>
+
+<?php include "utils/open_note_navbar.php"?>
+
+
+<body>
 <div class="container position-relative mt-5">
-    <form id="addChecklistForm" action="add_checklistnote" method="post" class="bg-dark p-4 rounded">
+    <form id="addChecklistForm" action="index/add_checklistnote" method="post" class="bg-dark p-4 rounded">
     <div class="position-absolute top-0 end-0">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i></button>
     </div>
 
         <div class="mb-3">

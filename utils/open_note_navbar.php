@@ -27,7 +27,13 @@
                 echo '<a href="#" class="icon-link">';
                 echo ' <i class="fa-solid fa-floppy-disk"></i>';
                 echo '</a>';
-            } else {
+            }elseif ($noteType == "add"){
+//                // Save
+//                echo '<button type="submit" class="icon-link">';
+//                echo ' <i class="fa-solid fa-floppy-disk"></i>';
+//                echo '</button>';
+                echo '';
+            }else {
                 // share
                 echo '<a href="index/view-share" class="icon-link">';
                 echo ' <span class="material-symbols-outlined"> share </span>';
@@ -49,5 +55,10 @@
 </nav>
 
 <div>
-        <h5 class="infoText"> Created <?= $messageCreate ?>. Edited <?= $messageEdit ?> </h5>
+    <?php
+    if ($noteType == "archived" || $noteType == "share" || $noteType == "edited" || $noteType == "normal") {
+        echo '<h5 class="infoText"> Created ' . $messageCreate . '. Edited ' . $messageEdit . ' </h5>';
+    }
+    ?>
+
     </div>

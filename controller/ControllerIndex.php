@@ -322,6 +322,7 @@ class ControllerIndex extends Controller
         $user = $this->get_user_or_redirect();
         $errors = [];
         $title = '';
+        $noteType = "add";
 
         if (isset($_POST['title'])) {
 
@@ -340,6 +341,7 @@ class ControllerIndex extends Controller
             $checklistNote->setWeight($weight);
 
             $errors = $checklistNote->validate_checklistnote();
+
 
             $items = [];
             $listitems = [];
@@ -375,7 +377,8 @@ class ControllerIndex extends Controller
 
         (new View("add_checklist_note"))->show([
             "title" => $title,
-            "errors" => $errors
+            "errors" => $errors,
+            "noteType"=>$noteType
         ]);
     }
 
