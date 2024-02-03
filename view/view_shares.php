@@ -69,6 +69,14 @@
                     <div class="input-group">
                         <select id="user-select" class="form-select" required>
                             <option selected>-User-</option>
+                            <?php
+                            
+                            foreach ($usersIds as $userId) {
+                                // Utilisez la fonction get_fullname_User() pour récupérer le nom de l'utilisateur
+                                $userFullName = User::get_fullname_User($userId);
+                                echo "<option value='" . htmlspecialchars($userId) . "'>" . htmlspecialchars($userFullName) . "</option>";
+                            }
+                            ?>
                         </select>
                         <select id="permission-select" class="form-select" required>
                             <option selected>-Permission-</option>

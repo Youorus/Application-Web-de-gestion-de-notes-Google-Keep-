@@ -176,6 +176,8 @@ class ControllerIndex extends Controller{
             $noteId = $_GET['id'];
             $noteType = getType($noteId);
             
+            $usersIds = User::getUsersIds();
+            
 
             if ($noteType == 'checklist') {
                 header('Location: view_checklist_note.php?id=' . $noteId); //mettre le vrai nom de la vue de open check list note de anass
@@ -189,7 +191,7 @@ class ControllerIndex extends Controller{
         
        
 
-        (new View("shares"))->show(["id" => $noteId]);
+        (new View("shares"))->show(["id" => $noteId, "usersIds" => $usersIds]);
     }
 
     public function add_share() {
