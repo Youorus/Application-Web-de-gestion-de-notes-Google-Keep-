@@ -11,6 +11,7 @@ require_once "model/CheckListNoteItem.php";
         $type = "archived";
     elseif ($note->isShared())
         $type = "share";
+
     return $type;
 }
 
@@ -125,8 +126,10 @@ class ControllerIndex extends Controller
         (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
     }
 
-    public function check_uncheck(): void {
-
+    public function check_uncheck(): void{
+        $user = $this->get_user_or_redirect();
+        $idNote = intval($_GET['param1']);
+        $note = $user->get_One_note_by_id($idNote);
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $itemId = $_POST['item_id'];
             $checked = isset($_POST['checked']) ? 1 : 0;
@@ -139,10 +142,13 @@ class ControllerIndex extends Controller
 
 
         }
-        $this->redirect("index", "open_checklist_note", $_GET['param1']);
+
+        $this->redirect("index", "open_checklist_note" . $note->getId());
+
+        //$this->redirect("index", "open_checklist_note");
     }
 
-    public function sort_items(array $items): array {
+    private function sort_items(array $items): array {
         usort($items, function($a, $b) {
             return $a->getChecked() <=> $b->getChecked();
         });
@@ -312,21 +318,20 @@ class ControllerIndex extends Controller
     }
 
 
-    public function add_checklist_note(): void {
+    public function add_checklistnote() {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $title = '';
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['title'])) {
+
             $title = $_POST['title'] ?? '';
+            $items = $_POST['items[]'] ?? '';
             $ownerId = $user->getId();
             $createdAt = new DateTime();
-            $weight = 1.0; // ou une autre logique pour définir le poids
+            $weight = 1.0;
 
-            $checklistNote = new CheckListNote(
-                0
-            );
-
+            $checklistNote = new CheckListNote(0);
             $checklistNote->setTitle($title);
             $checklistNote->setOwner($ownerId);
             $checklistNote->setDateTime($createdAt);
@@ -336,30 +341,35 @@ class ControllerIndex extends Controller
 
             $errors = $checklistNote->validate_checklistnote();
 
-
             $items = [];
-            for ($i = 1; $i <= 5; $i++) {
-                if (!empty($_POST["item$i"])) {
-                    $itemContent = $_POST["item$i"];
+            $listitems = [];
+            for ($i = 0; $i <= 4; $i++) {
+                if (!empty($_POST["items"][$i])) {
+                    $itemContent = $_POST["items"][$i];
                     $item = new CheckListNoteItem(
                         id: 0,
                         checklist_note: 0,
                         content: $itemContent,
                         checked: false
                     );
-                    $errors = array_merge($errors, $item->validate());
+                    if (in_array($itemContent, $listitems)) {
+                        $errors = array_merge($errors, ['item'.$i => 'Item names must be unique']);
+                    }
+                    $listitems[] = $itemContent;
                     $items[] = $item;
                 }
             }
 
+
             if (empty($errors)) {
-                $checklistNote->persist();
+                $checklistNote = $checklistNote->persist();
+
                 foreach ($items as $item) {
                     $item->setChecklistNote($checklistNote->getId());
                     $item->persist();
                 }
 
-                $this->redirect("checklistnote", "open_checklist_note", $checklistNote->getId());
+                $this->redirect("index", "open_checklist_note", $checklistNote->getId());
             }
         }
 
@@ -369,6 +379,27 @@ class ControllerIndex extends Controller
         ]);
     }
 
+    public function edit_checklistnote() {
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+        $content = $note->getItems();
+
+        $sortedItems = $this->sort_items($content);
+
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+        $noteType = open_note($note);
+
+        (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+
+    }
 
 
 }

@@ -239,6 +239,29 @@ body{
     margin-bottom: 10px;
 }
 .checklist-item input[type="checkbox"]:checked + label {
-    text-decoration-line-through;
+
     color: #6c757d;
 }
+
+.delete-btn {
+    background-color: red; /
+    color: white;
+    border: none;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.add-btn {
+    background-color: blue; /* Fond bleu */
+    color: white; /* Icône et texte en blanc */
+    border: none; /* Retirer la bordure du bouton par défaut */
+}
+
+/* Vous pouvez ajouter :hover pour changer l'aspect au survol */
+.add-btn:hover {
+    background-color: #0000cc; /* Un bleu légèrement plus foncé pour l'effet au survol */
+}
+
+

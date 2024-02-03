@@ -8,14 +8,14 @@ enum NoteType {
 }
 
 abstract class Note extends Model {
-    private int $id;
-    private string $title;
-    private int $owner;
-    private DateTime $dateTime;
-    private ?DateTime $dateTime_edit;
-    private int $pinned;
-    private int $archived;
-    private int $weight;
+    protected ?int $id;
+    protected string $title;
+    protected int $owner;
+    protected DateTime $dateTime;
+    protected ?DateTime $dateTime_edit;
+    protected int $pinned;
+    protected int $archived;
+    protected int $weight;
 
     public function __construct(
         int $id,

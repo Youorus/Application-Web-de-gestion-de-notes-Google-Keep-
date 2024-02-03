@@ -21,7 +21,8 @@ class CheckListNoteItem extends Model {
 
     public function validate() : array {
         $error = [];
-        
+
+
         return $error;
     }
 
@@ -75,9 +76,8 @@ class CheckListNoteItem extends Model {
         $this->checked = $checked;
     }
 
-    public function persist(): void {
+    public function persist(): CheckListNoteItem | array {
         if (self::get_item_by_id($this->id)) {
-            // Mise à jour de l'item existant
             self::execute("UPDATE checklist_note_items SET checklist_note = :checklist_note, content = :content, checked = :checked WHERE id = :id",
                 [
                     'id' => $this->id,
@@ -94,6 +94,7 @@ class CheckListNoteItem extends Model {
                 ]);
             $this->id = self::lastInsertId();
         }
+        return $this;
     }
 
     public function check_uncheck(): void {
