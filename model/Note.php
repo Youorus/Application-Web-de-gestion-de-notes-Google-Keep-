@@ -205,7 +205,7 @@ abstract class Note extends Model {
         $this->dateTime = $dateTime;
     }
 
-    public function setDateTimeEdit(?DateTime $dateTime_edit): void {
+    public function setDateTimeEdit(DateTime $dateTime_edit): void {
         $this->dateTime_edit = $dateTime_edit;
     }
 

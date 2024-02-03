@@ -381,10 +381,15 @@ class ControllerIndex extends Controller
 
     public function edit_checklistnote() {
         $idNote = intval($_GET['param1']);
+
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
         $title = $note->getTitle();
+
+        if(isset($_POST['title'])) {
+            return print_r($_POST);
+        }
         $content = $note->getItems();
 
         $sortedItems = $this->sort_items($content);
@@ -399,6 +404,54 @@ class ControllerIndex extends Controller
 
         (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
 
+    }
+
+    public function editchecklistnote() {
+        $error = [];
+        $idNote = $_POST['idnote'];
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $ownerId = $user->getId();
+
+        $title = $_POST['title'];
+
+
+        $checklistNote = new CheckListNote($idNote);
+        $checklistNote->setTitle($title);
+        $editDate = new DateTime();
+        $checklistNote->setDateTimeEdit($editDate);
+        $checklistNote->setOwner($ownerId);
+
+        $error = $checklistNote->validate_checklistnote();
+
+        if(empty($error)) {
+           $checklistNote->persist();
+        }
+
+        $this->redirect("index", "open_checklist_note", $idNote);
+
+
+
+    }
+
+    public function delete_item () {
+        //return print_r($_POST);
+        $idnoteitem = $_POST['id_item'];
+        $idNote = intval($_POST['idnote']);
+        $checklistnoteitem = new CheckListNoteItem($idnoteitem, 0, "", 0);
+        $checklistnoteitem->delete_item();
+
+
+        $this->redirect("index", "edit_checklistnote", $idNote);
+    }
+
+    public function add_item() {
+        $idNote = intval($_POST['idnote']);
+        $content = $_POST['content'];
+        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+        $checklistnoteitem->persist();
+
+        $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
 
