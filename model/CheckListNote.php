@@ -3,7 +3,7 @@
 require_once "Note.php";
 class CheckListNote extends Note
 {
-    private int $id;
+    protected ?int $id;
 
     public function getId(): int
     {
@@ -15,7 +15,7 @@ class CheckListNote extends Note
         $this->id = $id;
     }
 
-    public function __construct(int $id)
+    public function __construct(?int $id)
     {
         parent::__construct($id, "", 0, new DateTime(), null, 0, 0, 0);
         $this->id = $id;
@@ -38,13 +38,13 @@ class CheckListNote extends Note
     }
 
 
-    public function persist() {
-        if (self::get_checklistnote_by_id($this->id)) {
+    public function persist(): CheckListNote | array  {
+        if (self::get_checklistnote_by_id($this->getId())) {
             self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
                            edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
                            WHERE id = :id",
                 [
-                    'id' => $this->id,
+                    'id' => $this->getId(),
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
@@ -54,7 +54,6 @@ class CheckListNote extends Note
                     'weight' => $this->getWeight()
                 ]);
         } else {
-            // Insertion d'une nouvelle note dans 'notes'
             self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
                            VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
@@ -109,16 +108,7 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
 
 
 
-    public function getTitle(): string
-    {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row) {
-            $results = $row['title'];
-        }
-        return $results;
-    }
+
 
     public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
         $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
@@ -130,14 +120,36 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
         }
     }
 
-    public  function validate_checklistnote () : array {
-
+    public function validate_checklistnote(): array {
         $errors = [];
-        if(strlen($this->getTitle()) < 3 || strlen($this->getTitle())> 25) {
-            $errors[] = "title must be beetween 3 and 25";
+        if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
+            $errors['title'] = "The title must be between 3 and 25 characters.";
+        }
+
+        $itemNames = [];
+        foreach ($this->getItems() as $item) {
+            if (in_array($item->getContent(), $itemNames)) {
+                $errors[] = "Item names must be unique.";
+            }
+            $itemNames[] = $item->getContent();
         }
 
         return $errors;
+    }
+
+    public function getTitle(): string
+    {
+        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['title'];
+
+        }
+        if(empty($results)) {
+            $results = $this->title;
+        }
+        return $results;
     }
 
 
