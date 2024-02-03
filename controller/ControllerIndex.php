@@ -126,8 +126,10 @@ class ControllerIndex extends Controller
         (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
     }
 
-    public function check_uncheck(): void {
-
+    public function check_uncheck(): void{
+        $user = $this->get_user_or_redirect();
+        $idNote = intval($_GET['param1']);
+        $note = $user->get_One_note_by_id($idNote);
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $itemId = $_POST['item_id'];
             $checked = isset($_POST['checked']) ? 1 : 0;
@@ -141,7 +143,7 @@ class ControllerIndex extends Controller
 
         }
 
-        $this->redirect("index", "open_checklist_note", $_GET['param1']);
+        $this->redirect("index", "open_checklist_note" . $note->getId());
 
         //$this->redirect("index", "open_checklist_note");
     }

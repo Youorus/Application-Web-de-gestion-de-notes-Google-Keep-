@@ -12,7 +12,7 @@
         <div class="checklist-items">
             <label class="form-label">Items</label>
             <?php foreach ($content as $item): ?>
-                    <form action="index/check_uncheck" method="post">
+                    <form action="index/open_checklist_note" method="post">
                         <div class="input-group mb-3">
                             <div class="input-group-text">
                                 <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> onchange="this.form.submit();" aria-label="Checkbox for following text input">

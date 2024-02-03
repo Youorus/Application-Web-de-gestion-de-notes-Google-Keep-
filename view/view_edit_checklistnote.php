@@ -17,9 +17,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form action="index/check_uncheck" method="post" class="flex-grow-1 me-2">
                     <div class="input-group">
-                        <div class="input-group-text">
-                            <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> onchange="this.form.submit();" aria-label="Checkbox for following text input">
-                        </div>
+
                         <input type="text" class="form-control" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox" >
                         <input type="hidden" name="item_id" value="<?= $item->getId(); ?>">
                     </div>
