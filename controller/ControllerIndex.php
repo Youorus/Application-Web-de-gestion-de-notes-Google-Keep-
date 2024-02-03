@@ -144,7 +144,7 @@ class ControllerIndex extends Controller
         header('Refresh:2');
     }
 
-    public function sort_items(array $items): array {
+    private function sort_items(array $items): array {
         usort($items, function($a, $b) {
             return $a->getChecked() <=> $b->getChecked();
         });
@@ -393,7 +393,7 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+        (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
 
     }
 
