@@ -383,8 +383,10 @@ class ControllerIndex extends Controller
         ]);
     }
 
+    /*
     public function editchecklistnote() {
-        $idNote = intval($_GET['param1']);
+        return print_r($_GET);
+        $idNote = $_GET['param1'];
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
@@ -408,6 +410,71 @@ class ControllerIndex extends Controller
 
         (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
 
+    }
+    */
+
+    public function edit_checklistnote() {
+        $idNote = intval($_GET['param1']);
+
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $actualDate = new DateTime();
+        $title = $note->getTitle();
+
+        if(isset($_POST['title'])) {
+            return print_r($_POST);
+        }
+        $content = $note->getItems();
+
+        $sortedItems = $this->sort_items($content);
+
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+
+        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+        $noteType = open_note($note);
+
+        (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+
+    }
+
+    public function editchecklistnote() {
+        if(isset($_POST['idnote'], $_POST['title'])) { // S'assurer que les données nécessaires sont envoyées
+            $error = [];
+            $idNote = $_POST['idnote'];
+            $user = $this->get_user_or_redirect();
+            $ownerId = $user->getId();
+
+            // Assurez-vous que cette méthode renvoie l'instance correcte de la note
+            $note = $user->get_One_note_by_id($idNote);
+            $note->setOwner($ownerId);
+            //return var_dump($note);
+            if($note) {
+                // Utilisez l'objet note existant au lieu d'en créer un nouveau
+                $note->setTitle($_POST['title']);
+                $editDate = new DateTime();
+                $note->setDateTimeEdit($editDate);
+                //return print_r($note);
+                // Validez les changements avant de les persister
+                $error = $note->validate_checklistnote();
+
+                if(empty($error)) {
+                    // Cela devrait mettre à jour l'objet note dans la base de données
+                    $note->persist();
+                    //return print_r($note->persist());
+                    // Rediriger après la mise à jour
+                    $this->redirect("index", "edit_checklistnote", $idNote);
+                } else {
+                    // Gérer les erreurs de validation ici
+                }
+            } else {
+                // Gérer l'erreur si la note n'est pas trouvée
+            }
+        } else {
+            // Gérer l'erreur si les données POST nécessaires ne sont pas définies
+        }
     }
 
     /*
@@ -450,7 +517,7 @@ class ControllerIndex extends Controller
         $checklistnoteitem->delete_item();
 
 
-        $this->redirect("index", "editchecklistnote", $idNote);
+        $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
     public function add_item() {
@@ -460,7 +527,7 @@ class ControllerIndex extends Controller
         $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
         $checklistnoteitem->persist();
 
-        $this->redirect("index", "editchecklistnote", $idNote);
+        $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
 
