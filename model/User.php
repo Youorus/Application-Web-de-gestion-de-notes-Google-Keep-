@@ -168,6 +168,10 @@ class User extends Model{
 
     }
 
+    public function getAllUserName(){
+        $query = self::execute("SELECT ")
+    }
+
 
     public function get_UserShares_Notes(){
         $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
@@ -231,6 +235,15 @@ class User extends Model{
             $errors[] = "les mots de passes ne correspondent pas";
         }
         return $errors;
+    }
+
+    public static function getUsersIds(){
+        $query = self::execute("SELECT id from users WHERE users.id = :id", [
+            "id"=>$id]);
+
+        $userIds = $query->fetchAll(PDO::FETCH_COLUMN);
+
+        return $userIds;
     }
 
 
