@@ -86,7 +86,7 @@ class ControllerIndex extends Controller
 
 
 
-    public function open_text_note(): void {
+    public function open_text_note() {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -123,14 +123,15 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType, "idnote"=>$idNote]);
     }
 
-    public function check_uncheck(): void{
+    public function check_uncheck(){
+
         $user = $this->get_user_or_redirect();
-        $idNote = intval($_GET['param1']);
-        $note = $user->get_One_note_by_id($idNote);
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $idNote = intval($_POST['idnote']);
             $itemId = $_POST['item_id'];
             $checked = isset($_POST['checked']) ? 1 : 0;
 
@@ -143,7 +144,7 @@ class ControllerIndex extends Controller
 
         }
 
-        $this->redirect("index", "open_checklist_note" . $note->getId());
+        $this->redirect("index", "open_checklist_note/" . $idNote);
 
         //$this->redirect("index", "open_checklist_note");
     }
@@ -409,6 +410,7 @@ class ControllerIndex extends Controller
 
     }
 
+    /*
     public function edit_checklistnote() {
         $error = [];
         $idNote = intval($_GET['param1']);
@@ -437,6 +439,7 @@ class ControllerIndex extends Controller
 
 
     }
+    */
 
     public function delete_item () {
         //return print_r($_POST);
