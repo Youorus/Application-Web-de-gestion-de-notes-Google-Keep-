@@ -534,7 +534,7 @@ class ControllerIndex extends Controller
     }
 
 
-}
+
 
     public function view_shares_note(): void{
         $noteId = null;
@@ -609,4 +609,5 @@ class ControllerIndex extends Controller
 
      
 }
+
 

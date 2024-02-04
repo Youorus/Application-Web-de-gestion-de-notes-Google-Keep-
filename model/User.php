@@ -226,7 +226,7 @@ class User extends Model{
     }
 
     public function getAllUserName(){
-        $query = self::execute("SELECT ")
+       // $query = self::execute("SELECT ");
     }
 
 
@@ -315,14 +315,14 @@ WHERE notes.owner = :id", [
         return $errors;
     }
 
-    public static function getUsersIds(){
+    /*public static function getUsersIds(){
         $query = self::execute("SELECT id from users WHERE users.id = :id", [
             "id"=>$id]);
 
         $userIds = $query->fetchAll(PDO::FETCH_COLUMN);
 
         return $userIds;
-    }
+    }*/
 
 
 

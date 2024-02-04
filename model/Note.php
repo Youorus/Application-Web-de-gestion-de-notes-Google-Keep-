@@ -9,6 +9,7 @@ enum NoteType {
 
 abstract class Note extends Model {
     protected ?int $id;
+    protected $note;
     protected string $title;
     protected int $owner;
     protected DateTime $dateTime;
@@ -19,6 +20,7 @@ abstract class Note extends Model {
 
     public function __construct(
         int $id,
+        $note,
         string $title,
         int $owner,
         DateTime $dateTime,
@@ -28,6 +30,7 @@ abstract class Note extends Model {
         int $weight
     ) {
         $this->id = $id;
+        $this->note = $note;
         $this->title = $title;
         $this->owner = $owner;
         $this->dateTime = $dateTime;

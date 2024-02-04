@@ -8,7 +8,7 @@ private int $user;
 private int $editor;
 
 public function __construct(int $note, int $editor, int $user) {
-    parent::__construct($note, "", 0, new DateTime(), null, 0, 0, 0);
+    parent::__construct($note, $note, "", 0, new DateTime(), null, 0, 0, 0);
 $this->noteid = $note;
 $this->editor = $editor;
 $this->user = $user;
