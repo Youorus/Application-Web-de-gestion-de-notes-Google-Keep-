@@ -584,28 +584,32 @@ class ControllerIndex extends Controller
         }
     }
 
-    public function delete_share(){
 
-        $user = $this->get_user_or_redirect();
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Récupération des données du formulaire
-            $noteId = $_POST['note_id'];
-            $shareUserId = $_POST['user_id'];
+    public function delete_share()
+{
 
-            $note = Note::getId($noteId);
-            if ($note instanceof Note) {
-                $share = new NoteShare($note,$user->getId(),$shareUserId);
-                $share->delete();
-                $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
-            }
-            //suppression du partage
-            
-    } 
-}
+    $user = $this->get_user_or_redirect();
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Récupération des données du formulaire
+        $noteId = $_POST['note_id'];
+        $shareUserId = $_POST['user_id'];
 
-    public function toggle_share_permission(){
-       
+        $note = Note::getId($noteId);
+        if ($note instanceof Note) {
+            $share = new NoteShare($note, $user->getId(), $shareUserId);
+            $share->delete();
+            $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
+        }
+        //suppression du partage
+
     }
+
+    public
+    function toggle_share_permission()
+    {
+
+    }
+
 
      
 }
