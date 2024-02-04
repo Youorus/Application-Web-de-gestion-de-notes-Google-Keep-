@@ -8,14 +8,14 @@ enum NoteType {
 }
 
 abstract class Note extends Model {
-    private int $id;
-    private string $title;
-    private int $owner;
-    private DateTime $dateTime;
-    private ?DateTime $dateTime_edit;
-    private int $pinned;
-    private int $archived;
-    private int $weight;
+    protected ?int $id;
+    protected string $title;
+    protected int $owner;
+    protected DateTime $dateTime;
+    protected ?DateTime $dateTime_edit;
+    protected int $pinned;
+    protected int $archived;
+    protected int $weight;
 
     public function __construct(
         int $id,
@@ -48,6 +48,19 @@ abstract class Note extends Model {
         }
         return $result;
     }
+
+    public function isEditor(): bool
+    {
+        $query = self::execute("SELECT note_shares.editor FROM note_shares WHERE note_shares.note = :id", ["id" => $this->id]);
+        $data = $query->fetch();
+
+        $result = false;
+        if ($data[0] > 0){
+            $result = true;
+        }
+        return $result;
+    }
+
 
     public function isShared(): bool{
         $query = self::execute("SELECT COUNT(*) FROM `note_shares` WHERE note_shares.note = :id", ["id" => $this->id]);
@@ -116,6 +129,7 @@ abstract class Note extends Model {
             );
         }
     }
+
 
 
     public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
@@ -191,7 +205,7 @@ abstract class Note extends Model {
         $this->dateTime = $dateTime;
     }
 
-    public function setDateTimeEdit(?DateTime $dateTime_edit): void {
+    public function setDateTimeEdit(DateTime $dateTime_edit): void {
         $this->dateTime_edit = $dateTime_edit;
     }
 

@@ -2,6 +2,8 @@
 <html lang="en">
 <?php include "head.php"?>
 <body>
+
+<div class="box-signup">
 <div class="signup-box">
     <h2>Signup</h2>
     <hr>
@@ -42,6 +44,7 @@
         </div>
     </form>
 
+</div>
 </div>
 <!-- Font Awesome pour les icônes -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script> -->

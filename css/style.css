@@ -12,7 +12,6 @@ a{
 }
   *{
     color: var(--couleur-texte);
-    /*background-color: var(--couleur-fond);*/
   }
 
   title{
@@ -48,6 +47,11 @@ body{
     background-color: var(--couleur-fond);
     border: 1px solid var(--couleur-bordure);
     border-bottom: none;
+}
+.card-other {
+    background-color: var(--couleur-fond);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 5px;
 }
 .iconBox{
     border-top: 1px solid var(--couleur-bordure);
@@ -88,16 +92,26 @@ body{
     left: 4%;
     padding: 20px;
   }
-
+.box-login{
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+.box-signup{
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
   .signup-box {
+      text-align: center;
     background-color: var(--couleur-fond);
-    max-width: 500px;
+      width: 35%;
     border: 1px solid var(--couleur-bordure);
-    width: 80%;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
+
 
   .signup-box h2 {
     text-align: center;
@@ -109,13 +123,17 @@ body{
     margin-right: 20px;
 }
 
+.input-group-text {
+    background-color: var(--couleur-bouton);
+    border: none;
+}
+
 .open-text{
     margin: 1% 5% 0 5%;
 }
 .infoText{
     font-style: italic;
     font-weight: normal;
-    font-size: initial;
     margin-left: 5%;
     margin-top: 3%;
 }
@@ -132,6 +150,7 @@ body{
     margin: 15px 0;
     color: var(--couleur-texte);
   }
+
 
   .form-group {
     margin-bottom: 20px;
@@ -153,6 +172,9 @@ body{
     display: inline-block;
   }
 
+.checkBoxFinish{
+    margin-left: 15px;
+}
 
   .form-group i {
     margin-right: 10px;
@@ -163,6 +185,27 @@ body{
     border-radius: 15px;
     background-color: var(--error-color);
   }
+
+.edit-cancel{
+    text-decoration: none;
+    width: 20%;
+    padding: 10px;
+    background-color: var(--error-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.edit-save{
+    width: 20%;
+    padding: 10px;
+    background-color: var(--couleur-bouton);
+    color: #fff;
+    border: none;
+    margin-left: 5%;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
   .signup-btn {
     width: 100%;
@@ -182,3 +225,43 @@ body{
   .signup-btn:hover {
     background-color: #0056b3;
   }
+
+
+.note-container {
+    margin: 20px;
+}
+.note-title {
+    margin-bottom: 20px;
+}
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.checklist-item input[type="checkbox"]:checked + label {
+
+    color: #6c757d;
+}
+
+.delete-btn {
+    background-color: red; /
+    color: white;
+    border: none;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.add-btn {
+    background-color: blue; /* Fond bleu */
+    color: white; /* Icône et texte en blanc */
+    border: none; /* Retirer la bordure du bouton par défaut */
+}
+
+/* Vous pouvez ajouter :hover pour changer l'aspect au survol */
+.add-btn:hover {
+    background-color: #0000cc; /* Un bleu légèrement plus foncé pour l'effet au survol */
+}
+
+

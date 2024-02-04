@@ -31,17 +31,14 @@ class ControllerSettings extends Controller
             $newpassword = $_POST['newpassword'];
             $confirmpassword = $_POST['confirmpassword'];
 
-            // Vérifier si le mot de passe actuel est correct
             if (!$user->verifyPassword($currentpassword)) {
                 $errors[] = "Le mot de passe actuel est incorrect.";
             }
 
-            // Vérifier si les nouveaux mots de passe correspondent
             if ($newpassword !== $confirmpassword) {
                 $errors[] = "Le nouveau mot de passe et la confirmation ne correspondent pas.";
             }
 
-            // Si aucune erreur, mettre à jour le mot de passe
             if (empty($errors)) {
                 $user->setHashedPassword(Tools::my_hash($newpassword));
                 $user->persist();
@@ -49,40 +46,54 @@ class ControllerSettings extends Controller
             }
         }
 
-        // Afficher la vue avec les erreurs potentielles et le message de succès
         (new View("change_password"))->show(["errors" => $errors, "success" => $success]);
     }
 
 
 
-    function edit_profile(): void {
+    public function edit_profile()  {
         $user = $this->get_user_or_redirect();
+        $user_name = $user->getFullName();
+        $user_mail = $user->getMail();
         $errors = [];
-        $success = "";
 
         if(isset($_POST['full_name'])) {
-            $full_name = trim($_POST['full_name']);
-            if($full_name != $user->full_name) {
-                $user->full_name = $full_name;
-                $errors_fullname = $user->validate_full_name();
-                $errors = array_merge($errors, $errors_fullname);
+            $full_name = ($_POST['full_name']);
+            if($full_name != $user->getName()) {
+                $user->setName($full_name);
+                $errors = User::validate($full_name);
+            }
+        }
+
+        if(isset($_POST['email'])) {
+            $newemail = $_POST['email'];
+            if($newemail != $user->getMail()) {
+                $emailErrors = User::validate_unicity($newemail);
+                if(!empty($emailErrors)) {
+                    $errors = array_merge($errors, $emailErrors);
+                } else {
+                    $user->setMail($newemail);
+                }
             }
         }
 
         if (count($_POST) > 0 && count($errors) == 0) {
-            $user->update_full_name();
-            $success = "Your full name has been successfully updated.";
+            $user->persist_mail();
+            $this->redirect("settings", "edit_profile");
         }
 
         (new View("edit_profile"))->show([
             "user" => $user,
             "errors" => $errors,
-            "success" => $success
+            "user_name" => $user_name,
+            "user_mail" => $user_mail,
         ]);
     }
 
 
-
+public function cancel(){
+        $this->redirect("index","setting" );
+}
     
 
 

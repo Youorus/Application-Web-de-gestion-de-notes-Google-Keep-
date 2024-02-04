@@ -21,7 +21,8 @@ class CheckListNoteItem extends Model {
 
     public function validate() : array {
         $error = [];
-        
+
+
         return $error;
     }
 
@@ -30,26 +31,7 @@ class CheckListNoteItem extends Model {
         return  NoteType::ChecklistNote;
     }
 
-    public function persist(): void {
-        if ($this->id) {
-            // Mise à jour de l'item existant
-            self::execute("UPDATE checklist_note_items SET checklist_note = :checklist_note, content = :content, checked = :checked WHERE id = :id",
-                [
-                    'id' => $this->id,
-                    'checklist_note' => $this->checklist_note,
-                    'content' => $this->content,
-                    'checked' => $this->checked
-                ]);
-        } else {
-            self::execute("INSERT INTO checklist_note_items (checklist_note, content, checked) VALUES (:checklist_note, :content, :checked)",
-                [
-                    'checklist_note' => $this->checklist_note,
-                    'content' => $this->content,
-                    'checked' => $this->checked
-                ]);
-            $this->id = self::lastInsertId();
-        }
-    }
+
 
 
 
@@ -93,5 +75,59 @@ class CheckListNoteItem extends Model {
     {
         $this->checked = $checked;
     }
+
+    public function persist(): CheckListNoteItem | array {
+        if (self::get_item_by_id($this->id)) {
+            self::execute("UPDATE checklist_note_items SET checklist_note = :checklist_note, content = :content, checked = :checked WHERE id = :id",
+                [
+                    'id' => $this->id,
+                    'checklist_note' => $this->checklist_note,
+                    'content' => $this->content,
+                    'checked' => $this->checked
+                ]);
+        } else {
+            self::execute("INSERT INTO checklist_note_items (checklist_note, content, checked) VALUES (:checklist_note, :content, :checked)",
+                [
+                    'checklist_note' => $this->checklist_note,
+                    'content' => $this->content,
+                    'checked' => $this->checked
+                ]);
+            $this->id = self::lastInsertId();
+        }
+        return $this;
+    }
+
+    public function check_uncheck(): void {
+        if($this->getChecked() == 0) {
+            $this->setChecked(1);
+        } else {
+            $this->setChecked(0);
+        }
+    }
+
+    public static function get_item_by_id(int $id): CheckListNoteItem | false {
+        $query = self::execute("SELECT * FROM checklist_note_items WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch();
+        if ($data) {
+            return new CheckListNoteItem(
+                id: $data['id'],
+                checklist_note: $data['checklist_note'],
+                content: $data['content'],
+                checked: $data['checked']
+            );
+        } else {
+            return false;
+        }
+    }
+
+    public function delete_item () {
+        self::execute("DELETE FROM checklist_note_items WHERE id = :id", ["id" => $this->id]);
+    }
+
+
+
+
+
+
 
 }

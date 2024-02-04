@@ -3,8 +3,6 @@
 
 <?php include "head.php"?>
     <body>
-     
-       
         <!-- menu deroulant -->
             <div class="offcanvas offcanvas-start navbar-dark bg-dark text-bg-dark show" style="width:100vw;" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                 <div class="offcanvas-header">
@@ -29,21 +27,21 @@
                    </div>       
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="settings/edit_profile">
                                 <span class="material-symbols-outlined">
                                     manage_accounts
                                 </span> Edit profile
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">
+                            <a class="nav-link" href="settings/change_password">
                                 <span class="material-symbols-outlined">
                                     password
                                 </span> Change password
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="login">
+                            <a class="nav-link" href="index/logout">
                                 <span class="material-symbols-outlined">
                                     logout
                                 

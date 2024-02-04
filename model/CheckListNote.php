@@ -3,7 +3,7 @@
 require_once "Note.php";
 class CheckListNote extends Note
 {
-    private int $id;
+    protected ?int $id;
 
     public function getId(): int
     {
@@ -15,7 +15,7 @@ class CheckListNote extends Note
         $this->id = $id;
     }
 
-    public function __construct(int $id)
+    public function __construct(?int $id)
     {
         parent::__construct($id, "", 0, new DateTime(), null, 0, 0, 0);
         $this->id = $id;
@@ -24,6 +24,8 @@ class CheckListNote extends Note
 
     public function delete(): void
     {
+
+        self::execute("DELETE FROM checklist_note_items WHERE checklist_note_items.checklist_note = :id", ["id" => $this->getId()]);
         self::execute("DELETE FROM checklist_notes WHERE checklist_notes.id = :id", ["id" => $this->getId()]);
         parent::delete();
     }
@@ -35,53 +37,47 @@ class CheckListNote extends Note
         return $error;
     }
 
-    public function persist(): CheckListNote | array {
-        $errors = $this->validate();
-        if (!empty($errors)) {
-            return $errors;
-        }
 
-        if (!parent::get_checklistnote_by_id($this->getId())) {
-            // Insérer une nouvelle note dans 'notes'
-            parent::execute(
-                "INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight) 
-             VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+    public function persist(): CheckListNote | array  {
+        if (self::get_checklistnote_by_id($this->getId())) {
+            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
+                           edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
+                           WHERE id = :id",
+                [
+                    'id' => $this->getId(),
+                    'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
+                    'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
+                    'pinned' => $this->getPinned(),
+                    'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
+                ]);
+        } else {
+            self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
+                           VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
-                ]
-            );
-            $this->setId(parent::lastInsertId());
-
-            // Insére dans 'checklist_notes'
-            parent::execute(
-                "INSERT INTO checklist_notes (id) VALUES (:id)",
-                ['id' => $this->getId()]
-            );
-        } else {
-            // Mettre à jour la note existante
-            parent::execute(
-                "UPDATE notes SET title = :title, edited_at = :editedAt, 
-             pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
-                [
-                    'id' => $this->getId(),
-                    'title' => $this->getTitle(),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
-                    'pinned' => $this->getPinned(),
-                    'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
-                ]
-            );
-
+                ]);
+            $this->id = self::lastInsertId();
+            self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
+                ['id' => $this->id]);
+        }
+        foreach ($this->getItems() as $item) {
+            $item->setChecklistNote($this->id);
+            $item->persist();
         }
 
         return $this;
     }
+
+
 
     public function getType(): NoteType
     {
@@ -111,16 +107,56 @@ WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
     }
 
 
+
+
+
+    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new CheckListNote($data["id"]);
+        }
+    }
+
+    public function validate_checklistnote(): array {
+        $errors = [];
+        if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
+            $errors['title'] = "The title must be between 3 and 25 characters.";
+        }
+
+        $itemNames = [];
+        foreach ($this->getItems() as $item) {
+            if (in_array($item->getContent(), $itemNames)) {
+                $errors[] = "Item names must be unique.";
+            }
+            $itemNames[] = $item->getContent();
+        }
+
+        return $errors;
+    }
+
     public function getTitle(): string
     {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row) {
-            $results = $row['title'];
+        if(empty($this->title)){
+            $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
+            $data = $query->fetchAll();
+            $results = "";
+            foreach ($data as $row){
+                $results = $row['title'];
+
+            }
+
+        }else{
+            $results = $this->title;
         }
         return $results;
     }
+
+
+
+
 }
 
 

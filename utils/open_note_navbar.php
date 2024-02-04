@@ -16,20 +16,24 @@
                 echo ' <span style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
                 echo '</a>';
                 // unarchived
-                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">
-unarchive
+                echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive
 </span></a>';
-            } elseif ($noteType == "shared"){
+            } elseif ($noteType == "share"){
                 // edite share
-                echo '<a href="#" class="icon-link">';
-                echo ' <i class="fa-regular  fa-pen-to-square"></i>';
-                echo '</a>';
+                echo $note->isEditor() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> edit </span> </a>' : '';
+
             } elseif ($noteType == "edited"){
                 // Save
                 echo '<a href="#" class="icon-link">';
                 echo ' <i class="fa-solid fa-floppy-disk"></i>';
                 echo '</a>';
-            } else {
+            }elseif ($noteType == "add"){
+//                // Save
+//                echo '<button type="submit" class="icon-link">';
+//                echo ' <i class="fa-solid fa-floppy-disk"></i>';
+//                echo '</button>';
+                echo '';
+            }else {
                 // share
                 echo '<a href="index/view-share" class="icon-link">';
                 echo ' <span class="material-symbols-outlined"> share </span>';
@@ -51,5 +55,10 @@ unarchive
 </nav>
 
 <div>
-        <h5 class="infoText"> Created <?= $messageCreate ?>. Edited <?= $messageEdit ?> </h5>
+    <?php
+    if ($noteType == "archived" || $noteType == "share" || $noteType == "edited" || $noteType == "normal") {
+        echo '<h5 class="infoText"> Created ' . $messageCreate . '. Edited ' . $messageEdit . ' </h5>';
+    }
+    ?>
+
     </div>

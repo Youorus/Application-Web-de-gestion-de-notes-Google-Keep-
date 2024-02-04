@@ -31,7 +31,7 @@ CREATE TABLE `checklist_note_items` (
   UNIQUE KEY `checklist_note` (`checklist_note`,`content`),
   KEY `fkchecklist_note_items_checklist_notes` (`checklist_note`),
   CONSTRAINT `fkchecklist_note_items_checklist_notes` FOREIGN KEY (`checklist_note`) REFERENCES `checklist_notes` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `checklist_note_items` (
 
 LOCK TABLES `checklist_note_items` WRITE;
 /*!40000 ALTER TABLE `checklist_note_items` DISABLE KEYS */;
-INSERT INTO `checklist_note_items` VALUES (1,24,'reblochon',0),(2,24,'crème fraiche',0),(3,24,'lardons',0),(9,24,'pommes de terre',0),(10,24,'oignons',0),(11,25,'Enoncé projet PRWB',1),(12,27,'PQ',1),(13,27,'Jus',1),(14,27,'Café',0),(15,27,'Biscuits',0),(16,29,'Examen BD01',0),(17,29,'Examen TGPR',1),(18,25,'Leçon 17 PRO2',0),(19,25,'Interro boucles PRM2',0),(20,24,'vin de savoie',0);
+INSERT INTO `checklist_note_items` VALUES (12,27,'PQ',1),(13,27,'Jus',1),(14,27,'Café',0),(15,27,'Biscuits',0),(16,29,'Examen BD01',0),(17,29,'Examen TGPR',1),(21,32,'a',0),(22,33,'a',0),(23,34,'a',0),(24,35,'aa',0),(25,36,'ee',0),(26,38,'test',1),(27,39,'test',0),(28,40,'at',1),(29,40,'pu',1),(30,41,'test',0),(32,43,'tess',0);
 /*!40000 ALTER TABLE `checklist_note_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +64,7 @@ CREATE TABLE `checklist_notes` (
 
 LOCK TABLES `checklist_notes` WRITE;
 /*!40000 ALTER TABLE `checklist_notes` DISABLE KEYS */;
-INSERT INTO `checklist_notes` VALUES (24),(25),(27),(29);
+INSERT INTO `checklist_notes` VALUES (24),(25),(27),(29),(32),(33),(34),(35),(36),(38),(39),(40),(41),(42),(43),(44);
 /*!40000 ALTER TABLE `checklist_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +115,7 @@ CREATE TABLE `notes` (
   PRIMARY KEY (`id`),
   KEY `fk_notes_users` (`owner`),
   CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',1,1,2),(21,'Code alarme',1,'2023-10-11 11:51:43','2023-11-20 21:33:47',1,0,6),(22,'Pensées',1,'2023-10-11 11:51:50','2023-11-21 09:17:15',1,0,1),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,5),(24,'Colruyt tartiflette',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',1,0,4),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',1,0,3),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,1),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,7),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,3);
+INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',1,1,2),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,5),(24,'Colruyt tartiflette',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',0,0,0),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',0,0,0),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,1),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,7),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,3),(32,'aaaa',1,'2024-01-30 01:31:41',NULL,0,0,1),(33,'aaa',1,'2024-01-30 01:32:21',NULL,0,0,1),(34,'aaa',1,'2024-01-30 01:32:50',NULL,0,0,1),(35,'test',1,'2024-01-30 01:33:57',NULL,0,0,1),(36,'tez',1,'2024-01-30 01:35:02',NULL,0,0,1),(38,'test',1,'2024-02-02 20:38:33',NULL,0,0,1),(39,'Test',1,'2024-02-02 21:14:08',NULL,0,0,1),(40,'Test',1,'2024-02-02 21:15:29',NULL,0,0,1),(41,'Test',1,'2024-02-02 22:31:32',NULL,0,0,1),(42,'Test',1,'2024-02-03 13:53:00',NULL,0,0,0),(43,'test',1,'2024-02-03 13:59:16',NULL,0,0,1),(44,'sssss',1,'2024-02-03 17:21:43',NULL,0,0,0);
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +149,7 @@ CREATE TABLE `text_notes` (
 
 LOCK TABLES `text_notes` WRITE;
 /*!40000 ALTER TABLE `text_notes` DISABLE KEYS */;
-INSERT INTO `text_notes` VALUES (20,NULL),(21,'1793'),(22,'La simplicité ne précède pas la complexité, elle la suit.'),(23,'pouet pouet Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus accumsan tortor posuere ac ut consequat semper viverra. Viverra adipiscing at in tellus. Maecenas ultricies mi eget mauris pharetra et ultrices neque ornare. Nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus. Et netus et malesuada fames. Mauris sit amet massa vitae tortor condimentum lacinia quis. Ultrices dui sapien eget mi. Gravida neque convallis a cras semper auctor neque vitae tempus. Nulla facilisi cras fermentum odio eu feugiat pretium nibh ipsum.\r\n\r\nRisus feugiat in ante metus dictum at tempor commodo ullamcorper. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Ultrices vitae auctor eu augue. Nunc non blandit massa enim nec dui nunc mattis enim. Dolor purus non enim praesent elementum facilisis leo vel fringilla. At consectetur lorem donec massa sapien faucibus et. Nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi. Mattis vulputate enim nulla aliquet porttitor lacus luctus. Ultrices in iaculis nunc sed augue lacus viverra vitae. Velit dignissim sodales ut eu. Lectus nulla at volutpat diam ut venenatis tellus in metus. Nisl purus in mollis nunc sed id semper. Felis eget velit aliquet sagittis id consectetur purus. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Facilisis magna etiam tempor orci.\r\n\r\nAdipiscing diam donec adipiscing tristique risus nec feugiat. Tellus integer feugiat scelerisque varius. Sit amet mattis vulputate enim nulla. Massa id neque aliquam vestibulum morbi blandit cursus risus. Eu non diam phasellus vestibulum lorem sed risus ultricies. Quis varius quam quisque id. Ante in nibh mauris cursus mattis molestie. Tristique risus nec feugiat in fermentum posuere. Posuere urna nec tincidunt praesent semper feugiat nibh. Magna sit amet purus gravida quis blandit. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Non odio euismod lacinia at quis risus. Volutpat odio facilisis mauris sit.\r\n\r\nSed elementum tempus egestas sed sed risus pretium quam vulputate. Fringilla urna porttitor rhoncus dolor. Magna etiam tempor orci eu. Fusce id velit ut tortor pretium. Sed enim ut sem viverra. Dignissim enim sit amet venenatis urna cursus. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Aliquam vestibulum morbi blandit cursus risus at ultrices mi. Consectetur a erat nam at lectus urna duis. Volutpat lacus laoreet non curabitur gravida. Magna ac placerat vestibulum lectus mauris ultrices eros.\r\n\r\nNunc mi ipsum faucibus vitae aliquet nec ullamcorper. Imperdiet proin fermentum leo vel orci porta. Hendrerit dolor magna eget est lorem ipsum dolor. Scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis. Scelerisque viverra mauris in aliquam sem fringilla ut morbi tincidunt. Metus dictum at tempor commodo ullamcorper a lacus. Hac habitasse platea dictumst vestibulum. Adipiscing elit pellentesque habitant morbi. Bibendum neque egestas congue quisque egestas diam in. Justo donec enim diam vulputate ut pharetra. Auctor eu augue ut lectus arcu bibendum at. Quis vel eros donec ac odio tempor orci dapibus ultrices. Quam viverra orci sagittis eu volutpat odio facilisis. Sed viverra tellus in hac habitasse platea dictumst vestibulum. Ut sem viverra aliquet eget sit amet tellus cras. Erat nam at lectus urna. Nunc eget lorem dolor sed viverra. In nulla posuere sollicitudin aliquam ultrices sagittis orci a.'),(26,'EPFC!!Password84'),(28,'git clean -xdf \r\ngit clean -xdfn pour faire une simulation'),(30,NULL),(31,'de Marc');
+INSERT INTO `text_notes` VALUES (20,NULL),(23,'pouet pouet Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus accumsan tortor posuere ac ut consequat semper viverra. Viverra adipiscing at in tellus. Maecenas ultricies mi eget mauris pharetra et ultrices neque ornare. Nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus. Et netus et malesuada fames. Mauris sit amet massa vitae tortor condimentum lacinia quis. Ultrices dui sapien eget mi. Gravida neque convallis a cras semper auctor neque vitae tempus. Nulla facilisi cras fermentum odio eu feugiat pretium nibh ipsum.\r\n\r\nRisus feugiat in ante metus dictum at tempor commodo ullamcorper. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Ultrices vitae auctor eu augue. Nunc non blandit massa enim nec dui nunc mattis enim. Dolor purus non enim praesent elementum facilisis leo vel fringilla. At consectetur lorem donec massa sapien faucibus et. Nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi. Mattis vulputate enim nulla aliquet porttitor lacus luctus. Ultrices in iaculis nunc sed augue lacus viverra vitae. Velit dignissim sodales ut eu. Lectus nulla at volutpat diam ut venenatis tellus in metus. Nisl purus in mollis nunc sed id semper. Felis eget velit aliquet sagittis id consectetur purus. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Facilisis magna etiam tempor orci.\r\n\r\nAdipiscing diam donec adipiscing tristique risus nec feugiat. Tellus integer feugiat scelerisque varius. Sit amet mattis vulputate enim nulla. Massa id neque aliquam vestibulum morbi blandit cursus risus. Eu non diam phasellus vestibulum lorem sed risus ultricies. Quis varius quam quisque id. Ante in nibh mauris cursus mattis molestie. Tristique risus nec feugiat in fermentum posuere. Posuere urna nec tincidunt praesent semper feugiat nibh. Magna sit amet purus gravida quis blandit. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Non odio euismod lacinia at quis risus. Volutpat odio facilisis mauris sit.\r\n\r\nSed elementum tempus egestas sed sed risus pretium quam vulputate. Fringilla urna porttitor rhoncus dolor. Magna etiam tempor orci eu. Fusce id velit ut tortor pretium. Sed enim ut sem viverra. Dignissim enim sit amet venenatis urna cursus. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Aliquam vestibulum morbi blandit cursus risus at ultrices mi. Consectetur a erat nam at lectus urna duis. Volutpat lacus laoreet non curabitur gravida. Magna ac placerat vestibulum lectus mauris ultrices eros.\r\n\r\nNunc mi ipsum faucibus vitae aliquet nec ullamcorper. Imperdiet proin fermentum leo vel orci porta. Hendrerit dolor magna eget est lorem ipsum dolor. Scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis. Scelerisque viverra mauris in aliquam sem fringilla ut morbi tincidunt. Metus dictum at tempor commodo ullamcorper a lacus. Hac habitasse platea dictumst vestibulum. Adipiscing elit pellentesque habitant morbi. Bibendum neque egestas congue quisque egestas diam in. Justo donec enim diam vulputate ut pharetra. Auctor eu augue ut lectus arcu bibendum at. Quis vel eros donec ac odio tempor orci dapibus ultrices. Quam viverra orci sagittis eu volutpat odio facilisis. Sed viverra tellus in hac habitasse platea dictumst vestibulum. Ut sem viverra aliquet eget sit amet tellus cras. Erat nam at lectus urna. Nunc eget lorem dolor sed viverra. In nulla posuere sollicitudin aliquam ultrices sagittis orci a.'),(26,'EPFC!!Password84'),(28,'git clean -xdf \r\ngit clean -xdfn pour faire une simulation'),(30,NULL),(31,'de Marc');
 /*!40000 ALTER TABLE `text_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ CREATE TABLE `users` (
   `role` enum('user','admin') NOT NULL DEFAULT 'user',
   PRIMARY KEY (`id`),
   UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +177,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'boverhaegen@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Boris','user'),(2,'bepenelle@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Benoît','user'),(3,'xapigeolet@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Xavier','user'),(4,'mamichel@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Marc','user');
+INSERT INTO `users` VALUES (1,'boverhaegen@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Boris','user'),(2,'bepenelle@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Benoît','user'),(3,'xapigeolet@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Xavier','user'),(4,'mamichel@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Marc','user'),(5,'epfc123@gmail.com','56ce92d1de4f05017cf03d6cd514d6d1','Anass','user'),(6,'anassepfc1234@gmail.com','bf6dd07f264469d8f0f25ad8e3b4643a','anass','user'),(7,'anassepfc12345@gmail.com','115c6e688d7c4f66618605b5bf8ecca5','anass','user'),(8,'anassepfc123456@gmail.com','bf6dd07f264469d8f0f25ad8e3b4643a','Anass','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -190,4 +190,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-22 10:24:42
+-- Dump completed on 2024-02-04  1:27:47

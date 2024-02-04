@@ -1,12 +1,19 @@
 <?php
 require_once "framework/Model.php";
 class User extends Model{
-    private int  $id;
+    private ?int  $id;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
     private string $mail;
     private string $full_name;
+
+
     private string $role;
     private String $hashed_password;
-    public function __construct($mail,$hashed_password, $full_name, $role, $id=NULL){
+    public function __construct($id,$mail,$hashed_password, $full_name, $role){
         $this->id = $id;
         $this->mail = $mail;
         $this->hashed_password = $hashed_password;
@@ -21,9 +28,21 @@ class User extends Model{
         if ($query->rowCount() == 0) {
             return false;
         } else {
-            return new User($data["mail"], $data["hashed_password"], $data["full_name"], $data["role"], $data["id"]);
+            return new User($data["id"], $data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+
         }
     }
+
+    public static function get_user_by_id(int $id) : User|false {
+        $query = self::execute("SELECT * FROM Users WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch(); // Un seul résultat au maximum
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new User($data["id"], $data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+        }
+    }
+
     private static function check_password(string $clear_password, string $hash) : bool {
         return $hash === Tools::my_hash($clear_password);
     }
@@ -81,11 +100,6 @@ class User extends Model{
         return $results;
     }
 
-    public function get_User(bool $pinned, int $archive = 0): array
-    {
-
-    }
-
     public function get_One_note_by_id(int $noteId)
     {
         // Récupérer les détails de la note textuelle
@@ -110,6 +124,49 @@ class User extends Model{
         }
 
         return null; // Aucune note trouvée
+    }
+
+    public function get_All_shared_notes(int $userShare): array
+    {
+        $query = self::execute("SELECT notes.id, note_shares.editor
+                            FROM note_shares
+                            JOIN notes ON notes.id = note_shares.note
+                            WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
+            "loggedInUserId" => $this->id,
+            "userShare" => $userShare
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+
+        foreach ($data as $row) {
+            $queryNote = self::execute("SELECT notes.id, notes.title, text_notes.content
+                                    FROM notes
+                                    LEFT JOIN text_notes ON notes.id = text_notes.id
+                                    WHERE notes.id = :id", ["id" => $row['id']]);
+            $dataNote = $queryNote->fetch();
+
+            if ($dataNote) {
+                if ($dataNote['content'] !== null) {
+                    // Note textuelle
+                    $results[] = new TextNote(
+                        $dataNote['id'],
+                        $dataNote['title'],
+                        $dataNote['content'],
+                        $row['editor'] // Ajoutez l'éditeur à la création de la note
+                    );
+                } else {
+                    // Note de liste de contrôle
+                    $results[] = new CheckListNote(
+                        $dataNote['id'],
+                        $dataNote['title'],
+                        $row['editor'] // Ajoutez l'éditeur à la création de la note
+                    );
+                }
+            }
+        }
+
+        return $results;
     }
 
 
@@ -152,20 +209,20 @@ class User extends Model{
         return $results;
     }
 
+    public function getFullName(): string
+    {
+        return $this->full_name;
+    }
 
-    public function get_fullname_User(){
-        $query = self::execute("SELECT users.full_name from users WHERE users.id = :id", [
-                        "id" => $this->id,
-                    ]);
-                    $data = $query->fetchAll();
-                    $result ="";
-                    if ($query->rowCount() > 0) {
-                        foreach ($data as $row) {
-                            $result = $row['full_name'];
-                        }
-                    }
-                    return $result;
+    public static function getFullNameById(int $userId): string|null {
+        $query = self::execute("SELECT full_name FROM users WHERE id = :id", ["id" => $userId]);
+        $data = $query->fetch();
 
+        if ($query->rowCount() > 0) {
+            return $data["full_name"];
+        } else {
+            return null;
+        }
     }
 
     public function getAllUserName(){
@@ -173,24 +230,37 @@ class User extends Model{
     }
 
 
-    public function get_UserShares_Notes(){
-        $query = self::execute("SELECT DISTINCT users.full_name FROM note_shares JOIN users on users.id = note_shares.user WHERE note_shares.note in(
-        select note_shares.note FROM note_shares WHERE note_shares.user = :id ) and note_shares.user != :id", [
+
+
+    public function get_UserShares_Notes(): array {
+        $query = self::execute("SELECT DISTINCT users.*
+FROM note_shares
+JOIN notes ON notes.id = note_shares.note
+JOIN users ON users.id = note_shares.user
+WHERE notes.owner = :id", [
             "id" => $this->id,
         ]);
-        $data = $query->fetchAll();
-        $results =[];
-        if ($query->rowCount() > 0) {
-            foreach ($data as $row) {
-                $results[] = $row['full_name'];
 
+        $data = $query->fetchAll();
+        $results = [];
+
+        if ($query->rowCount() > 0) {
+            foreach ($data as $userData) {
+                $user = new User(
+                    $userData['id'],
+                    $userData['mail'],
+                    $userData['hashed_password'],
+                    $userData['full_name'],
+                    $userData['role']
+                );
+                $results[] = $user;
             }
         }
+
         return $results;
     }
 
     public function persist(): User {
-
         if (self::get_user_by_mail($this->mail)) {
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE mail = :mail",
                 ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
@@ -202,16 +272,24 @@ class User extends Model{
         }
         return $this;
     }
-    public function validate() : array
 
-    {
+    public function persist_mail() : User {
+        if(self::get_user_by_id($this->getId())) {
+            self::execute("UPDATE users SET mail = :mail, hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE id = :id",
+                ["id" => $this->id, "mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+
+        }
+        return $this;
+    }
+
+    public static function validate($fullname) : array {
         $errors = [];
-        if(!strlen($this->full_name) >= 3) {
-            $errors[] = "Le nom doit contenir au moins 3 caractères";
+        if(strlen($fullname) < 3) {
+            $errors[] = "Le nom doit contenir au moins 3 caractères.";
         }
         return $errors;
-
     }
+
 
     public static function validate_unicity($email): array {
         $errors = [];
@@ -250,10 +328,7 @@ class User extends Model{
 
 
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+
 
     public function getMail(): string
     {
@@ -297,9 +372,10 @@ class User extends Model{
 
     public function setHashedPassword(string $hashedPassword): void
     {
-        $this->hashedPassword = $hashedPassword;
+        $this->hashed_password = $hashedPassword;
     }
 
+    /*
     public function getMaxweight(): int
     {
         $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
@@ -314,4 +390,5 @@ class User extends Model{
         return $data["minwheight"];
     }
 
+    */
 }
