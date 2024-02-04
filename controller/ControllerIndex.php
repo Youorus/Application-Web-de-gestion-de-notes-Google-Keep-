@@ -379,16 +379,17 @@ class ControllerIndex extends Controller
         ]);
     }
 
-    public function edit_checklistnote() {
+    public function editchecklistnote() {
         $idNote = intval($_GET['param1']);
-
+        return print_r($_POST);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
         $title = $note->getTitle();
 
+
         if(isset($_POST['title'])) {
-            return print_r($_POST);
+
         }
         $content = $note->getItems();
 
@@ -406,9 +407,10 @@ class ControllerIndex extends Controller
 
     }
 
-    public function editchecklistnote() {
+    public function edit_checklistnote() {
         $error = [];
-        $idNote = $_POST['idnote'];
+        $idNote = intval($_GET['param1']);
+
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $ownerId = $user->getId();
@@ -442,7 +444,7 @@ class ControllerIndex extends Controller
         $checklistnoteitem->delete_item();
 
 
-        $this->redirect("index", "edit_checklistnote", $idNote);
+        $this->redirect("index", "editchecklistnote", $idNote);
     }
 
     public function add_item() {
@@ -451,7 +453,7 @@ class ControllerIndex extends Controller
         $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
         $checklistnoteitem->persist();
 
-        $this->redirect("index", "edit_checklistnote", $idNote);
+        $this->redirect("index", "editchecklistnote", $idNote);
     }
 
 
