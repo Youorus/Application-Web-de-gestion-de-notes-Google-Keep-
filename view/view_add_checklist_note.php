@@ -9,7 +9,7 @@
 <div class="container position-relative mt-5">
     <form id="addChecklistForm" action="index/add_checklistnote" method="post" class="bg-dark p-4 rounded">
     <div class="position-absolute top-0 end-0">
-        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i></button>
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i>
     </div>
 
         <div class="mb-3">
