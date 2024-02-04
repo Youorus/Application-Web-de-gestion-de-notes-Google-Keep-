@@ -441,39 +441,31 @@ class ControllerIndex extends Controller
     }
 
     public function editchecklistnote() {
-        if(isset($_POST['idnote'], $_POST['title'])) { // S'assurer que les données nécessaires sont envoyées
+        if(isset($_POST['idnote'], $_POST['title'])) {
             $error = [];
             $idNote = $_POST['idnote'];
             $user = $this->get_user_or_redirect();
             $ownerId = $user->getId();
 
-            // Assurez-vous que cette méthode renvoie l'instance correcte de la note
             $note = $user->get_One_note_by_id($idNote);
             $note->setOwner($ownerId);
             //return var_dump($note);
-            if($note) {
-                // Utilisez l'objet note existant au lieu d'en créer un nouveau
+            if ($note) {
+
                 $note->setTitle($_POST['title']);
                 $editDate = new DateTime();
                 $note->setDateTimeEdit($editDate);
                 //return print_r($note);
-                // Validez les changements avant de les persister
+
                 $error = $note->validate_checklistnote();
 
-                if(empty($error)) {
-                    // Cela devrait mettre à jour l'objet note dans la base de données
+                if (empty($error)) {
+
                     $note->persist();
-                    //return print_r($note->persist());
-                    // Rediriger après la mise à jour
+
                     $this->redirect("index", "edit_checklistnote", $idNote);
-                } else {
-                    // Gérer les erreurs de validation ici
                 }
-            } else {
-                // Gérer l'erreur si la note n'est pas trouvée
             }
-        } else {
-            // Gérer l'erreur si les données POST nécessaires ne sont pas définies
         }
     }
 
