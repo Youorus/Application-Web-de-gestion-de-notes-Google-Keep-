@@ -7,16 +7,21 @@ require_once "head.php";
         <h2>Change Password</h2>
         <hr>
 
-        <form action="#" method="post">
+        <form action="settings/change_password" method="post">
 
             <div class="form-group input">
                 <i class="fa-solid fa-lock icon""></i>
-                <input type="text" id="mail"  placeholder="New Password" name="fullname"  ">
+                <input type="password" id="currentpassword"  placeholder="Current password" name="currentpassword"  ">
+            </div>
+
+            <div class="form-group input">
+                <i class="fa-solid fa-lock icon""></i>
+                <input type="password" id="newpassword"  placeholder="New Password" name="newpassword"  ">
             </div>
 
             <div class="form-group input">
                 <i class="fa-solid fa-check icon"></i>
-                <input type="email" id="password" placeholder="Confirm password" name="email"  ">
+                <input type="password" id="confirmpassword" placeholder="Confirm password" name="confirmpassword"  ">
             </div>
 
             <div class="btn-editProfile">

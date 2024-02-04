@@ -46,7 +46,6 @@ class ControllerSettings extends Controller
             }
         }
 
-        // Afficher la vue avec les erreurs potentielles et le message de succès
         (new View("change_password"))->show(["errors" => $errors, "success" => $success]);
     }
 

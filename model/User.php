@@ -359,7 +359,7 @@ WHERE notes.owner = :id", [
 
     public function setHashedPassword(string $hashedPassword): void
     {
-        $this->hashedPassword = $hashedPassword;
+        $this->hashed_password = $hashedPassword;
     }
 
     /*
