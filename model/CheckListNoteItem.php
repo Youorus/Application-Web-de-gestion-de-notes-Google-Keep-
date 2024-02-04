@@ -120,6 +120,12 @@ class CheckListNoteItem extends Model {
         }
     }
 
+    public function delete_item () {
+        self::execute("DELETE FROM checklist_note_items WHERE id = :id", ["id" => $this->id]);
+    }
+
+
+
 
 
 
