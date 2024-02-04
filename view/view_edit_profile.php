@@ -7,10 +7,10 @@ require_once "head.php";
         <h2>Edit Profile</h2>
         <hr>
 
-        <form action="#" method="post">
+        <form action="settings/edit_profile" method="post">
             <div class="form-group input">
                 <i class="fa-regular fa-user icon"></i>
-                <input type="text" id="mail"  value="<?= $user_name ?>"  name="fullname"  ">
+                <input type="text" id="mail"  value="<?= $user_name ?>"  name="full_name"  ">
             </div>
 
             <div class="form-group input">
@@ -33,6 +33,9 @@ require_once "head.php";
                 </ul>
             </div>
         <?php endif; ?>
+
+
+
     </div>
 </div>
 

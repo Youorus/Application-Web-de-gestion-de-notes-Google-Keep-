@@ -32,6 +32,17 @@ class User extends Model{
 
         }
     }
+
+    public static function get_user_by_id(int $id) : User|false {
+        $query = self::execute("SELECT * FROM Users WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch(); // Un seul résultat au maximum
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new User($data["id"], $data["mail"], $data["hashed_password"], $data["full_name"], $data["role"]);
+        }
+    }
+
     private static function check_password(string $clear_password, string $hash) : bool {
         return $hash === Tools::my_hash($clear_password);
     }
@@ -246,7 +257,6 @@ WHERE notes.owner = :id", [
     }
 
     public function persist(): User {
-
         if (self::get_user_by_mail($this->mail)) {
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE mail = :mail",
                 ["mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
@@ -258,16 +268,24 @@ WHERE notes.owner = :id", [
         }
         return $this;
     }
-    public function validate() : array
 
-    {
+    public function persist_mail() : User {
+        if(self::get_user_by_id($this->getId())) {
+            self::execute("UPDATE users SET mail = :mail, hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE id = :id",
+                ["id" => $this->id, "mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+
+        }
+        return $this;
+    }
+
+    public static function validate($fullname) : array {
         $errors = [];
-        if(!strlen($this->full_name) >= 3) {
-            $errors[] = "Le nom doit contenir au moins 3 caractères";
+        if(strlen($fullname) < 3) {
+            $errors[] = "Le nom doit contenir au moins 3 caractères.";
         }
         return $errors;
-
     }
+
 
     public static function validate_unicity($email): array {
         $errors = [];
