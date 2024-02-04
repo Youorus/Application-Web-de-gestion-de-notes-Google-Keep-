@@ -209,10 +209,10 @@ class ControllerIndex extends Controller{
                 $share = new NoteShare($note, $permission, $shareUserId);
                 $share->persist();
     
-                // Redirection avec un message de succès ou d'erreur
-                $this->redirect('index.php?action=view_shares_note&id=' . $noteId); // Assurez-vous que la méthode redirect accepte cette syntaxe
+                
+                $this->redirect('index.php?action=view_shares_note&id=' . $noteId); 
             } else {
-                // Gérez l'erreur si l'objet Note n'est pas récupéré correctement
+                
             }
         }
     }
