@@ -381,7 +381,6 @@ class ControllerIndex extends Controller
 
     public function editchecklistnote() {
         $idNote = intval($_GET['param1']);
-        return print_r($_POST);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
@@ -439,7 +438,8 @@ class ControllerIndex extends Controller
     public function delete_item () {
         //return print_r($_POST);
         $idnoteitem = $_POST['id_item'];
-        $idNote = intval($_POST['idnote']);
+        $idNote = $_POST['idnote'];
+
         $checklistnoteitem = new CheckListNoteItem($idnoteitem, 0, "", 0);
         $checklistnoteitem->delete_item();
 
@@ -448,7 +448,8 @@ class ControllerIndex extends Controller
     }
 
     public function add_item() {
-        $idNote = intval($_POST['idnote']);
+        //$idnoteitem = $_POST['id_item'];
+        $idNote = $_POST['idnote'];
         $content = $_POST['content'];
         $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
         $checklistnoteitem->persist();

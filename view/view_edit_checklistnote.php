@@ -41,11 +41,12 @@
             <label class="form-label">New Items</label>
             <div class="d-flex justify-content-between align-items-center">
                 <form action="index/add_item" method="post" class="flex-grow-1 me-2">
+                    <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
                     <div class="input-group">
                         <input type="text" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
-                        <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
                         <button class="btn add-btn" type="submit" aria-label="Add">
                             <i class="bi bi-plus-lg"></i>
+                            <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
                         </button>
                     </div>
                 </form>
