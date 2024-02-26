@@ -64,7 +64,7 @@ class ControllerIndex extends Controller
         $title = "My archives";
         $notesArchives = $user->get_All_notesArchived();
         $userSharesNotes = $user->get_UserShares_Notes();
-        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title,"userSharesNotes" => $userSharesNotes,]);
+        (new View("archives"))->show(["notesArchives" => $notesArchives, "title" => $title, "userSharesNotes" => $userSharesNotes,]);
     }
 
 
@@ -72,13 +72,12 @@ class ControllerIndex extends Controller
     {
         $user = $this->get_user_or_redirect();
 
-        if (isset($_GET['logout'])&& $_GET['logout'] == 'true'){
+        if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
             $this->logout();
             header('Location: main/login.php');
             exit;
         }
         $user_name = $user->getFullName();
-
 
 
         if (isset($_GET['logout'])) {
@@ -94,9 +93,8 @@ class ControllerIndex extends Controller
     }
 
 
-
-
-    public function open_text_note() {
+    public function open_text_note()
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -111,7 +109,7 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
+        (new View("text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
     }
 
     public function open_checklist_note()
@@ -133,10 +131,11 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("checklist_note"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType, "idnote"=>$idNote]);
+        (new View("checklist_note"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "idnote" => $idNote]);
     }
 
-    public function check_uncheck(){
+    public function check_uncheck()
+    {
 
         $user = $this->get_user_or_redirect();
 
@@ -159,8 +158,9 @@ class ControllerIndex extends Controller
         //$this->redirect("index", "open_checklist_note");
     }
 
-    private function sort_items(array $items): array {
-        usort($items, function($a, $b) {
+    private function sort_items(array $items): array
+    {
+        usort($items, function ($a, $b) {
             return $a->getChecked() <=> $b->getChecked();
         });
         return $items;
@@ -168,21 +168,22 @@ class ControllerIndex extends Controller
     }
 
 
-    public function share_notes(){
+    public function share_notes()
+    {
         $userId = $_GET['param1'];
         $user = $this->get_user_or_redirect();
         $userSharesNotes = $user->get_UserShares_Notes();
         $userName = User::getFullNameById($userId);
-        $title = "Shared by ". $userName;
+        $title = "Shared by " . $userName;
         $notesShares = $user->get_All_shared_notes($userId);
 
 
-        (new View("share_notes"))->show(["title" => $title, "userName"=> $userName,"userSharesNotes" => $userSharesNotes, "notesShares"=> $notesShares]);
+        (new View("share_notes"))->show(["title" => $title, "userName" => $userName, "userSharesNotes" => $userSharesNotes, "notesShares" => $notesShares]);
     }
 
 
-
-    public function edit_text_note(): void{
+    public function edit_text_note(): void
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $actualDate = new DateTime();
@@ -196,7 +197,7 @@ class ControllerIndex extends Controller
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
         $noteType = "edited";
 
-        (new View("edit_text_note"))->show(["title" => $title, "content"=> "$content", "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "noteType"=>$noteType, "note"=>$note]);
+        (new View("edit_text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
 
     }
 
@@ -235,11 +236,11 @@ class ControllerIndex extends Controller
 //    }
 
 
-
-    public function view_add_text_note(): void{
+    public function view_add_text_note(): void
+    {
         $content = '';
         $id = '';
-        if(isset($_POST['content'])){
+        if (isset($_POST['content'])) {
             $content = $_POST['content'];
             $note = new TextNote($content, $id);
         }
@@ -247,9 +248,8 @@ class ControllerIndex extends Controller
     }
 
 
-
-
-    public function unpin(): void {
+    public function unpin(): void
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -258,14 +258,15 @@ class ControllerIndex extends Controller
             $note->setPinned(0);
             $note->persist();
         }
-        if($note->getType() == NoteType::TextNote){
+        if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
-        }else{
+        } else {
             $this->redirect("index", "open_checklist_note", $_GET['param1']);
         }
     }
 
-    public function pin(): void {
+    public function pin(): void
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -275,15 +276,16 @@ class ControllerIndex extends Controller
             var_dump($note);
             $note->persist();
         }
-        if($note->getType() == NoteType::TextNote){
+        if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
-        }else{
+        } else {
             $this->redirect("index", "open_checklist_note", $_GET['param1']);
         }
 
     }
 
-    public function unarchive(){
+    public function unarchive()
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -293,14 +295,15 @@ class ControllerIndex extends Controller
             $note->persist();
         }
 
-        if($note->getType() == NoteType::TextNote){
+        if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
-        }else{
+        } else {
             $this->redirect("index", "open_checklist_note", $_GET['param1']);
         }
     }
 
-    public function archive(){
+    public function archive()
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -310,14 +313,15 @@ class ControllerIndex extends Controller
             $note->persist();
         }
 
-        if($note->getType() == NoteType::TextNote){
+        if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
-        }else{
+        } else {
             $this->redirect("index", "open_checklist_note", $_GET['param1']);
         }
     }
 
-    public function deleteNote(){
+    public function deleteNote()
+    {
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -330,7 +334,8 @@ class ControllerIndex extends Controller
     }
 
 
-    public function add_checklistnote() {
+    public function add_checklistnote()
+    {
         $user = $this->get_user_or_redirect();
         $errors = [];
         $title = '';
@@ -367,7 +372,7 @@ class ControllerIndex extends Controller
                         checked: false
                     );
                     if (in_array($itemContent, $listitems)) {
-                        $errors = array_merge($errors, ['item'.$i => 'Item names must be unique']);
+                        $errors = array_merge($errors, ['item' . $i => 'Item names must be unique']);
                     }
                     $listitems[] = $itemContent;
                     $items[] = $item;
@@ -390,7 +395,7 @@ class ControllerIndex extends Controller
         (new View("add_checklist_note"))->show([
             "title" => $title,
             "errors" => $errors,
-            "noteType"=>$noteType
+            "noteType" => $noteType
         ]);
     }
 
@@ -424,7 +429,8 @@ class ControllerIndex extends Controller
     }
     */
 
-    public function edit_checklistnote() {
+    public function edit_checklistnote()
+    {
         $idNote = intval($_GET['param1']);
 
         $user = $this->get_user_or_redirect();
@@ -432,7 +438,7 @@ class ControllerIndex extends Controller
         $actualDate = new DateTime();
         $title = $note->getTitle();
 
-        if(isset($_POST['title'])) {
+        if (isset($_POST['title'])) {
             return print_r($_POST);
         }
         $content = $note->getItems();
@@ -447,12 +453,13 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
+        (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType]);
 
     }
 
-    public function editchecklistnote() {
-        if(isset($_POST['idnote'], $_POST['title'])) {
+    public function editchecklistnote()
+    {
+        if (isset($_POST['idnote'], $_POST['title'])) {
             $error = [];
             $idNote = $_POST['idnote'];
             $user = $this->get_user_or_redirect();
@@ -511,7 +518,8 @@ class ControllerIndex extends Controller
     }
     */
 
-    public function delete_item () {
+    public function delete_item()
+    {
         //return print_r($_POST);
         $idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
@@ -523,7 +531,8 @@ class ControllerIndex extends Controller
         $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
-    public function add_item() {
+    public function add_item()
+    {
         //$idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
@@ -533,8 +542,6 @@ class ControllerIndex extends Controller
         $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
-
-}
 
     public function view_shares_note(): void{
         $noteId = null;

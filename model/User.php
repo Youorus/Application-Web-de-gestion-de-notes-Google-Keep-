@@ -226,7 +226,7 @@ class User extends Model{
     }
 
     public function getAllUserName(){
-        $query = self::execute("SELECT ")
+        $query = self::execute("SELECT ");
     }
 
 
