@@ -68,30 +68,6 @@ class ControllerIndex extends Controller
     }
 
 
-    public function setting(): void
-    {
-        $user = $this->get_user_or_redirect();
-
-        if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
-            $this->logout();
-            header('Location: main/login.php');
-            exit;
-        }
-        $user_name = $user->getFullName();
-
-
-        if (isset($_GET['logout'])) {
-            $this->logout();
-            header('Location: index.php');
-            exit;
-        }
-        $user_name = $user->get_fullname_User();
-
-        $title = "Settings";
-        (new View("setting"))->show(["user_name" => $user_name, "title" => $title]);
-
-    }
-
 
     public function open_text_note()
     {

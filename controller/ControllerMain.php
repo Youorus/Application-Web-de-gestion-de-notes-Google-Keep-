@@ -12,14 +12,6 @@ class ControllerMain extends Controller {
 
 
     public function login() : void {
-<<<<<<< HEAD
-        if ($this->get_user_or_redirect()){
-            $this->redirect("index");
-=======
-        if($this->get_user_or_redirect()){
-           $this->redirect("index");
->>>>>>> a289841377d45b95511340f6e227231bcf7fa99e
-        }
         $mail = "";
         $password = "";
         $errors = [];
