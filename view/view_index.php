@@ -8,19 +8,26 @@ include "utils/navbar.php";
 ?>
 
 <div class="container">
-    <h3>Pinned</h3>
-    <div class="row">
-       <?php
-       include "pinnedNote.php";
-       ?>
-    </div>
-    <br>
-    <h3>Others</h3>
-    <div class="row">
-        <?php
+    <?php
+    if (empty($notesPinned) || empty($notesOthers)) {
+        echo '<h5 class="infoText">Notes are empty.</h5>';
+    } else {
+        echo '<h3>Pinned</h3>';
+        echo '<div class="row">';
+        include "pinnedNote.php";
+        echo '</div>';
+        echo '<br>';
+        echo '<h3>Others</h3>';
+        echo '<div class="row">';
         include "othersNote.php";
-        ?>
-    </div>
+        echo '</div>';
+    }
+    ?>
+
+</div>
+    }
+    ?>
+
 </div>
 
 

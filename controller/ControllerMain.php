@@ -12,6 +12,9 @@ class ControllerMain extends Controller {
 
 
     public function login() : void {
+        if ($this->get_user_or_redirect()){
+            $this->redirect("index");
+        }
         $mail = "";
         $password = "";
         $errors = [];
@@ -44,12 +47,13 @@ class ControllerMain extends Controller {
 
             $user = new User(0, $email, Tools::my_hash($password), $full_name, $role);
             $errors = User::validate_unicity($email);
-            $errors = array_merge($errors, $user->validate());
+            $errors = array_merge($errors, $user->validate($full_name));
             $errors = array_merge($errors, User::validate_passwords($password, $passwordconfirm));
 
             if (count($errors) == 0) {
                 $user->persist();
                 $this->log_user($user);
+                $this->redirect("index");
             }
         }
 
