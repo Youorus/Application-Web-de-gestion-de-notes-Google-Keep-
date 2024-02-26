@@ -25,11 +25,6 @@ include "utils/navbar.php";
     ?>
 
 </div>
-    }
-    ?>
-
-</div>
-
 
 <div class="fixed-icons">
     <a href="#"> <i class="fa-regular fa-file"> </i></a>

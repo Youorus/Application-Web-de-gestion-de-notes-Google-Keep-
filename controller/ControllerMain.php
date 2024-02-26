@@ -12,13 +12,18 @@ class ControllerMain extends Controller {
 
 
     public function login() : void {
+<<<<<<< HEAD
         if ($this->get_user_or_redirect()){
             $this->redirect("index");
+=======
+        if($this->get_user_or_redirect()){
+           $this->redirect("index");
+>>>>>>> a289841377d45b95511340f6e227231bcf7fa99e
         }
         $mail = "";
         $password = "";
         $errors = [];
-        if (isset($_POST['mail']) && isset($_POST['password'])) { //note : pourraient contenir des chaînes vides
+        if (isset($_POST['mail']) && isset($_POST['password'])) {
             $mail = $_POST['mail'];
             $password = $_POST['password'];
             $errors = User::validate_login($mail, $password);
