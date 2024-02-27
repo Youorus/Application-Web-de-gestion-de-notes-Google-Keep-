@@ -128,10 +128,13 @@ class User extends Model{
 
     public function get_All_shared_notes(int $userShare): array
     {
-        $query = self::execute("SELECT notes.id, note_shares.editor
-                            FROM note_shares
-                            JOIN notes ON notes.id = note_shares.note
-                            WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
+        $query = self::execute("
+        SELECT note_shares.*
+        FROM note_shares
+        INNER JOIN notes ON notes.id = note_shares.note
+        WHERE notes.owner = :loggedInUserId
+          AND note_shares.user = :userShare
+    ", [
             "loggedInUserId" => $this->id,
             "userShare" => $userShare
         ]);
@@ -140,10 +143,13 @@ class User extends Model{
         $results = [];
 
         foreach ($data as $row) {
-            $queryNote = self::execute("SELECT notes.id, notes.title, text_notes.content
-                                    FROM notes
-                                    LEFT JOIN text_notes ON notes.id = text_notes.id
-                                    WHERE notes.id = :id", ["id" => $row['id']]);
+            $queryNote = self::execute("
+            SELECT notes.id, notes.title, text_notes.content
+            FROM notes
+            LEFT JOIN text_notes ON notes.id = text_notes.id
+            WHERE notes.id = :id
+        ", ["id" => $row['note']]);
+
             $dataNote = $queryNote->fetch();
 
             if ($dataNote) {
@@ -168,7 +174,6 @@ class User extends Model{
 
         return $results;
     }
-
 
 
 
@@ -233,11 +238,13 @@ class User extends Model{
 
 
     public function get_UserShares_Notes(): array {
-        $query = self::execute("SELECT DISTINCT users.*
+        $query = self::execute("SELECT DISTINCT users.* FROM users
+JOIN note_shares on note_shares.user = users.id
+WHERE note_shares.note IN
+(SELECT DISTINCT note_shares.note
 FROM note_shares
 JOIN notes ON notes.id = note_shares.note
-JOIN users ON users.id = note_shares.user
-WHERE notes.owner = :id", [
+WHERE notes.owner = :id)", [
             "id" => $this->id,
         ]);
 
