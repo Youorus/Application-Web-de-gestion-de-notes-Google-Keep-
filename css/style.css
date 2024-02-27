@@ -105,11 +105,25 @@ body{
   .signup-box {
       text-align: center;
     background-color: var(--couleur-fond);
-      width: 35%;
+      width: 25%;
     border: 1px solid var(--couleur-bordure);
     padding: 20px;
     border-radius: 10px;
   }
+
+@media only screen and (max-width: 600px) {
+    .signup-box {
+    margin-top: 25%;
+        width: 95%;
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+    .signup-box {
+        margin-top: 25%;
+        width: 60%;
+    }
+}
 
 
 
