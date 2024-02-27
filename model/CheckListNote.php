@@ -90,7 +90,7 @@ class CheckListNote extends Note
 FROM checklist_note_items
 JOIN checklist_notes
 ON checklist_notes.id = checklist_note_items.checklist_note
-WHERE checklist_note_items.checklist_note = :id", ["id" => $this->id]);
+WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.checked = 1", ["id" => $this->id]);
         $data = $query->fetchAll();
         $results = [];
 

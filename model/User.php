@@ -63,7 +63,7 @@ class User extends Model{
     {
         $pinnedValue = $pinned ? 1 : 0;
 
-        $query = self::execute("SELECT notes.id FROM notes WHERE notes.owner = :id AND notes.pinned = :pinned AND notes.archived = :archive ORDER BY notes.weight", [
+        $query = self::execute("SELECT notes.id FROM notes WHERE notes.owner = :id AND notes.pinned = :pinned AND notes.archived = :archive ORDER BY notes.weight DESC ", [
             "id" => $this->id,
             "pinned" => $pinnedValue,
             "archive" => $archive

@@ -36,7 +36,7 @@ function displayNoteCardView($note)
             if ($cpt < 3){
                 $cpt++;
                 echo '<div class="form-check">';
-                echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
+                echo '  <input class="form-check-input" type="checkbox" disabled value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
                 echo '  <label class="form-check-label" for="exampleCheckbox">';
                 echo $item->getContent();
                 echo '  </label>';
