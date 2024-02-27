@@ -2,10 +2,18 @@
     <div class="container">
         <!-- Première div avec l'icône de retour -->
         <div class="navbar-icon">
-            <a href="index/index">
-               <span class="material-symbols-outlined"> arrow_back_ios </span>
-            </a>
+            <?php
+            if ($noteType == "archived") {
+                echo '<a href="index/archive_notes">';
+            } else {
+                echo '<a href="index">';
+            }
+
+            echo '<span class="material-symbols-outlined"> arrow_back_ios </span>';
+            echo '</a>';
+            ?>
         </div>
+
 
         <!-- Deuxième div avec quatre autres icônes -->
         <div class="navbar-icons" id="icons">
