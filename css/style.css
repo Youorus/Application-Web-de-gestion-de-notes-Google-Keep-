@@ -111,11 +111,25 @@ body{
     border-radius: 10px;
   }
 
+  /*style de pour telephone */
 @media only screen and (max-width: 600px) {
+    .card{
+
+    }
     .signup-box {
     margin-top: 25%;
         width: 95%;
     }
+}
+
+.bt-default{
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 }
 
 @media only screen and (min-width: 601px) and (max-width: 900px) {

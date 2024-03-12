@@ -25,7 +25,6 @@ function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compare
     $interval = $referenceDate->diff($compareDate);
     $nombreMoisEcart = $interval->y * 12 + $interval->m;
 
-
     // Vérification si le nombre de mois d'écart est le même mois
     if ($nombreMoisEcart == 0) {
         // Vérification du nombre de jours d'écart
@@ -74,7 +73,7 @@ class ControllerIndex extends Controller
         $idNote = intval($_GET['param1']);
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
+        $actualDate = new DateTime('now');
         $title = $note->getTitle();
         $content = $note->getContent();
         $createDate = $note->getDateTime();
@@ -87,7 +86,6 @@ class ControllerIndex extends Controller
 
         (new View("text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
     }
-
     public function open_checklist_note()
     {
         $idNote = intval($_GET['param1']);
@@ -212,16 +210,7 @@ class ControllerIndex extends Controller
 //    }
 
 
-    public function view_add_text_note(): void
-    {
-        $content = '';
-        $id = '';
-        if (isset($_POST['content'])) {
-            $content = $_POST['content'];
-            $note = new TextNote($content, $id);
-        }
-        (new View("add_text_note"))->show(["content" => $content]);
-    }
+
 
 
     public function unpin(): void
@@ -431,6 +420,11 @@ class ControllerIndex extends Controller
 
         (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType]);
 
+    }
+
+    public function add_text_note(){
+
+        (new View("add_text_note"))->show([]);
     }
 
     public function editchecklistnote()

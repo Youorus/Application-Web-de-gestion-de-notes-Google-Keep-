@@ -80,7 +80,7 @@ class TextNote extends Note {
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitle(),
-                    'editedAt' => $this->getDateTimeEdit()?->format('Y-m-d H:i:s'),
+                    'editedAt' => $this->getDateTimeEdit()? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
