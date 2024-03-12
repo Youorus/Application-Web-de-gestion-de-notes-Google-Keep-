@@ -7,7 +7,7 @@
     <div class="container">
         <!-- Bouton de retour -->
         <div class="navbar-icon">
-            <a href="index/archive_notes">
+            <a href="index">
                 <span class="material-symbols-outlined"> arrow_back_ios </span>
             </a>
         </div>
@@ -22,18 +22,32 @@
     </div>
 </nav>
 
-<form id="addTextNote" method="POST" action="votre_action.php">
+<form id="addTextNote" method="POST" action="AddTextNote/add_text_note">
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" class="form-control" name="title">
+            <input type="text" id="title_note" class="form-control" value="<?= $title_note ?>" name="title_note">
+            <!-- Section pour afficher les erreurs -->
+            <?php if (isset($errors['title'])): ?>
+                <div class="error-message"><?php var_dump($errors['title']); ; ?></div>
+            <?php endif; ?>
         </div>
         <div class="mb-3">
             <label class="form-label">Text</label>
-            <textarea class="form-control" rows="10" name="text"></textarea>
+            <textarea class="form-control" id="content_note" value="<?= $content_note ?>" rows="10" name="content_note"></textarea>
+
         </div>
     </div>
 </form>
+
+<!-- Styles pour les messages d'erreur -->
+<style>
+    .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+</style>
 
 </body>
 </html>

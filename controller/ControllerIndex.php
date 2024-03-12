@@ -18,27 +18,51 @@ require_once "model/NoteShare.php";
 
 function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
 {
-    // Calcul de la différence en mois
-    if ($compareDate == null) {
+    // Vérifier si la date de comparaison est nulle
+    if ($compareDate === null) {
         return "Not yet";
     }
+
+    // Calcul de la différence entre les dates
     $interval = $referenceDate->diff($compareDate);
-    $nombreMoisEcart = $interval->y * 12 + $interval->m;
 
-    // Vérification si le nombre de mois d'écart est le même mois
-    if ($nombreMoisEcart == 0) {
-        // Vérification du nombre de jours d'écart
-        $nombreJoursEcart = $interval->d;
-
-        if ($nombreJoursEcart == 0) {
-            return "Today";
-        } else {
-            return $nombreJoursEcart . " days ago";
+    // Vérifier si la date de comparaison est dans le passé
+    if ($interval->invert === 0) {
+        // Si la différence est inférieure à une minute
+        if ($interval->s < 60) {
+            return "Just now";
         }
+        // Si la différence est inférieure à une heure
+        if ($interval->i < 60) {
+            return "About " . $interval->i . " minutes ago";
+        }
+        // Si la différence est inférieure à un jour
+        if ($interval->h < 24) {
+            return "About " . $interval->h . " hours ago";
+        }
+        // Si la différence est inférieure à une semaine
+        if ($interval->d < 7) {
+            return "About " . $interval->d . " days ago";
+        }
+        // Si la différence est inférieure à un mois
+        if ($interval->m < 1) {
+            return "About " . floor($interval->d / 7) . " weeks ago";
+        }
+        // Si la différence est inférieure à un an
+        if ($interval->y < 1) {
+            return "About " . $interval->m . " months ago";
+        }
+        // Si la différence est supérieure ou égale à un an
+        return "About " . $interval->y . " years ago";
     } else {
-        return $nombreMoisEcart . " month ago";
+        // Si la date de comparaison est dans le futur
+        // Utilisez simplement une chaîne vide pour indiquer une date future
+        return "";
     }
 }
+
+
+
 
 
 
@@ -74,11 +98,11 @@ class ControllerIndex extends Controller
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime('now');
+        $actualDate = new DateTime('now');
         $title = $note->getTitle();
         $content = $note->getContent();
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
-
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
@@ -100,8 +124,8 @@ class ControllerIndex extends Controller
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
 
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+        $messageCreate = $note->getDateTimeCreate()->format('s');
+        $messageEdit = $note->getDateTimeEdit() ? $note->getDateTimeEdit()->format('s') : '';
 
         $noteType = open_note($note);
 
@@ -422,10 +446,7 @@ class ControllerIndex extends Controller
 
     }
 
-    public function add_text_note(){
 
-        (new View("add_text_note"))->show([]);
-    }
 
     public function editchecklistnote()
     {
@@ -515,13 +536,13 @@ class ControllerIndex extends Controller
 
     public function view_shares_note(): void{
         $noteId = null;
-        
+
         if(isset($_GET['id'])){
             $noteId = $_GET['id'];
             $noteType = getType($noteId);
-            
+
             $usersIds = User::getUsersIds();
-            
+
 
             if ($noteType == 'checklist') {
                 header('Location: view_checklist_note.php?id=' . $noteId); //mettre le vrai nom de la vue de open check list note de anass
@@ -529,11 +550,11 @@ class ControllerIndex extends Controller
                 header('Location: index/open_text_note.php?id=' . $noteId);
             }
 
-           
+
         }
 
-        
-       
+
+
 
         (new View("shares"))->show(["id" => $noteId, "usersIds" => $usersIds]);
     }
@@ -545,18 +566,18 @@ class ControllerIndex extends Controller
             $noteId = $_POST['note_id'];
             $shareUserId = $_POST['user_id'];
             $permission = $_POST['permission'] === 'editor' ? 1 : 0;
-    
+
             // Obtenez l'objet Note à partir de son ID
             $note = Note::getId($noteId);
             if ($note instanceof Note) {
                 // Création de l'objet NoteShare et sauvegarde dans la base de données
                 $share = new NoteShare($note, $permission, $shareUserId);
                 $share->persist();
-    
-                
-                $this->redirect('index.php?action=view_shares_note&id=' . $noteId); 
+
+
+                $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
             } else {
-                
+
             }
         }
     }
@@ -576,14 +597,14 @@ class ControllerIndex extends Controller
                 $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
             }
             //suppression du partage
-            
-    } 
+
+    }
 }
 
     public function toggle_share_permission(){
-       
+
     }
 
-     
+
 }
 

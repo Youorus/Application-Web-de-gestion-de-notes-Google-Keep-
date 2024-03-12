@@ -164,13 +164,13 @@ abstract class Note extends Model {
 
     public function getDateTimeCreate(): DateTime
     {
-        $query = self::execute("SELECT notes.create_at from notes where notes.id = :id", ["id" => $this->id]);
+        $query = self::execute("SELECT notes.created_at from notes where notes.id = :id", ["id" => $this->id]);
         $data = $query->fetchAll();
         $results ="";
         foreach ($data as $row){
-            $results = $row['create_at'];
+            $results = $row['created_at'];
         }
-       return $results;
+        return new DateTime($results);
             
         
 
