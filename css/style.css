@@ -20,6 +20,13 @@ a{
   }
 
 
+
+.dark-bg {
+    background-color: var(--couleur-fond);
+    color: white; /* Pour changer la couleur du texte en blanc */
+}
+
+
 body{
     background-color: var(--couleur-fond);
 }

@@ -43,7 +43,7 @@
                 echo '';
             }else {
                 // share
-                echo '<a href="index/view-share" class="icon-link">';
+                echo '<a href="Share/note" class="icon-link">';
                 echo ' <span class="material-symbols-outlined"> share </span>';
                 echo '</a>';
                 // pinned

@@ -180,63 +180,6 @@ class ControllerIndex extends Controller
     }
 
 
-//    public function edit_text_note(): void
-//    {
-//        $idNote = intval($_GET['param1']);
-//        $user = $this->get_user_or_redirect();
-//        $actualDate = new DateTime();
-//        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
-//        $title = $note->getTitle();
-//        $content = $note->getContent();
-//        $createDate = $note->getDateTime();
-//        $editDate = $note->getDateTimeEdit();
-//
-//        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-//        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
-//        $noteType = "edited";
-//
-//        (new View("edit_text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
-//
-//    }
-
-//    public function save_note(): void
-//    {
-//        $user = $this->get_user_or_redirect();
-//        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//            if (isset($_POST['note_id']) && isset($_POST['content'])) {
-//                $idNote = $_POST['note_id'];
-//                $content = $_POST['content'];
-//
-//                $note = new TextNote($idNote, $content);
-//                $note->setId($idNote);
-//                $note->setContent($content);
-//
-//                if ($note->persist()) {
-//                    header('Location: index/open_text_note.php');
-//                    exit();
-//
-//
-//                }
-//            }
-//        }
-//
-//        $title = "title";
-//        // $actualDate = new DateTime();
-//        $idNote = intval($_GET['param1']);
-//        $dateCreation = new DateTime(Note::getDateTimeCreate($idNote));
-//        //$messageCreate = getMessageForDate($actualDate, $dateCreation);
-//        (new View("edit_text_note"))->show(["title" => $title, "dateCreation" => $dateCreation]);
-//
-//    }
-
-//    public function open_checklist_note () {
-//
-//    }
-
-
-
-
-
     public function unpin(): void
     {
         $idNote = intval($_GET['param1']);
@@ -478,36 +421,8 @@ class ControllerIndex extends Controller
         }
     }
 
-    /*
-    public function edit_checklistnote() {
-        $error = [];
-        $idNote = intval($_GET['param1']);
-
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-        $ownerId = $user->getId();
-
-        $title = $_POST['title'];
 
 
-        $checklistNote = new CheckListNote($idNote);
-        $checklistNote->setTitle($title);
-        $editDate = new DateTime();
-        $checklistNote->setDateTimeEdit($editDate);
-        $checklistNote->setOwner($ownerId);
-
-        $error = $checklistNote->validate_checklistnote();
-
-        if(empty($error)) {
-           $checklistNote->persist();
-        }
-
-        $this->redirect("index", "open_checklist_note", $idNote);
-
-
-
-    }
-    */
 
     public function delete_item()
     {
@@ -533,31 +448,6 @@ class ControllerIndex extends Controller
         $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
-
-    public function view_shares_note(): void{
-        $noteId = null;
-
-        if(isset($_GET['id'])){
-            $noteId = $_GET['id'];
-            $noteType = getType($noteId);
-
-            $usersIds = User::getUsersIds();
-
-
-            if ($noteType == 'checklist') {
-                header('Location: view_checklist_note.php?id=' . $noteId); //mettre le vrai nom de la vue de open check list note de anass
-            } else {
-                header('Location: index/open_text_note.php?id=' . $noteId);
-            }
-
-
-        }
-
-
-
-
-        (new View("shares"))->show(["id" => $noteId, "usersIds" => $usersIds]);
-    }
 
     public function add_share() {
         $user = $this->get_user_or_redirect(); // S'assure que l'utilisateur est connecté
