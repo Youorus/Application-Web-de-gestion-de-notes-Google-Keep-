@@ -184,6 +184,10 @@ body{
       color: var(--error-color);
   }
 
+  .check-text{
+      text-decoration: line-through;
+  }
+
 .error-text {
     color: var(--error-color);
     font-size: 17px;

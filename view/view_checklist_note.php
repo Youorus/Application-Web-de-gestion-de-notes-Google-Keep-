@@ -15,9 +15,14 @@
                     <form action="index/check_uncheck" method="post">
                         <div class="input-group mb-3">
                             <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> onchange="this.form.submit();" aria-label="Checkbox for following text input">
+                                <input class="form-check-input  mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> onchange="this.form.submit();" aria-label="Checkbox for following text input">
                             </div>
-                            <input type="text" class="form-control" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox" readonly>
+                            <?php
+                            if ($item->getChecked() == 1)
+                                echo '<input type="text" class="form-control check-text" value="' . htmlspecialchars($item->getContent()) . '" aria-label="Text input with checkbox" readonly>';
+                            else
+                                echo '<input type="text" class="form-control" value="' . htmlspecialchars($item->getContent()) . '" aria-label="Text input with checkbox" readonly>';
+                            ?>
                             <input type="hidden" name="item_id" value="<?= $item->getId(); ?>">
                             <input type="hidden" name="idnote" value="<?= $idnote ?>">
                         </div>
