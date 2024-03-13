@@ -267,6 +267,21 @@ WHERE notes.owner = :id)", [
         return $results;
     }
 
+    public function getOtherUsers(): array {
+        $query = self::execute("SELECT users.full_name FROM users WHERE NOT users.id = :id", [
+            "id" => $this->id,
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+        foreach ($data as $row) {
+            // Accédez à la valeur 'full_name' de chaque ligne, pas de '$data'
+            $results[] = $row['full_name'];
+        }
+
+        return $results;
+    }
+
     public function persist(): User {
         if (self::get_user_by_mail($this->mail)) {
             self::execute("UPDATE users SET hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE mail = :mail",
@@ -322,17 +337,6 @@ WHERE notes.owner = :id)", [
         return $errors;
     }
 
-    public static function getUsersIds(){
-        $query = self::execute("SELECT id from users WHERE users.id = :id", [
-            "id"=>$id]);
-
-        $userIds = $query->fetchAll(PDO::FETCH_COLUMN);
-
-        return $userIds;
-    }
-
-
-
 
 
 
@@ -382,20 +386,4 @@ WHERE notes.owner = :id)", [
         $this->hashed_password = $hashedPassword;
     }
 
-    /*
-    public function getMaxweight(): int
-    {
-        $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
-        $data = $query->fetch();
-        return $data["maxwheight"];
-    }
-
-    public function getMinweight(): int
-    {
-        $query = self::execute("SELECT MIN(weight) as minwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
-        $data = $query->fetch();
-        return $data["minwheight"];
-    }
-
-    */
 }

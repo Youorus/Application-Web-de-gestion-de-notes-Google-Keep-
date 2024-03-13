@@ -11,7 +11,11 @@ class ControllerShare extends Controller
     }
 
     public function note(): void {
-        (new View("shares"))->show([]);
+        $user = $this->get_user_or_redirect();
+        $idNote = intval($_GET['param1']);
+        $note = $user->get_One_note_by_id($idNote);
+        $otherUsers = $user->getOtherUsers();
+        (new View("shares"))->show(["note" => $note, "otherUsers" => $otherUsers]);
     }
 
 

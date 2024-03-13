@@ -28,8 +28,15 @@
 </span></a>';
             } elseif ($noteType == "share"){
                 // edite share
-                echo $note->isEditor() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> edit </span> </a>' : '';
-
+                if ($note->getType() == NoteType::TextNote){
+                    echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }else{
+                    echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }
             } elseif ($noteType == "edited"){
                 // Save
                 echo '<a href="#" class="icon-link">';
@@ -43,7 +50,7 @@
                 echo '';
             }else {
                 // share
-                echo '<a href="Share/note" class="icon-link">';
+                echo '<a  href="Share/note/'. $note->getId() .'" class="icon-link">';
                 echo ' <span class="material-symbols-outlined"> share </span>';
                 echo '</a>';
                 // pinned
