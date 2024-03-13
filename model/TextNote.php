@@ -41,10 +41,12 @@ class TextNote extends Note {
 
 
     public function persist(): TextNote | array {
-
         $currentDateTime = new DateTime('now');
 
+        // Vérifier si la note existe déjà dans la base de données
         if (!parent::get_textnote_by_id($this->getId())) {
+            // Si la note n'existe pas, l'insérer dans la base de données
+
             // Insérer une nouvelle note dans 'notes'
             parent::execute(
                 "INSERT INTO notes (title, owner, created_at, pinned, archived, weight) 
@@ -66,14 +68,16 @@ class TextNote extends Note {
                 ['id' => $this->getId(), 'content' => $this->content]
             );
         } else {
-            // Mettre à jour la note existante
+            // Si la note existe, mettre à jour les données dans la base de données
+
+            // Mettre à jour la note existante dans 'notes'
             parent::execute(
                 "UPDATE notes SET title = :title, edited_at = :editedAt, 
             pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitle(),
-                    'editedAt' => $this->getDateTimeEdit()? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
+                    'editedAt' => $currentDateTime->format('Y-m-d H:i:s'), // Mise à jour de la date de modification
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
@@ -89,6 +93,7 @@ class TextNote extends Note {
 
         return $this;
     }
+
 
 
 

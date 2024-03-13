@@ -3,7 +3,9 @@
 <?php include "head.php"?>
 <body>
 
-<nav class="navbar navbar-dark bg-dark fixed">
+<form id="addTextNote" method="POST" action="AddTextNote/add_text_note">
+
+<div class="navbar navbar-dark bg-dark fixed">
     <div class="container">
         <!-- Bouton de retour -->
         <div class="navbar-icon">
@@ -20,9 +22,9 @@
             </button>
         </div>
     </div>
-</nav>
+</div>
 
-<form id="addTextNote" method="POST" action="AddTextNote/add_text_note">
+
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>

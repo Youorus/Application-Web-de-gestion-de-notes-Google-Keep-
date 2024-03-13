@@ -180,24 +180,24 @@ class ControllerIndex extends Controller
     }
 
 
-    public function edit_text_note(): void
-    {
-        $idNote = intval($_GET['param1']);
-        $user = $this->get_user_or_redirect();
-        $actualDate = new DateTime();
-        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
-        $title = $note->getTitle();
-        $content = $note->getContent();
-        $createDate = $note->getDateTime();
-        $editDate = $note->getDateTimeEdit();
-
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
-        $noteType = "edited";
-
-        (new View("edit_text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
-
-    }
+//    public function edit_text_note(): void
+//    {
+//        $idNote = intval($_GET['param1']);
+//        $user = $this->get_user_or_redirect();
+//        $actualDate = new DateTime();
+//        $note = $user->get_One_note_by_id($idNote); // je recupere la note sur laquelle on se trouve
+//        $title = $note->getTitle();
+//        $content = $note->getContent();
+//        $createDate = $note->getDateTime();
+//        $editDate = $note->getDateTimeEdit();
+//
+//        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
+//        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+//        $noteType = "edited";
+//
+//        (new View("edit_text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
+//
+//    }
 
 //    public function save_note(): void
 //    {
