@@ -28,15 +28,16 @@
 </span></a>';
             } elseif ($noteType == "share"){
                 // edite share
-                if ($note->getType() == NoteType::TextNote){
+                if ($note->getType() == NoteType::TextNote && $note->isEditor()){
                     echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
                     echo ' <span class="material-symbols-outlined"> edit </span>';
                     echo '</a>';
-                }else{
+                }elseif($note->getType() == NoteType::ChecklistNote && $note->isEditor()){
                     echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
                     echo ' <span class="material-symbols-outlined"> edit </span>';
                     echo '</a>';
                 }
+
             } elseif ($noteType == "edited"){
                 // Save
                 echo '<a href="#" class="icon-link">';

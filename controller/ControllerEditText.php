@@ -13,6 +13,7 @@ class ControllerEditText extends Controller
 
     public function note(): void
     {
+
         // Récupération de l'ID de la note depuis les paramètres de l'URL
         $idNote = intval($_GET['param1']);
 
@@ -34,6 +35,8 @@ class ControllerEditText extends Controller
         // Calcul des messages relatifs aux dates de création et de dernière édition
         $messageCreate = getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+
+
 
         // Affichage de la vue pour l'édition de la note
         (new View("edit_text_note"))->show([
