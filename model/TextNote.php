@@ -11,7 +11,7 @@ class TextNote extends Note {
     }
 
     public function __construct(int $id, ?string $content) {
-        parent::__construct($id, "", 0, new DateTime(), null, 0, 0, 0);
+        parent::__construct($id, "default ", 0, new DateTime(), null, 0, 0, 0);
         $this->content = $content;
     }
 
@@ -47,13 +47,12 @@ class TextNote extends Note {
         if (!parent::get_textnote_by_id($this->getId())) {
             // Insérer une nouvelle note dans 'notes'
             parent::execute(
-                "INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight) 
-            VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                "INSERT INTO notes (title, owner, created_at, pinned, archived, weight) 
+            VALUES (:title, :owner, :createdAt, :pinned, :archived, :weight)",
                 [
                     'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $currentDateTime->format('Y-m-d H:i:s'),
-                    'editedAt' => $currentDateTime->format('Y-m-d H:i:s'),
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
                     'weight' => $this->getWeight()
@@ -105,10 +104,6 @@ class TextNote extends Note {
        return parent::getId();
     }
 
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
 
 
 
@@ -163,6 +158,13 @@ class TextNote extends Note {
         }
         return $results;
     }
+
+//        public function setTitle(string $title): void
+//        {
+//            parent::execute("UPDATE notes SET title = :title WHERE notes.id = :id", ["id" => $this->getId(), "title" => $title]);
+//
+//        }
+
 
     public function getTitle(): string
     {

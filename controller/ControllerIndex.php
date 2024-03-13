@@ -199,35 +199,35 @@ class ControllerIndex extends Controller
 
     }
 
-    public function save_note(): void
-    {
-        $user = $this->get_user_or_redirect();
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if (isset($_POST['note_id']) && isset($_POST['content'])) {
-                $idNote = $_POST['note_id'];
-                $content = $_POST['content'];
-
-                $note = new TextNote($idNote, $content);
-                $note->setId($idNote);
-                $note->setContent($content);
-
-                if ($note->persist()) {
-                    header('Location: index/open_text_note.php');
-                    exit();
-
-
-                }
-            }
-        }
-
-        $title = "title";
-        // $actualDate = new DateTime();
-        $idNote = intval($_GET['param1']);
-        $dateCreation = new DateTime(Note::getDateTimeCreate($idNote));
-        //$messageCreate = getMessageForDate($actualDate, $dateCreation);
-        (new View("edit_text_note"))->show(["title" => $title, "dateCreation" => $dateCreation]);
-
-    }
+//    public function save_note(): void
+//    {
+//        $user = $this->get_user_or_redirect();
+//        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//            if (isset($_POST['note_id']) && isset($_POST['content'])) {
+//                $idNote = $_POST['note_id'];
+//                $content = $_POST['content'];
+//
+//                $note = new TextNote($idNote, $content);
+//                $note->setId($idNote);
+//                $note->setContent($content);
+//
+//                if ($note->persist()) {
+//                    header('Location: index/open_text_note.php');
+//                    exit();
+//
+//
+//                }
+//            }
+//        }
+//
+//        $title = "title";
+//        // $actualDate = new DateTime();
+//        $idNote = intval($_GET['param1']);
+//        $dateCreation = new DateTime(Note::getDateTimeCreate($idNote));
+//        //$messageCreate = getMessageForDate($actualDate, $dateCreation);
+//        (new View("edit_text_note"))->show(["title" => $title, "dateCreation" => $dateCreation]);
+//
+//    }
 
 //    public function open_checklist_note () {
 //

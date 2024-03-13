@@ -184,6 +184,11 @@ body{
       color: var(--error-color);
   }
 
+.error-text {
+    color: var(--error-color);
+    font-size: 17px;
+    margin-top: 5px;
+}
 
   .form-group {
     margin-bottom: 20px;

@@ -8,14 +8,14 @@ enum NoteType {
 }
 
 abstract class Note extends Model {
-    protected ?int $id;
-    protected string $title;
-    protected int $owner;
-    protected DateTime $dateTime;
-    protected ?DateTime $dateTime_edit;
-    protected int $pinned;
-    protected int $archived;
-    protected int $weight;
+    private ?int $id;
+    private string $title;
+    private int $owner;
+    private DateTime $dateTime;
+    private ?DateTime $dateTime_edit;
+    private int $pinned;
+    private int $archived;
+    private int $weight;
 
     public function __construct(
         int $id,
@@ -95,7 +95,6 @@ abstract class Note extends Model {
 
     public function getId(): int {
         return $this->id;
-        
     }
 
     public function getOwner(): int {

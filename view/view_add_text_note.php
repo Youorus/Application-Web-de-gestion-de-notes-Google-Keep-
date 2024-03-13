@@ -26,15 +26,17 @@
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" id="title_note" class="form-control" value="<?= $title_note ?>" name="title_note">
+            <input type="text" id="title_note" class="form-control" value="<?= isset($title_note) ? $title_note : '' ?>" name="title_note">
             <!-- Section pour afficher les erreurs -->
-            <?php if (isset($errors['title'])): ?>
-                <div class="error-message"><?php var_dump($errors['title']); ; ?></div>
+            <?php if (isset($errors)): ?>
+                <?php foreach ($errors as $error): ?>
+                    <h2 class="error-text"><?php echo $error; ?></h2>
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
         <div class="mb-3">
             <label class="form-label">Text</label>
-            <textarea class="form-control" id="content_note" value="<?= $content_note ?>" rows="10" name="content_note"></textarea>
+            <textarea class="form-control" id="content_note" value="<?= isset($content_note) ? $content_note : '' ?>" rows="10" name="content_note"></textarea>
 
         </div>
     </div>

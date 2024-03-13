@@ -13,8 +13,8 @@ class ControllerAddTextNote extends Controller
     public function add_text_note(): void
     {
         $errors = []; // Tableau pour stocker les erreurs
-        $title_note = "";
-        $content_note = "";
+        $title_note = '';
+        $content_note = '';
         $idnote = "";
         $user = $this->get_user_or_redirect();
 
@@ -25,16 +25,19 @@ class ControllerAddTextNote extends Controller
             // Validation de la longueur du titre
             if (strlen($title_note) < 3) {
                 $errors[] = "Le titre doit avoir au moins 3 caractères.";
-            } else {
+            }
+            if (empty($errors)){
                 // Création de la note si la validation est réussie
                 $note = new TextNote(0, $content_note);
                 $note->setOwner($user->getId());
                 $note->persist(); // Enregistrement de la note
+                $note->setTitle($title_note);
 
                 // Redirection vers l'index avec l'ID de la note en tant que paramètre
                 $idnote = $note->getId();
                 $this->redirect("index", "open_text_note", "$idnote");
             }
+
         }
 
         // Affichage de la vue avec les erreurs
