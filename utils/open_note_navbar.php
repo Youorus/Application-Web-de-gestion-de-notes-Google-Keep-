@@ -52,10 +52,16 @@
                 // archived
                 echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> unarchive </span> </a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> archive </span></a>';
 
-                // edited
-                echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
-                echo ' <span class="material-symbols-outlined"> edit </span>';
-                echo '</a>';
+                if ($note->getType() == NoteType::TextNote){
+                    echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }else{
+                    echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }
+
             }
             ?>
         </div>

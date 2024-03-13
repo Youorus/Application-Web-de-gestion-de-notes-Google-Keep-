@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include "head.php"?>
-<body>
-<div class="note-container">
-    <?php include "utils/open_note_navbar.php"?>
 
 
+<div class="navbar navbar-dark bg-dark fixed">
+    <div class="container">
+        <!-- Bouton de retour -->
+        <div class="navbar-icon">
+            <a href="index">
+                <span class="material-symbols-outlined"> arrow_back_ios </span>
+            </a>
+        </div>
+
+        <!-- Bouton quelconque -->
+        <div class="navbar-icons">
+            <!-- save bouton -->
+            <button class="bt-default" type="submit" form="addTextNote">
+                <span class="material-symbols-outlined">save</span>
+            </button>
+        </div>
+    </div>
 </div>
+
+
 <form action="index/editchecklistnote" method="post">
-    <button type="submit" class="btn btn-primary">Save</button>
 <div class="open-text">
     <label class="form-label">Title</label>
     <input id="title" name="title" type="text" class="form-control"  value="<?= $title ?>">
