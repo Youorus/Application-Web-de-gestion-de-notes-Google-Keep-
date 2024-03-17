@@ -21,7 +21,7 @@
                     </li>
                    <?php include  "utils/usersSharesNotes.php" ?>
                     <li class="nav-item">
-                        <a class="nav-link moi" aria-current="page" href="index/setting">Settings</a>
+                        <a class="nav-link moi" aria-current="page" href="Settings">Settings</a>
                     </li>
                 </ul>
             </div>

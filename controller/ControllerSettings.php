@@ -9,13 +9,25 @@ class ControllerSettings extends Controller
 
     public function index(): void
     {
-        if ($this->user_logged()) {
-            $user = $this->get_user_or_redirect();
-            (new View("settings"))->show(array("full_name" => $user->fullName));
-        } else {
-            // si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
-            $this->redirect("main", "login");
+        $user = $this->get_user_or_redirect();
+
+        if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+            $this->logout();
+            header('Location: main/login.php');
+            exit;
         }
+        $user_name = $user->getFullName();
+
+
+        if (isset($_GET['logout'])) {
+            $this->logout();
+            header('Location: index.php');
+            exit;
+        }
+
+        $title = "Settings";
+        (new View("setting"))->show(["user_name" => $user_name, "title" => $title]);
+
     }
 
     public function change_password(): void {
@@ -90,9 +102,15 @@ class ControllerSettings extends Controller
         ]);
     }
 
+    public function logoutUser(): void
+    {
+        $this->logout();
+       $this->redirect("main", "login");
+    }
 
-public function cancel(){
-        $this->redirect("index","setting" );
+
+    public function cancel(){
+        $this->redirect("settings");
 }
     
 

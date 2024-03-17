@@ -63,7 +63,7 @@ class User extends Model{
     {
         $pinnedValue = $pinned ? 1 : 0;
 
-        $query = self::execute("SELECT notes.id FROM notes WHERE notes.owner = :id AND notes.pinned = :pinned AND notes.archived = :archive ORDER BY notes.weight", [
+        $query = self::execute("SELECT notes.id FROM notes WHERE notes.owner = :id AND notes.pinned = :pinned AND notes.archived = :archive ORDER BY notes.weight DESC ", [
             "id" => $this->id,
             "pinned" => $pinnedValue,
             "archive" => $archive
@@ -128,10 +128,13 @@ class User extends Model{
 
     public function get_All_shared_notes(int $userShare): array
     {
-        $query = self::execute("SELECT notes.id, note_shares.editor
-                            FROM note_shares
-                            JOIN notes ON notes.id = note_shares.note
-                            WHERE note_shares.user = :loggedInUserId AND notes.owner = :userShare", [
+        $query = self::execute("
+        SELECT note_shares.*
+        FROM note_shares
+        INNER JOIN notes ON notes.id = note_shares.note
+        WHERE notes.owner = :loggedInUserId
+          AND note_shares.user = :userShare
+    ", [
             "loggedInUserId" => $this->id,
             "userShare" => $userShare
         ]);
@@ -140,10 +143,13 @@ class User extends Model{
         $results = [];
 
         foreach ($data as $row) {
-            $queryNote = self::execute("SELECT notes.id, notes.title, text_notes.content
-                                    FROM notes
-                                    LEFT JOIN text_notes ON notes.id = text_notes.id
-                                    WHERE notes.id = :id", ["id" => $row['id']]);
+            $queryNote = self::execute("
+            SELECT notes.id, notes.title, text_notes.content
+            FROM notes
+            LEFT JOIN text_notes ON notes.id = text_notes.id
+            WHERE notes.id = :id
+        ", ["id" => $row['note']]);
+
             $dataNote = $queryNote->fetch();
 
             if ($dataNote) {
@@ -168,7 +174,6 @@ class User extends Model{
 
         return $results;
     }
-
 
 
 
@@ -226,18 +231,20 @@ class User extends Model{
     }
 
     public function getAllUserName(){
-        $query = self::execute("SELECT ")
+        $query = self::execute("SELECT ");
     }
 
 
 
 
     public function get_UserShares_Notes(): array {
-        $query = self::execute("SELECT DISTINCT users.*
+        $query = self::execute("SELECT DISTINCT users.* FROM users
+JOIN note_shares on note_shares.user = users.id
+WHERE note_shares.note IN
+(SELECT DISTINCT note_shares.note
 FROM note_shares
 JOIN notes ON notes.id = note_shares.note
-JOIN users ON users.id = note_shares.user
-WHERE notes.owner = :id", [
+WHERE notes.owner = :id)", [
             "id" => $this->id,
         ]);
 
@@ -255,6 +262,21 @@ WHERE notes.owner = :id", [
                 );
                 $results[] = $user;
             }
+        }
+
+        return $results;
+    }
+
+    public function getOtherUsers(): array {
+        $query = self::execute("SELECT users.full_name FROM users WHERE NOT users.id = :id", [
+            "id" => $this->id,
+        ]);
+
+        $data = $query->fetchAll();
+        $results = [];
+        foreach ($data as $row) {
+            // Accédez à la valeur 'full_name' de chaque ligne, pas de '$data'
+            $results[] = $row['full_name'];
         }
 
         return $results;
@@ -315,17 +337,6 @@ WHERE notes.owner = :id", [
         return $errors;
     }
 
-    public static function getUsersIds(){
-        $query = self::execute("SELECT id from users WHERE users.id = :id", [
-            "id"=>$id]);
-
-        $userIds = $query->fetchAll(PDO::FETCH_COLUMN);
-
-        return $userIds;
-    }
-
-
-
 
 
 
@@ -375,20 +386,4 @@ WHERE notes.owner = :id", [
         $this->hashed_password = $hashedPassword;
     }
 
-    /*
-    public function getMaxweight(): int
-    {
-        $query = self::execute("SELECT MAX(weight) as maxwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
-        $data = $query->fetch();
-        return $data["maxwheight"];
-    }
-
-    public function getMinweight(): int
-    {
-        $query = self::execute("SELECT MIN(weight) as minwheight from Notes where notes.owner =:owner", ["owner" => $this->getId()]);
-        $data = $query->fetch();
-        return $data["minwheight"];
-    }
-
-    */
 }

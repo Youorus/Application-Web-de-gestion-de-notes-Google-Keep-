@@ -2,10 +2,18 @@
     <div class="container">
         <!-- Première div avec l'icône de retour -->
         <div class="navbar-icon">
-            <a href="index/index">
-               <span class="material-symbols-outlined"> arrow_back_ios </span>
-            </a>
+            <?php
+            if ($noteType == "archived") {
+                echo '<a href="index/archive_notes">';
+            } else {
+                echo '<a href="index">';
+            }
+
+            echo '<span class="material-symbols-outlined"> arrow_back_ios </span>';
+            echo '</a>';
+            ?>
         </div>
+
 
         <!-- Deuxième div avec quatre autres icônes -->
         <div class="navbar-icons" id="icons">
@@ -20,7 +28,15 @@
 </span></a>';
             } elseif ($noteType == "share"){
                 // edite share
-                echo $note->isEditor() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> edit </span> </a>' : '';
+                if ($note->getType() == NoteType::TextNote && $note->isEditor()){
+                    echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }elseif($note->getType() == NoteType::ChecklistNote && $note->isEditor()){
+                    echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }
 
             } elseif ($noteType == "edited"){
                 // Save
@@ -35,7 +51,7 @@
                 echo '';
             }else {
                 // share
-                echo '<a href="index/view-share" class="icon-link">';
+                echo '<a  href="Share/note/'. $note->getId() .'" class="icon-link">';
                 echo ' <span class="material-symbols-outlined"> share </span>';
                 echo '</a>';
                 // pinned
@@ -44,10 +60,16 @@
                 // archived
                 echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> unarchive </span> </a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> archive </span></a>';
 
-                // edited
-                echo '<a href="index/edit_text_note/'. $note->getId() .'" class="icon-link">';
-                echo ' <span class="material-symbols-outlined"> edit </span>';
-                echo '</a>';
+                if ($note->getType() == NoteType::TextNote){
+                    echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }else{
+                    echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    echo '</a>';
+                }
+
             }
             ?>
         </div>

@@ -1,16 +1,28 @@
 <html lang="en">
 <?php include "head.php"?>
-<body>
 
-<?php include "utils/open_note_navbar.php"?>
+<div class="navbar navbar-dark bg-dark fixed">
+    <div class="container">
+        <!-- Bouton de retour -->
+        <div class="navbar-icon">
+            <a href="index">
+                <span class="material-symbols-outlined"> arrow_back_ios </span>
+            </a>
+        </div>
 
+        <!-- Bouton quelconque -->
+        <div class="navbar-icons">
+            <!-- save bouton -->
+            <button class="bt-default" type="submit" form="addTextNote">
+                <span class="material-symbols-outlined">save</span>
+            </button>
+        </div>
+    </div>
+</div>
 
 <body>
 <div class="container position-relative mt-5">
     <form id="addChecklistForm" action="index/add_checklistnote" method="post" class="bg-dark p-4 rounded">
-    <div class="position-absolute top-0 end-0">
-        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i>
-    </div>
 
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
