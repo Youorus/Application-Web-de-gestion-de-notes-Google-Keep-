@@ -49,8 +49,7 @@ class ControllerMain extends Controller {
 
             if (count($errors) == 0) {
                 $user->persist();
-                $this->log_user($user);
-                $this->redirect("index");
+                $this->log_user(User::get_user_by_mail($email), "index");
             }
         }
 
