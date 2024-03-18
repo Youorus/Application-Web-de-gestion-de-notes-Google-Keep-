@@ -230,11 +230,6 @@ class User extends Model{
         }
     }
 
-    public function getAllUserName(){
-        $query = self::execute("SELECT ");
-    }
-
-
 
 
     public function get_UserShares_Notes(): array {

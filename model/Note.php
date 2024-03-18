@@ -221,16 +221,9 @@ abstract class Note extends Model {
     }
 
 
-    public function getTitle(): string
-    {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['title'];
-        }
-        return $results;
-    }
+ public function getTitleNote(): string{
+        return $this->title;
+   }
 
 }
 

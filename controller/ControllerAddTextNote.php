@@ -20,6 +20,7 @@ class ControllerAddTextNote extends Controller
 
         if (isset($_POST["title_note"]) && isset($_POST["content_note"])) {
             $title_note = trim($_POST["title_note"]);
+            var_dump($title_note);
             $content_note = trim($_POST["content_note"]);
 
             // Validation de la longueur du titre
@@ -30,12 +31,13 @@ class ControllerAddTextNote extends Controller
                 // Création de la note si la validation est réussie
                 $note = new TextNote(0, $content_note);
                 $note->setOwner($user->getId());
-                $note->persist(); // Enregistrement de la note
                 $note->setTitle($title_note);
+                $note->persist(); // Enregistrement de la note
+
 
                 // Redirection vers l'index avec l'ID de la note en tant que paramètre
                 $idnote = $note->getId();
-                $this->redirect("index", "open_text_note", "$idnote");
+              $this->redirect("index", "open_text_note", "$idnote");
             }
 
         }
