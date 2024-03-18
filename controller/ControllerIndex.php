@@ -472,8 +472,10 @@ class ControllerIndex extends Controller
         }
     }
 
-    public function delete_share(){
 
+    /*
+    public function delete_share()
+    {
         $user = $this->get_user_or_redirect();
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Récupération des données du formulaire
@@ -482,18 +484,23 @@ class ControllerIndex extends Controller
 
             $note = Note::getId($noteId);
             if ($note instanceof Note) {
+                $share = new NoteShare($note, $user->getId(), $shareUserId);
+                $share->delete();
+                $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
+            }
+
+            $note = Note::getId($noteId);
+            if ($note instanceof Note) {
                 $share = new NoteShare($note,$user->getId(),$shareUserId);
                 $share->delete();
                 $this->redirect('index.php?action=view_shares_note&id=' . $noteId);
             }
-            //suppression du partage
+        }
+        //suppression du partage
 
     }
-}
+    */
 
-    public function toggle_share_permission(){
-
-    }
 
 
 }
