@@ -132,6 +132,9 @@ class ControllerIndex extends Controller
         (new View("checklist_note"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "idnote" => $idNote]);
     }
 
+
+
+
     public function check_uncheck()
     {
 
@@ -252,18 +255,18 @@ class ControllerIndex extends Controller
         }
     }
 
-    public function deleteNote()
-    {
-        $idNote = intval($_GET['param1']);
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-
-        if ($note) {
-            $note->delete();
-        }
-
-        $this->redirect("index");
-    }
+//    public function deleteNote()
+//    {
+//        $idNote = intval($_GET['param1']);
+//        $user = $this->get_user_or_redirect();
+//        $note = $user->get_One_note_by_id($idNote);
+//
+//        if ($note) {
+//            $note->delete();
+//        }
+//
+//        $this->redirect("index");
+//    }
 
 
     public function add_checklistnote()
@@ -331,35 +334,6 @@ class ControllerIndex extends Controller
         ]);
     }
 
-    /*
-    public function editchecklistnote() {
-        return print_r($_GET);
-        $idNote = $_GET['param1'];
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
-        $title = $note->getTitle();
-
-
-        if(isset($_POST['title'])) {
-
-        }
-        $content = $note->getItems();
-
-        $sortedItems = $this->sort_items($content);
-
-        $createDate = $note->getDateTime();
-        $editDate = $note->getDateTimeEdit();
-
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
-
-        $noteType = open_note($note);
-
-        (new View("edit_checklistnote"))->show(["title" => $title, "content"=> $sortedItems, "messageCreate" => $messageCreate,"messageEdit" => $messageEdit, "note"=>$note,"noteType"=>$noteType]);
-
-    }
-    */
 
     public function edit_checklistnote()
     {
