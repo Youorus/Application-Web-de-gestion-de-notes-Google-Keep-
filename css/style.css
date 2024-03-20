@@ -20,6 +20,13 @@ a{
   }
 
 
+
+.dark-bg {
+    background-color: var(--couleur-fond);
+    color: white; /* Pour changer la couleur du texte en blanc */
+}
+
+
 body{
     background-color: var(--couleur-fond);
 }
@@ -105,11 +112,39 @@ body{
   .signup-box {
       text-align: center;
     background-color: var(--couleur-fond);
-      width: 35%;
+      width: 25%;
     border: 1px solid var(--couleur-bordure);
     padding: 20px;
     border-radius: 10px;
   }
+
+  /*style de pour telephone */
+@media only screen and (max-width: 600px) {
+    .card{
+
+    }
+    .signup-box {
+    margin-top: 25%;
+        width: 95%;
+    }
+}
+
+.bt-default{
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+    .signup-box {
+        margin-top: 25%;
+        width: 60%;
+    }
+}
 
 
 
@@ -151,6 +186,20 @@ body{
     color: var(--couleur-texte);
   }
 
+  .error{
+      text-align: center;
+      color: var(--error-color);
+  }
+
+  .check-text{
+      text-decoration: line-through;
+  }
+
+.error-text {
+    color: var(--error-color);
+    font-size: 17px;
+    margin-top: 5px;
+}
 
   .form-group {
     margin-bottom: 20px;

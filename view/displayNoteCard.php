@@ -34,7 +34,7 @@ echo '<a href="' . $href . '" class="card-link">';
                 if ($cpt < 3){
                     $cpt++;
                     echo '<div class="form-check">';
-                    echo '  <input class="form-check-input" type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
+                    echo '  <input class="form-check-input" disabled type="checkbox" value="1" id="exampleCheckbox" name="exampleCheckbox" ' . ($item->getChecked() == 1 ? 'checked' : '') . '>';
                     echo '  <label class="form-check-label" for="exampleCheckbox">';
                     echo $item->getContent();
                     echo '  </label>';
@@ -49,11 +49,7 @@ echo '<a href="' . $href . '" class="card-link">';
 
         echo '</div>';
     echo '</a>';
-echo '<div class="d-flex iconBox justify-content-between">';
-            echo '<span><i class="fa-solid fa-angles-left"></i></span>';
-            echo '<span><i class="fa-solid fa-angles-right"></i></span>';
-
-    echo '</div>';
+include "chevrons.php";
 }
 
 

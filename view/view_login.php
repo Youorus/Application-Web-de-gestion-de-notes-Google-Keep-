@@ -6,7 +6,7 @@ require_once "head.php";
 <div class="signup-box">
   <h2>Log In</h2>
   <hr>
-  <form action="main/login" method="post">    
+  <form action="main/login" method="post">
     <div class="form-group input">
     <i class="fa-regular fa-user icon"></i>
       <input type="email" id="mail" name="mail" placeholder="Enter your email" value="<?= $mail ?>">
