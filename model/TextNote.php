@@ -11,7 +11,7 @@ class TextNote extends Note {
     }
 
     public function __construct(int $id, ?string $content) {
-        parent::__construct($id, "default ", 0, new DateTime(), null, 0, 0, 0);
+        parent::__construct($id, " ", 0, new DateTime(), null, 0, 0, 0);
         $this->content = $content;
     }
 
@@ -41,23 +41,28 @@ class TextNote extends Note {
 
 
     public function persist(): TextNote | array {
+        var_dump($this);
         $currentDateTime = new DateTime('now');
+
 
         // Vérifier si la note existe déjà dans la base de données
         if (!parent::get_textnote_by_id($this->getId())) {
             // Si la note n'existe pas, l'insérer dans la base de données
 
+            $lastWeight = self::getLastWeightNote();
+
             // Insérer une nouvelle note dans 'notes'
             parent::execute(
                 "INSERT INTO notes (title, owner, created_at, pinned, archived, weight) 
             VALUES (:title, :owner, :createdAt, :pinned, :archived, :weight)",
+
                 [
-                    'title' => $this->getTitle(),
+                    'title' => $this->getTitleNote(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $currentDateTime->format('Y-m-d H:i:s'),
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
+                    'weight' => $lastWeight + 1
                 ]
             );
             $this->setId(parent::lastInsertId());
@@ -76,7 +81,7 @@ class TextNote extends Note {
             pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
                 [
                     'id' => $this->getId(),
-                    'title' => $this->getTitle(),
+                    'title' => $this->getTitleNote(),
                     'editedAt' => $currentDateTime->format('Y-m-d H:i:s'), // Mise à jour de la date de modification
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
@@ -122,37 +127,16 @@ class TextNote extends Note {
         return  NoteType::TextNote;
     }
 
-
-
-    public static function getTitleNote(int $id): string{
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $id]);
+    public  function getLastWeightNote(): int {
+        $query = self::execute("SELECT MAX(weight) AS last_weight FROM notes", []);
         $data = $query->fetchAll();
         $results = "";
         foreach ($data as $row){
-            $results = $row['title'];
+            $results = $row['last_weight'];
         }
         return $results;
     }
 
-    public static function getContentNote(int $id): string|null{
-        $query = self::execute("SELECT text_notes.content from text_notes WHERE text_notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['content'];
-        }
-        return $results;
-    }
-
-    public static function getCreateDateTime(int $id): string{
-        $query = self::execute("SELECT notes.created_at FROM notes WHERE notes.id = :id", ["id" => $id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['created_at'];
-        }
-        return $results;
-    }
 
     public static function geteditDateTime(int $id): string|null{
         $query = self::execute("SELECT notes.edited_at FROM notes WHERE notes.id = :id", ["id" => $id]);
@@ -164,11 +148,7 @@ class TextNote extends Note {
         return $results;
     }
 
-//        public function setTitle(string $title): void
-//        {
-//            parent::execute("UPDATE notes SET title = :title WHERE notes.id = :id", ["id" => $this->getId(), "title" => $title]);
-//
-//        }
+
 
 
     public function getTitle(): string

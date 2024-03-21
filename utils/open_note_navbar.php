@@ -20,8 +20,8 @@
             <?php
             if ($noteType == "archived"){
                 // delete
-                echo '<a href="index/deleteNote/'. $note->getId() .'" class="icon-link">';
-                echo ' <span style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
+                echo '<a href="delete/note/'. $note->getId() .'" class="icon-link">';
+                echo ' <span data-target="#confirmDeleteModal" style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
                 echo '</a>';
                 // unarchived
                 echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive
@@ -52,7 +52,7 @@
             }else {
                 // share
                 echo '<a  href="Share/note/'. $note->getId() .'" class="icon-link">';
-                echo ' <span class="material-symbols-outlined"> share </span>';
+                echo ' <span  class="material-symbols-outlined"> share </span>';
                 echo '</a>';
                 // pinned
                 echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><span style="font-variation-settings: \'FILL\' 1, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24;" class="material-symbols-outlined"> push_pin </span></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> push_pin </span></a>';
@@ -84,3 +84,26 @@
     ?>
 
     </div>
+
+
+<!-- Modal pour la suppression -->
+<div class="modal fade" id="confirmDeleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmation de la suppression</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cette note ?
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <a href="delete/note/<?php echo $note->getId(); ?>" class="btn btn-danger">Supprimer</a>
+            </div>
+        </div>
+    </div>
+</div>

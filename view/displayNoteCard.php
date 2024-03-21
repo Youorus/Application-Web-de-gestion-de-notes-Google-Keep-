@@ -49,11 +49,7 @@ echo '<a href="' . $href . '" class="card-link">';
 
         echo '</div>';
     echo '</a>';
-echo '<div class="d-flex iconBox justify-content-between">';
-            echo '<span><i class="fa-solid fa-angles-left"></i></span>';
-            echo '<span><i class="fa-solid fa-angles-right"></i></span>';
-
-    echo '</div>';
+include "chevrons.php";
 }
 
 

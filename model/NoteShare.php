@@ -8,6 +8,7 @@ private int $user;
 private int $editor;
 
 public function __construct(int $note, int $editor, int $user) {
+
 $this->noteid = $note;
 $this->editor = $editor;
 $this->user = $user;

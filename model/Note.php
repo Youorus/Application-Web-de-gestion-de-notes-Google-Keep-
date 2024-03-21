@@ -8,6 +8,7 @@ enum NoteType {
 }
 
 abstract class Note extends Model {
+
     private ?int $id;
     private string $title;
     private int $owner;
@@ -17,8 +18,10 @@ abstract class Note extends Model {
     private int $archived;
     private int $weight;
 
+
     public function __construct(
         int $id,
+        $note,
         string $title,
         int $owner,
         DateTime $dateTime,
@@ -28,6 +31,7 @@ abstract class Note extends Model {
         int $weight
     ) {
         $this->id = $id;
+        $this->note = $note;
         $this->title = $title;
         $this->owner = $owner;
         $this->dateTime = $dateTime;
@@ -188,6 +192,16 @@ abstract class Note extends Model {
         return $this->weight;
     }
 
+    public static function getWeightByIdNote(int $idNote): int {
+        $query = self::execute("SELECT weight FROM notes WHERE id = :id", ['id' => $idNote]);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['weight'];
+        }
+        return $results;
+    }
+
     public function setId(int $id): void {
         $this->id = $id;
     }
@@ -221,16 +235,9 @@ abstract class Note extends Model {
     }
 
 
-    public function getTitle(): string
-    {
-        $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['title'];
-        }
-        return $results;
-    }
+ public function getTitleNote(): string{
+        return $this->title;
+   }
 
 }
 

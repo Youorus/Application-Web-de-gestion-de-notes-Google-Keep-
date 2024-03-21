@@ -11,6 +11,7 @@ function displayNoteCardView($note)
     echo '<div class="card-body">';
     echo '<h5 class="card-title bord">' . $note->getTitle() . '</h5>';
 
+
     if ($note->getType() == NoteType::TextNote) {
         if ($note->getContent() === null) {
             echo '<p class="card-text">' . 'Note vide' . '</p>';
