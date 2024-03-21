@@ -70,15 +70,19 @@ class ControllerSettings extends Controller
         $errors = [];
 
         if(isset($_POST['full_name'])) {
-            $full_name = ($_POST['full_name']);
-            if($full_name != $user->getName()) {
+            $full_name = $_POST['full_name'];
+            $user_name = $full_name;
+
+            if ($full_name != $user->getName()) {
                 $user->setName($full_name);
-                $errors = User::validate($full_name);
+                $errors = array_merge($errors, User::validate($full_name));
             }
         }
 
         if(isset($_POST['email'])) {
             $newemail = $_POST['email'];
+            $user_mail = $newemail;
+
             if($newemail != $user->getMail()) {
                 $emailErrors = User::validate_unicity($newemail);
                 if(!empty($emailErrors)) {
