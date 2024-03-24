@@ -34,27 +34,34 @@ class ControllerSettings extends Controller
         $user = $this->get_user_or_redirect();
         $errors = [];
         $success = false;
-        $currentpassword = '';
-        $newpassword = '';
-        $confirmpassword = '';
 
-        if (isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
             $currentpassword = $_POST['currentpassword'];
             $newpassword = $_POST['newpassword'];
             $confirmpassword = $_POST['confirmpassword'];
 
+            // Vérifier si le mot de passe actuel est correct
             if (!$user->verifyPassword($currentpassword)) {
                 $errors[] = "Le mot de passe actuel est incorrect.";
             }
 
+            // Vérifier si le nouveau mot de passe correspond à la confirmation
             if ($newpassword !== $confirmpassword) {
                 $errors[] = "Le nouveau mot de passe et la confirmation ne correspondent pas.";
             }
 
+            // Vérifier si le nouveau mot de passe est différent de l'ancien
+            if ($user->verifyPassword($newpassword)) {
+                $errors[] = "Le nouveau mot de passe doit être différent de l'ancien.";
+            }
+
+            // Si aucune erreur, mettre à jour le mot de passe et rediriger
             if (empty($errors)) {
                 $user->setHashedPassword(Tools::my_hash($newpassword));
                 $user->persist();
-                $success = true;
+                // Redirection vers la page de paramètres
+                $this->redirect("settings");
+                return; // Important pour arrêter l'exécution après la redirection
             }
         }
 
@@ -63,15 +70,15 @@ class ControllerSettings extends Controller
 
 
 
+
     public function edit_profile() {
         $user = $this->get_user_or_redirect();
-        $errors = []; // Assurez-vous que c'est un tableau pour pouvoir y ajouter des erreurs
+        $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
             $newemail = isset($_POST['email']) ? trim($_POST['email']) : '';
 
-            // Vérifiez que le nom complet n'est pas vide
             if (empty($full_name)) {
                 $errors[] = "Le champ du nom complet ne peut pas être vide.";
             } elseif ($full_name != $user->getFullName()) {
@@ -79,7 +86,6 @@ class ControllerSettings extends Controller
                 $errors = array_merge($errors, User::validate($full_name));
             }
 
-            // Vérifiez que l'email n'est pas vide
             if (empty($newemail)) {
                 $errors[] = "Le champ de l'email ne peut pas être vide.";
             } elseif ($newemail != $user->getMail()) {
@@ -87,23 +93,21 @@ class ControllerSettings extends Controller
                 if (!empty($emailErrors)) {
                     $errors = array_merge($errors, $emailErrors);
                 } else {
-                    $user->setMail($newemail); // Mise à jour temporaire
+                    $user->setMail($newemail);
                 }
             }
 
-            // Si il n'y a pas d'erreurs, mettez à jour le profil de l'utilisateur
             if (empty($errors)) {
                 $user->persist();
-                $this->redirect("settings", "edit_profile"); // Redirection si la mise à jour est réussie
-                return; // Empêche l'exécution ultérieure après une redirection
+                $this->redirect("settings", "edit_profile");
+                return;
             }
         }
 
-        // Si erreurs ou première visite, affichez la vue avec les informations existantes ou soumises
         (new View("edit_profile"))->show([
             "user" => $user,
             "errors" => $errors,
-            "user_name" => $user->getFullName(), // Utilisez les valeurs actualisées pour l'affichage
+            "user_name" => $user->getFullName(),
             "user_mail" => $user->getMail(),
         ]);
     }
