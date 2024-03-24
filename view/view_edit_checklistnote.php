@@ -15,7 +15,7 @@
         <!-- Bouton quelconque -->
         <div class="navbar-icons">
             <!-- save bouton -->
-            <button class="bt-default" type="submit" form="addTextNote">
+            <button class="bt-default" type="submit" form="editchecklistnote">
                 <span class="material-symbols-outlined">save</span>
             </button>
         </div>
@@ -23,7 +23,7 @@
 </div>
 
 
-<form action="index/editchecklistnote" method="post">
+<form id="editchecklistnote" action="index/editchecklistnote" method="post">
 <div class="open-text">
     <label class="form-label">Title</label>
     <input id="title" name="title" type="text" class="form-control"  value="<?= $title ?>">
