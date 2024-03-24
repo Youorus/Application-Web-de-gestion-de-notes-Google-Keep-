@@ -65,49 +65,49 @@ class ControllerSettings extends Controller
 
     public function edit_profile() {
         $user = $this->get_user_or_redirect();
-        // Initialisez avec les valeurs actuelles pour gérer le cas où aucune donnée n'est soumise
-        $user_name = $user->getFullName();
-        $user_mail = $user->getMail();
-        $errors = [];
+        $errors = []; // Assurez-vous que c'est un tableau pour pouvoir y ajouter des erreurs
 
-        // Mettez à jour avec les valeurs soumises si disponibles
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['full_name'])) {
-                $full_name = $_POST['full_name']; // Utilisez directement la valeur soumise
-                if ($full_name != $user->getName()) {
-                    $user->setName($full_name); // Mettez à jour temporairement l'objet utilisateur
-                    $errors = User::validate($full_name); // Validez le nom complet
-                }
-                $user_name = $full_name; // Gardez la valeur soumise pour la réafficher dans la vue
+            $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
+            $newemail = isset($_POST['email']) ? trim($_POST['email']) : '';
+
+            // Vérifiez que le nom complet n'est pas vide
+            if (empty($full_name)) {
+                $errors[] = "Le champ du nom complet ne peut pas être vide.";
+            } elseif ($full_name != $user->getFullName()) {
+                $user->setName($full_name); // Mise à jour temporaire
+                $errors = array_merge($errors, User::validate($full_name));
             }
 
-            if (isset($_POST['email'])) {
-                $newemail = $_POST['email']; // Utilisez directement la valeur soumise
-                if ($newemail != $user->getMail()) {
-                    $emailErrors = User::validate_unicity($newemail); // Validez l'unicité de l'email
-                    if (!empty($emailErrors)) {
-                        $errors = array_merge($errors, $emailErrors);
-                    } else {
-                        $user->setMail($newemail); // Mettez à jour temporairement l'objet utilisateur
-                    }
+            // Vérifiez que l'email n'est pas vide
+            if (empty($newemail)) {
+                $errors[] = "Le champ de l'email ne peut pas être vide.";
+            } elseif ($newemail != $user->getMail()) {
+                $emailErrors = User::validate_unicity($newemail);
+                if (!empty($emailErrors)) {
+                    $errors = array_merge($errors, $emailErrors);
+                } else {
+                    $user->setMail($newemail); // Mise à jour temporaire
                 }
-                $user_mail = $newemail; // Gardez la valeur soumise pour la réafficher dans la vue
             }
 
-            if (count($errors) == 0) {
-                $user->persist_mail(); // Persistez les changements seulement si aucune erreur n'est détectée
-                $this->redirect("settings", "edit_profile"); // Redirigez après la mise à jour réussie
+            // Si il n'y a pas d'erreurs, mettez à jour le profil de l'utilisateur
+            if (empty($errors)) {
+                $user->persist();
+                $this->redirect("settings", "edit_profile"); // Redirection si la mise à jour est réussie
+                return; // Empêche l'exécution ultérieure après une redirection
             }
         }
 
-        // Affichez la vue avec les données actuelles ou les données soumises, ainsi que les erreurs s'il y en a
+        // Si erreurs ou première visite, affichez la vue avec les informations existantes ou soumises
         (new View("edit_profile"))->show([
             "user" => $user,
             "errors" => $errors,
-            "user_name" => $user_name, // Ces variables peuvent contenir les valeurs soumises
-            "user_mail" => $user_mail,
+            "user_name" => $user->getFullName(), // Utilisez les valeurs actualisées pour l'affichage
+            "user_mail" => $user->getMail(),
         ]);
     }
+
 
 
     public function logoutUser(): void
