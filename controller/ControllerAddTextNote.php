@@ -24,9 +24,9 @@ class ControllerAddTextNote extends Controller
             $content_note = trim($_POST["content_note"]);
 
             // Validation de la longueur du titre
-            if (strlen($title_note) < 3) {
-                $errors[] = "Le titre doit avoir au moins 3 caractères.";
-            }
+
+                $errors[] = TextNote::validateTitle($title_note);
+
             if (empty($errors)){
                 // Création de la note si la validation est réussie
                 $note = new TextNote(0, $content_note);

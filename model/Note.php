@@ -84,10 +84,15 @@ abstract class Note extends Model {
         return $result;
     }
 
-    public function validate(): array {
-        $error = [];
-        // Validation logique ici si nécessaire
-        return $error;
+    public static function validateTitle(string $title): String {
+        $error = "";
+
+        if(strlen($title) < Configuration::get("title_min_lenght"))
+            $error = "The title must have more than 3 characters";
+        if (strlen($title) > Configuration::get("title_max_lenght"))
+            $error = "the title must have less than 25 characters";
+
+    return $error;
     }
 
     public function delete(): void {
