@@ -26,13 +26,13 @@
             titleError.text("The title must have less than 25 characters");
     }
 
-    async  function checkTitle(){
-
-        const data = await $.getJSON("addtextnote/validate/" + title_note.val())
-        if (data){
-            titleError.text("this title is already exist");
-        }
-
+    // async  function checkTitle() {
+    //
+    //     const data = await $.getJSON("addtextnote/validate/" + title_note.val())
+    //     if (data) {
+    //         titleError.text("");
+    //     }
+    // }
 
 </script>
 
