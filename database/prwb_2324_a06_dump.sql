@@ -1,6 +1,6 @@
--- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for Win64 (AMD64)
+-- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for osx10.10 (x86_64)
 --
--- Host: 127.0.0.1    Database: prwb_2324_a06
+-- Host: 127.0.0.1    Database: prwb_2324_xyy
 -- ------------------------------------------------------
 -- Server version	10.4.28-MariaDB
 
@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `checklist_note_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `checklist_note_items` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `checklist_note` int(11) NOT NULL,
-  `content` varchar(256) NOT NULL,
-  `checked` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `checklist_note` (`checklist_note`,`content`),
-  KEY `fkchecklist_note_items_checklist_notes` (`checklist_note`),
-  CONSTRAINT `fkchecklist_note_items_checklist_notes` FOREIGN KEY (`checklist_note`) REFERENCES `checklist_notes` (`id`)
+                                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                                        `checklist_note` int(11) NOT NULL,
+                                        `content` varchar(256) NOT NULL,
+                                        `checked` tinyint(1) NOT NULL DEFAULT 0,
+                                        PRIMARY KEY (`id`),
+                                        UNIQUE KEY `checklist_note` (`checklist_note`,`content`),
+                                        KEY `fkchecklist_note_items_checklist_notes` (`checklist_note`),
+                                        CONSTRAINT `fkchecklist_note_items_checklist_notes` FOREIGN KEY (`checklist_note`) REFERENCES `checklist_notes` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -52,9 +52,9 @@ DROP TABLE IF EXISTS `checklist_notes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `checklist_notes` (
-  `id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_checklist_notes_notes` FOREIGN KEY (`id`) REFERENCES `notes` (`id`)
+                                   `id` int(11) NOT NULL,
+                                   PRIMARY KEY (`id`),
+                                   CONSTRAINT `fk_checklist_notes_notes` FOREIGN KEY (`id`) REFERENCES `notes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -76,13 +76,13 @@ DROP TABLE IF EXISTS `note_shares`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `note_shares` (
-  `note` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `editor` tinyint(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`note`,`user`),
-  KEY `fk_note_shares_users` (`user`),
-  CONSTRAINT `fk_note_shares_notes` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
-  CONSTRAINT `fk_note_shares_users` FOREIGN KEY (`note`) REFERENCES `notes` (`id`)
+                               `note` int(11) NOT NULL,
+                               `user` int(11) NOT NULL,
+                               `editor` tinyint(1) NOT NULL DEFAULT 0,
+                               PRIMARY KEY (`note`,`user`),
+                               KEY `fk_note_shares_users` (`user`),
+                               CONSTRAINT `fk_note_shares_notes` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
+                               CONSTRAINT `fk_note_shares_users` FOREIGN KEY (`note`) REFERENCES `notes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -104,18 +104,20 @@ DROP TABLE IF EXISTS `notes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(256) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `edited_at` datetime DEFAULT NULL,
-  `pinned` tinyint(1) NOT NULL DEFAULT 0,
-  `archived` tinyint(1) NOT NULL DEFAULT 0,
-  `weight` double NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`),
-  KEY `fk_notes_users` (`owner`),
-  CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `title` varchar(256) NOT NULL,
+                         `owner` int(11) NOT NULL,
+                         `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+                         `edited_at` datetime DEFAULT NULL,
+                         `pinned` tinyint(1) NOT NULL DEFAULT 0,
+                         `archived` tinyint(1) NOT NULL DEFAULT 0,
+                         `weight` double NOT NULL DEFAULT 1,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `unique_title_owner` (`title`,`owner`),
+                         UNIQUE KEY `unique_weigh_owner` (`weight`,`owner`),
+                         KEY `fk_notes_users` (`owner`),
+                         CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +126,7 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
-INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',1,1,2),(21,'Code alarme',1,'2023-10-11 11:51:43','2023-11-20 21:33:47',1,0,6),(22,'Pensées',1,'2023-10-11 11:51:50','2023-11-21 09:17:15',1,0,1),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,5),(24,'Colruyt tartiflette',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',1,0,4),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',1,0,3),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,1),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,7),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,3),(32,'',2,'2024-03-19 14:00:17',NULL,0,0,0);
+INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',0,1,1),(21,'Code alarme',1,'2023-10-11 11:51:43','2023-11-20 21:33:47',1,0,7),(22,'Pensées',1,'2023-10-11 11:51:50','2023-11-21 09:17:15',1,0,4),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,2),(24,'Colruyt tartiflette',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',1,0,6),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',1,0,5),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,3),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,3),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,1);
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -136,10 +138,10 @@ DROP TABLE IF EXISTS `text_notes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `text_notes` (
-  `id` int(11) NOT NULL,
-  `content` text DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_text_notes_notes` FOREIGN KEY (`id`) REFERENCES `notes` (`id`)
+                              `id` int(11) NOT NULL,
+                              `content` text DEFAULT NULL,
+                              PRIMARY KEY (`id`),
+                              CONSTRAINT `fk_text_notes_notes` FOREIGN KEY (`id`) REFERENCES `notes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,7 +151,7 @@ CREATE TABLE `text_notes` (
 
 LOCK TABLES `text_notes` WRITE;
 /*!40000 ALTER TABLE `text_notes` DISABLE KEYS */;
-INSERT INTO `text_notes` VALUES (20,NULL),(21,'1793'),(22,'La simplicité ne précède pas la complexité, elle la suit.'),(23,'pouet pouet Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus accumsan tortor posuere ac ut consequat semper viverra. Viverra adipiscing at in tellus. Maecenas ultricies mi eget mauris pharetra et ultrices neque ornare. Nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus. Et netus et malesuada fames. Mauris sit amet massa vitae tortor condimentum lacinia quis. Ultrices dui sapien eget mi. Gravida neque convallis a cras semper auctor neque vitae tempus. Nulla facilisi cras fermentum odio eu feugiat pretium nibh ipsum.\r\n\r\nRisus feugiat in ante metus dictum at tempor commodo ullamcorper. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Ultrices vitae auctor eu augue. Nunc non blandit massa enim nec dui nunc mattis enim. Dolor purus non enim praesent elementum facilisis leo vel fringilla. At consectetur lorem donec massa sapien faucibus et. Nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi. Mattis vulputate enim nulla aliquet porttitor lacus luctus. Ultrices in iaculis nunc sed augue lacus viverra vitae. Velit dignissim sodales ut eu. Lectus nulla at volutpat diam ut venenatis tellus in metus. Nisl purus in mollis nunc sed id semper. Felis eget velit aliquet sagittis id consectetur purus. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Facilisis magna etiam tempor orci.\r\n\r\nAdipiscing diam donec adipiscing tristique risus nec feugiat. Tellus integer feugiat scelerisque varius. Sit amet mattis vulputate enim nulla. Massa id neque aliquam vestibulum morbi blandit cursus risus. Eu non diam phasellus vestibulum lorem sed risus ultricies. Quis varius quam quisque id. Ante in nibh mauris cursus mattis molestie. Tristique risus nec feugiat in fermentum posuere. Posuere urna nec tincidunt praesent semper feugiat nibh. Magna sit amet purus gravida quis blandit. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Non odio euismod lacinia at quis risus. Volutpat odio facilisis mauris sit.\r\n\r\nSed elementum tempus egestas sed sed risus pretium quam vulputate. Fringilla urna porttitor rhoncus dolor. Magna etiam tempor orci eu. Fusce id velit ut tortor pretium. Sed enim ut sem viverra. Dignissim enim sit amet venenatis urna cursus. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Aliquam vestibulum morbi blandit cursus risus at ultrices mi. Consectetur a erat nam at lectus urna duis. Volutpat lacus laoreet non curabitur gravida. Magna ac placerat vestibulum lectus mauris ultrices eros.\r\n\r\nNunc mi ipsum faucibus vitae aliquet nec ullamcorper. Imperdiet proin fermentum leo vel orci porta. Hendrerit dolor magna eget est lorem ipsum dolor. Scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis. Scelerisque viverra mauris in aliquam sem fringilla ut morbi tincidunt. Metus dictum at tempor commodo ullamcorper a lacus. Hac habitasse platea dictumst vestibulum. Adipiscing elit pellentesque habitant morbi. Bibendum neque egestas congue quisque egestas diam in. Justo donec enim diam vulputate ut pharetra. Auctor eu augue ut lectus arcu bibendum at. Quis vel eros donec ac odio tempor orci dapibus ultrices. Quam viverra orci sagittis eu volutpat odio facilisis. Sed viverra tellus in hac habitasse platea dictumst vestibulum. Ut sem viverra aliquet eget sit amet tellus cras. Erat nam at lectus urna. Nunc eget lorem dolor sed viverra. In nulla posuere sollicitudin aliquam ultrices sagittis orci a.'),(26,'EPFC!!Password84'),(28,'git clean -xdf \r\ngit clean -xdfn pour faire une simulation'),(30,NULL),(31,'de Marc'),(32,'ddd');
+INSERT INTO `text_notes` VALUES (20,NULL),(21,'1793'),(22,'La simplicité ne précède pas la complexité, elle la suit.'),(23,'pouet pouet Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus accumsan tortor posuere ac ut consequat semper viverra. Viverra adipiscing at in tellus. Maecenas ultricies mi eget mauris pharetra et ultrices neque ornare. Nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus. Et netus et malesuada fames. Mauris sit amet massa vitae tortor condimentum lacinia quis. Ultrices dui sapien eget mi. Gravida neque convallis a cras semper auctor neque vitae tempus. Nulla facilisi cras fermentum odio eu feugiat pretium nibh ipsum.\r\n\r\nRisus feugiat in ante metus dictum at tempor commodo ullamcorper. Fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Ultrices vitae auctor eu augue. Nunc non blandit massa enim nec dui nunc mattis enim. Dolor purus non enim praesent elementum facilisis leo vel fringilla. At consectetur lorem donec massa sapien faucibus et. Nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi. Mattis vulputate enim nulla aliquet porttitor lacus luctus. Ultrices in iaculis nunc sed augue lacus viverra vitae. Velit dignissim sodales ut eu. Lectus nulla at volutpat diam ut venenatis tellus in metus. Nisl purus in mollis nunc sed id semper. Felis eget velit aliquet sagittis id consectetur purus. Nec ullamcorper sit amet risus nullam eget felis eget nunc. Facilisis magna etiam tempor orci.\r\n\r\nAdipiscing diam donec adipiscing tristique risus nec feugiat. Tellus integer feugiat scelerisque varius. Sit amet mattis vulputate enim nulla. Massa id neque aliquam vestibulum morbi blandit cursus risus. Eu non diam phasellus vestibulum lorem sed risus ultricies. Quis varius quam quisque id. Ante in nibh mauris cursus mattis molestie. Tristique risus nec feugiat in fermentum posuere. Posuere urna nec tincidunt praesent semper feugiat nibh. Magna sit amet purus gravida quis blandit. Ac odio tempor orci dapibus ultrices in iaculis nunc sed. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor. Non odio euismod lacinia at quis risus. Volutpat odio facilisis mauris sit.\r\n\r\nSed elementum tempus egestas sed sed risus pretium quam vulputate. Fringilla urna porttitor rhoncus dolor. Magna etiam tempor orci eu. Fusce id velit ut tortor pretium. Sed enim ut sem viverra. Dignissim enim sit amet venenatis urna cursus. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Aliquam vestibulum morbi blandit cursus risus at ultrices mi. Consectetur a erat nam at lectus urna duis. Volutpat lacus laoreet non curabitur gravida. Magna ac placerat vestibulum lectus mauris ultrices eros.\r\n\r\nNunc mi ipsum faucibus vitae aliquet nec ullamcorper. Imperdiet proin fermentum leo vel orci porta. Hendrerit dolor magna eget est lorem ipsum dolor. Scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis. Scelerisque viverra mauris in aliquam sem fringilla ut morbi tincidunt. Metus dictum at tempor commodo ullamcorper a lacus. Hac habitasse platea dictumst vestibulum. Adipiscing elit pellentesque habitant morbi. Bibendum neque egestas congue quisque egestas diam in. Justo donec enim diam vulputate ut pharetra. Auctor eu augue ut lectus arcu bibendum at. Quis vel eros donec ac odio tempor orci dapibus ultrices. Quam viverra orci sagittis eu volutpat odio facilisis. Sed viverra tellus in hac habitasse platea dictumst vestibulum. Ut sem viverra aliquet eget sit amet tellus cras. Erat nam at lectus urna. Nunc eget lorem dolor sed viverra. In nulla posuere sollicitudin aliquam ultrices sagittis orci a.'),(26,'EPFC!!Password84'),(28,'git clean -xdf \r\ngit clean -xdfn pour faire une simulation'),(30,NULL),(31,'de Marc');
 /*!40000 ALTER TABLE `text_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,13 +163,13 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mail` varchar(256) NOT NULL,
-  `hashed_password` varchar(512) NOT NULL,
-  `full_name` varchar(256) NOT NULL,
-  `role` enum('user','admin') NOT NULL DEFAULT 'user',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mail` (`mail`)
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `mail` varchar(256) NOT NULL,
+                         `hashed_password` varchar(512) NOT NULL,
+                         `full_name` varchar(256) NOT NULL,
+                         `role` enum('user','admin') NOT NULL DEFAULT 'user',
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -190,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-19 14:07:34
+-- Dump completed on 2024-03-04 18:09:57
