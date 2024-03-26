@@ -84,7 +84,7 @@ abstract class Note extends Model {
         return $result;
     }
 
-    public static function validateTitle(string $title): String {
+    public static function validate(string $title): String {
         $error = "";
 
         if(strlen($title) < Configuration::get("title_min_lenght"))
@@ -94,6 +94,10 @@ abstract class Note extends Model {
 
     return $error;
     }
+
+
+
+
 
     public function delete(): void {
         self::execute("DELETE FROM notes WHERE id = :id", ["id" => $this->getId()]);
