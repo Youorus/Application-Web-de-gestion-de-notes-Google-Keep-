@@ -122,6 +122,7 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
 
     public function validate_checklistnote(): array {
         $errors = [];
+
         if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
             $errors['title'] = "The title must be between 3 and 25 characters.";
         }
@@ -139,7 +140,7 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
 
     public function getTitle(): string
     {
-        if(empty($this->title)){
+        if(empty($this->getTitleNote())){
             $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
             $data = $query->fetchAll();
             $results = "";
@@ -149,7 +150,7 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
             }
 
         }else{
-            $results = $this->title;
+            $results = $this->getTitleNote();
         }
         return $results;
     }

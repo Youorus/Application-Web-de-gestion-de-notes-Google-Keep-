@@ -27,12 +27,18 @@
 <div class="open-text">
     <label class="form-label">Title</label>
     <input id="title" name="title" type="text" class="form-control"  value="<?= $title ?>">
+    <?php if($coderror == 1) {
+        echo "$msgerror";
+    } ?>
     <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
 </form>
     <div class="checklist-items">
         <label class="form-label">Items</label>
 
         <?php foreach ($content as $item): ?>
+        <?php if($coderror == 0) {
+            echo "$msgerror";
+        } ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form action="index/check_uncheck" method="post" class="flex-grow-1 me-2">
                     <div class="input-group">

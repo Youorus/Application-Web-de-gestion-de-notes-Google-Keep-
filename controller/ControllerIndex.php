@@ -338,6 +338,12 @@ class ControllerIndex extends Controller
     public function edit_checklistnote()
     {
         $idNote = intval($_GET['param1']);
+        $coderror = "";
+
+        if(isset($_GET['param2'])) {
+            $coderror = intval($_GET['param2']);
+        }
+
 
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
@@ -359,7 +365,16 @@ class ControllerIndex extends Controller
 
         $noteType = open_note($note);
 
-        (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType]);
+        if($coderror == 1) {
+            $error = "Le titre doit contenir au moins 3 caractères";
+        } else if ($coderror == 0) {
+            $error = "les items doivent être unique";
+        } else {
+            $error = "";
+        }
+
+
+        (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "coderror" => $coderror, "msgerror" => $error]);
 
     }
 
@@ -378,18 +393,32 @@ class ControllerIndex extends Controller
             //return var_dump($note);
             if ($note) {
 
-                $note->setTitle($_POST['title']);
+                if($note->isPinned()) {
+                    $note->setPinned(1);
+                }
+                if(!empty($_POST['title'])) {
+                    $note->setTitle($_POST['title']);
+                } else {
+                    $note->setTitle(" ");
+                }
+
                 $editDate = new DateTime();
                 $note->setDateTimeEdit($editDate);
                 //return print_r($note);
 
                 $error = $note->validate_checklistnote();
 
+                //return print_r($error);
+
                 if (empty($error)) {
-
                     $note->persist();
-
                     $this->redirect("index", "edit_checklistnote", $idNote);
+                } else {
+                    $coderror = 0;
+                    if(isset($error["title"])) {
+                        $coderror = 1;
+                    }
+                    $this->redirect("index", "edit_checklistnote", $idNote, $coderror);
                 }
             }
         }
@@ -416,10 +445,29 @@ class ControllerIndex extends Controller
         //$idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
-        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
-        $checklistnoteitem->persist();
+        $error = "";
+        $coderror = "";
 
-        $this->redirect("index", "edit_checklistnote", $idNote);
+        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+        $checklistnote = new CheckListNote($idNote);
+        $allItems = $checklistnote->getItems();
+
+        foreach ($allItems as $item) {
+            if(strtolower(trim($item->getContent())) === strtolower($content)) {
+                $errors[] = "Un item avec le même nom existe déjà.";
+                break;
+            }
+        }
+
+
+        if(empty($errors)) {
+            $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+            $checklistnoteitem->persist();
+
+        } else {
+            $this->redirect("index", "edit_checklistnote", $idNote, $coderror);
+        }
+
     }
 
 

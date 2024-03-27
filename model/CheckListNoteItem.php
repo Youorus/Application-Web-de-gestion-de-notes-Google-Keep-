@@ -23,6 +23,7 @@ class CheckListNoteItem extends Model {
         $error = [];
 
 
+
         return $error;
     }
 
