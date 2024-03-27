@@ -21,7 +21,6 @@ abstract class Note extends Model {
 
     public function __construct(
         int $id,
-        $note,
         string $title,
         int $owner,
         DateTime $dateTime,
@@ -31,7 +30,6 @@ abstract class Note extends Model {
         int $weight
     ) {
         $this->id = $id;
-        $this->note = $note;
         $this->title = $title;
         $this->owner = $owner;
         $this->dateTime = $dateTime;
@@ -86,11 +84,20 @@ abstract class Note extends Model {
         return $result;
     }
 
-    public function validate(): array {
-        $error = [];
-        // Validation logique ici si nécessaire
-        return $error;
+    public static function validate(string $title): String {
+        $error = "";
+
+        if(strlen($title) < Configuration::get("title_min_lenght"))
+            $error = "The title must have more than 3 characters";
+        if (strlen($title) > Configuration::get("title_max_lenght"))
+            $error = "the title must have less than 25 characters";
+
+    return $error;
     }
+
+
+
+
 
     public function delete(): void {
         self::execute("DELETE FROM notes WHERE id = :id", ["id" => $this->getId()]);

@@ -35,7 +35,7 @@
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" id="title" class="form-control" value="<?= $title ?>" name="title">
+            <input type="text" id="title_note" class="form-control" value="<?= $title ?>" name="title_note">
             <!-- Section pour afficher les erreurs -->
             <?php if (isset($errors)): ?>
                 <?php foreach ($errors as $error): ?>
@@ -45,7 +45,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Text</label>
-            <textarea class="form-control" id="content" value="<?= $content ?>" rows="10" name="content"><?= $content ?></textarea>
+            <textarea class="form-control" id="content_note" value="<?= $content ?>" rows="10" name="content_note"><?= $content ?></textarea>
 
         </div>
     </div>
