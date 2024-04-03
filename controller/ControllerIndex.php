@@ -338,11 +338,8 @@ class ControllerIndex extends Controller
     public function edit_checklistnote()
     {
         $idNote = intval($_GET['param1']);
-        $coderror = "";
+        $coderror = isset($_GET['param2']) ? intval($_GET['param2']) : null;
 
-        if(isset($_GET['param2'])) {
-            $coderror = intval($_GET['param2']);
-        }
 
 
         $user = $this->get_user_or_redirect();
@@ -364,6 +361,7 @@ class ControllerIndex extends Controller
         $messageEdit = getMessageForDateDifference($actualDate, $editDate);
 
         $noteType = open_note($note);
+
 
         if($coderror == 1) {
             $error = "Le titre doit contenir au moins 3 caractères";
@@ -448,24 +446,19 @@ class ControllerIndex extends Controller
         $error = "";
         $coderror = "";
 
-        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
         $checklistnote = new CheckListNote($idNote);
         $allItems = $checklistnote->getItems();
 
         foreach ($allItems as $item) {
-            if(strtolower(trim($item->getContent())) === strtolower($content)) {
-                $errors[] = "Un item avec le même nom existe déjà.";
-                break;
+            if (strtolower(trim($item->getContent())) === strtolower($content)) {
+                $this->redirect("index", "edit_checklistnote", $idNote, 0);
             }
         }
 
-
-        if(empty($errors)) {
+        if (empty($errors)) {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
-
-        } else {
-            $this->redirect("index", "edit_checklistnote", $idNote, $coderror);
+            $this->redirect("index", "edit_checklistnote", $idNote);
         }
 
     }
