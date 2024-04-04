@@ -8,6 +8,7 @@ enum NoteType {
 }
 
 abstract class Note extends Model {
+
     private ?int $id;
     private string $title;
     private int $owner;
@@ -16,6 +17,7 @@ abstract class Note extends Model {
     private int $pinned;
     private int $archived;
     private int $weight;
+
 
     public function __construct(
         int $id,
@@ -82,11 +84,20 @@ abstract class Note extends Model {
         return $result;
     }
 
-    public function validate(): array {
-        $error = [];
-        // Validation logique ici si nécessaire
-        return $error;
+    public static function validate(string $title): String {
+        $error = "";
+
+        if(strlen($title) < Configuration::get("title_min_lenght"))
+            $error = "The title must have more than 3 characters";
+        if (strlen($title) > Configuration::get("title_max_lenght"))
+            $error = "the title must have less than 25 characters";
+
+    return $error;
     }
+
+
+
+
 
     public function delete(): void {
         self::execute("DELETE FROM notes WHERE id = :id", ["id" => $this->getId()]);

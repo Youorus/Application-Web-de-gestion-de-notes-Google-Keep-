@@ -30,12 +30,6 @@ class CheckListNote extends Note
         parent::delete();
     }
 
-    public function validate(): array
-    {
-        $error = [];
-
-        return $error;
-    }
 
 
     public function persist(): CheckListNote | array  {

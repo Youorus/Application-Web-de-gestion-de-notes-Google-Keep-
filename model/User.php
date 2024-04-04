@@ -126,6 +126,16 @@ class User extends Model{
         return null; // Aucune note trouvée
     }
 
+    public function title_exist(string $title): bool{
+        $query = self::execute("SELECT COUNT(*) FROM notes WHERE notes.owner = :id AND notes.title = :title;", ["id" => $this->id, "title" => $title]);
+        $data = $query->fetch();
+        $result = false;
+        if ($data[0] > 0){
+            $result = true;
+        }
+        return $result;
+    }
+
     public function get_All_shared_notes(int $userShare): array
     {
         $query = self::execute("

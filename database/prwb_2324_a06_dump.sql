@@ -1,6 +1,6 @@
--- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for Win64 (AMD64)
+-- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for osx10.10 (x86_64)
 --
--- Host: 127.0.0.1    Database: prwb_2324_a06
+-- Host: 127.0.0.1    Database: prwb_2324_xyy
 -- ------------------------------------------------------
 -- Server version	10.4.28-MariaDB
 
@@ -16,6 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+
 -- Table structure for table `checklist_note_items`
 --
 
@@ -104,6 +105,7 @@ DROP TABLE IF EXISTS `notes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notes` (
+<<<<<<< HEAD
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(256) NOT NULL,
   `owner` int(11) NOT NULL,
@@ -116,6 +118,22 @@ CREATE TABLE `notes` (
   KEY `fk_notes_users` (`owner`),
   CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+=======
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `title` varchar(256) NOT NULL,
+                         `owner` int(11) NOT NULL,
+                         `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+                         `edited_at` datetime DEFAULT NULL,
+                         `pinned` tinyint(1) NOT NULL DEFAULT 0,
+                         `archived` tinyint(1) NOT NULL DEFAULT 0,
+                         `weight` double NOT NULL DEFAULT 1,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `unique_title_owner` (`title`,`owner`),
+                         UNIQUE KEY `unique_weigh_owner` (`weight`,`owner`),
+                         KEY `fk_notes_users` (`owner`),
+                         CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+>>>>>>> devTest
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +142,11 @@ CREATE TABLE `notes` (
 
 LOCK TABLES `notes` WRITE;
 /*!40000 ALTER TABLE `notes` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',1,1,2),(21,'dddd',1,'2023-10-11 11:51:43','2024-03-21 06:29:58',0,0,0),(22,'Penséess',1,'2023-10-11 11:51:50','2024-03-25 00:32:17',0,0,0),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,5),(24,'Colruyt tartiflettes',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',0,0,0),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',0,0,0),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,1),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,7),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,3),(32,'pense',1,'2024-03-25 00:32:49',NULL,0,0,8);
+=======
+INSERT INTO `notes` VALUES (20,'Note archivée',1,'2023-10-11 11:51:37','2023-11-21 09:18:46',0,1,1),(21,'Code alarme',1,'2023-10-11 11:51:43','2023-11-20 21:33:47',1,0,7),(22,'Pensées',1,'2023-10-11 11:51:50','2023-11-21 09:17:15',1,0,4),(23,'Note avec un long texte',1,'2023-10-11 13:19:30','2023-11-20 21:36:02',0,0,2),(24,'Colruyt tartiflette',1,'2023-10-12 20:16:52','2023-11-20 21:37:12',1,0,6),(25,'Urgent',1,'2023-10-19 21:01:06','2023-11-20 21:34:34',1,0,5),(26,'Netflix password',4,'2023-11-06 23:03:42','2023-11-21 09:20:40',1,0,3),(27,'Courses',4,'2023-11-06 23:04:52','2023-11-21 09:19:34',0,0,2),(28,'Git clean',2,'2023-11-13 15:50:19',NULL,0,0,1),(29,'Prépa EPFC',2,'2023-11-13 16:08:37','2023-11-21 09:22:07',0,0,2),(30,'Note vide',1,'2023-11-20 18:42:04',NULL,0,0,3),(31,'Note archivée',4,'2023-11-21 09:21:07',NULL,0,1,1);
+>>>>>>> devTest
 /*!40000 ALTER TABLE `notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,6 +176,7 @@ INSERT INTO `text_notes` VALUES (20,NULL),(21,'1793'),(22,'La simplicité ne pr�
 UNLOCK TABLES;
 
 --
+
 -- Table structure for table `users`
 --
 
@@ -168,7 +191,19 @@ CREATE TABLE `users` (
   `role` enum('user','admin') NOT NULL DEFAULT 'user',
   PRIMARY KEY (`id`),
   UNIQUE KEY `mail` (`mail`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+=======
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `mail` varchar(256) NOT NULL,
+                         `hashed_password` varchar(512) NOT NULL,
+                         `full_name` varchar(256) NOT NULL,
+                         `role` enum('user','admin') NOT NULL DEFAULT 'user',
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `mail` (`mail`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +212,9 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+
 INSERT INTO `users` VALUES (1,'boverhaegen@epfc.eu','1d60416e7a9f1218b83b0368d6e7f681','Boris','user'),(2,'bepenelle@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Benoît','user'),(3,'xapigeolet@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Xavier','user'),(4,'mamichel@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Marc','user'),(5,'anass10@gmail.com','bf6dd07f264469d8f0f25ad8e3b4643a','Anass','user');
+
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -191,3 +228,6 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-03-25  0:35:38
+
+-- Dump completed on 2024-03-21  6:00:12
+-- Dump completed on 2024-03-04 18:09:57

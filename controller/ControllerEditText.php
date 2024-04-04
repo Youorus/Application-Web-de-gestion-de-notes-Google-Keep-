@@ -52,7 +52,7 @@ class ControllerEditText extends Controller
     {
         // Récupération de l'ID de la note depuis les paramètres de l'URL
         $idNote = intval($_GET['param1']);
-
+        $user = $this->get_user_or_redirect();
         // Initialisation des erreurs
         $errors = [];
 
@@ -61,14 +61,19 @@ class ControllerEditText extends Controller
         $content = '';
 
         // Vérification de l'existence et de la validité des données envoyées en POST
-        if (isset($_POST["title"]) && isset($_POST["content"])) {
-            $title = trim($_POST["title"]);
-            $content = trim($_POST["content"]);
+        if (isset($_POST["title_note"]) && isset($_POST["content_note"])) {
+            $title = trim($_POST["title_note"]);
+            $content = trim($_POST["content_note"]);
 
             // Validation de la longueur du titre
-            if (strlen($title) < 3) {
-                $errors[] = "Le titre doit comporter au moins 3 caractères.";
+
+            $errors[] = TextNote::validate($title);
+
+            if($user->title_exist($title)){
+                $errors[] = "this title is already exist";
             }
+
+
 
             // Si aucune erreur n'est détectée, mise à jour de la note
             if (empty($errors)) {

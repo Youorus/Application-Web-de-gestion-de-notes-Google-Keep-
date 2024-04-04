@@ -71,9 +71,11 @@ class ControllerSettings extends Controller
 
 
 
-    public function edit_profile() {
+    public function edit_profile()
+    {
         $user = $this->get_user_or_redirect();
         $errors = [];
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
@@ -89,27 +91,44 @@ class ControllerSettings extends Controller
             if (empty($newemail)) {
                 $errors[] = "Le champ de l'email ne peut pas être vide.";
             } elseif ($newemail != $user->getMail()) {
-                $emailErrors = User::validate_unicity($newemail);
-                if (!empty($emailErrors)) {
-                    $errors = array_merge($errors, $emailErrors);
-                } else {
-                    $user->setMail($newemail);
-                }
-            }
+                if (isset($_POST['full_name'])) {
+                    $full_name = $_POST['full_name'];
+                    $user_name = $full_name;
 
-            if (empty($errors)) {
-                $user->persist();
-                $this->redirect("settings", "edit_profile");
-                return;
+                    if ($full_name != $user->getName()) {
+                        $user->setName($full_name);
+                        $errors = array_merge($errors, User::validate($full_name));
+                    }
+                }
+
+                if (isset($_POST['email'])) {
+                    $newemail = $_POST['email'];
+                    $user_mail = $newemail;
+
+                    if ($newemail != $user->getMail()) {
+                        $emailErrors = User::validate_unicity($newemail);
+                        if (!empty($emailErrors)) {
+                            $errors = array_merge($errors, $emailErrors);
+                        } else {
+                            $user->setMail($newemail);
+                        }
+                    }
+
+                    if (empty($errors)) {
+                        $user->persist();
+                        $this->redirect("settings", "edit_profile");
+                        return;
+                    }
+                }
+
+                (new View("edit_profile"))->show([
+                    "user" => $user,
+                    "errors" => $errors,
+                    "user_name" => $user->getFullName(),
+                    "user_mail" => $user->getMail(),
+                ]);
             }
         }
-
-        (new View("edit_profile"))->show([
-            "user" => $user,
-            "errors" => $errors,
-            "user_name" => $user->getFullName(),
-            "user_mail" => $user->getMail(),
-        ]);
     }
 
 
