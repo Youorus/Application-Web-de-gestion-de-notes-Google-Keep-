@@ -13,7 +13,7 @@
         <!-- Bouton quelconque -->
         <div class="navbar-icons">
             <!-- save bouton -->
-            <button class="bt-default" type="submit" form="addTextNote">
+            <button class="bt-default" type="submit" form="addChecklistForm">
                 <span class="material-symbols-outlined">save</span>
             </button>
         </div>

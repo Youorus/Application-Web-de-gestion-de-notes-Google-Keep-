@@ -365,7 +365,7 @@ class ControllerIndex extends Controller
 
         if($coderror == 1) {
             $error = "Le titre doit contenir au moins 3 caractères";
-        } else if ($coderror == 0) {
+        } else if ($coderror == 2) {
             $error = "les items doivent être unique";
         } else {
             $error = "";
@@ -410,9 +410,9 @@ class ControllerIndex extends Controller
 
                 if (empty($error)) {
                     $note->persist();
-                    $this->redirect("index", "edit_checklistnote", $idNote);
+                    $this->redirect("index", "edit_checklistnote", $idNote, 0);
                 } else {
-                    $coderror = 0;
+                    $coderror = 2;
                     if(isset($error["title"])) {
                         $coderror = 1;
                     }
@@ -451,14 +451,14 @@ class ControllerIndex extends Controller
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower($content)) {
-                $this->redirect("index", "edit_checklistnote", $idNote, 0);
+                $this->redirect("index", "edit_checklistnote", $idNote, 2);
             }
         }
 
         if (empty($errors)) {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
-            $this->redirect("index", "edit_checklistnote", $idNote);
+            $this->redirect("index", "edit_checklistnote", $idNote, 0);
         }
 
     }

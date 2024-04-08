@@ -55,7 +55,7 @@
                 </form>
             </div>
         <?php endforeach; ?>
-        <?php if($coderror == 0) {
+        <?php if($coderror == 2) {
             echo "$msgerror";
         } ?>
         <div class="my-3">
