@@ -238,7 +238,21 @@ abstract class Note extends Model {
     }
 
     public function setWeight(int $weight): void {
+
+
         $this->weight = $weight;
+    }
+
+    public function getMaxWeight($owner) {
+
+            $query = self::execute("SELECT MAX(weight) as mweight FROM notes  WHERE owner = :owner", ["owner" => $owner]);
+            $data = $query->fetch();
+            $weight = 1;
+            if (sizeof($data) > 0){
+               $weight = $data[0] + 1;
+            }
+            return $weight;
+
     }
 
 

@@ -22,7 +22,7 @@
 
 <body>
 <div class="container position-relative mt-5">
-    <form id="addChecklistForm" action="index/add_checklistnote" method="post" class="bg-dark p-4 rounded">
+    <form id="addChecklistForm" action="Checklistnote/add" method="post" class="bg-dark p-4 rounded">
 
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>

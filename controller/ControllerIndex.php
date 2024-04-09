@@ -110,27 +110,7 @@ class ControllerIndex extends Controller
 
         (new View("text_note"))->show(["title" => $title, "content" => "$content", "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "noteType" => $noteType, "note" => $note]);
     }
-    public function open_checklist_note()
-    {
-        $idNote = intval($_GET['param1']);
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
-        $title = $note->getTitle();
-        $content = $note->getItems();
 
-        $sortedItems = $this->sort_items($content);
-
-        $createDate = $note->getDateTime();
-        $editDate = $note->getDateTimeEdit();
-
-        $messageCreate = $note->getDateTimeCreate()->format('s');
-        $messageEdit = $note->getDateTimeEdit() ? $note->getDateTimeEdit()->format('s') : '';
-
-        $noteType = open_note($note);
-
-        (new View("checklist_note"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "idnote" => $idNote]);
-    }
 
 
 
@@ -159,14 +139,7 @@ class ControllerIndex extends Controller
         //$this->redirect("index", "open_checklist_note");
     }
 
-    private function sort_items(array $items): array
-    {
-        usort($items, function ($a, $b) {
-            return $a->getChecked() <=> $b->getChecked();
-        });
-        return $items;
 
-    }
 
 
     public function share_notes()
