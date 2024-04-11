@@ -3,7 +3,7 @@
 function displayNoteCard($note) {
 $href = ($note->getType() == NoteType::TextNote) ?
 'index/open_text_note/' . $note->getId() :
-'index/open_checkList_note/' . $note->getId();
+'Checklistnote/index/' . $note->getId();
 
 echo '<a href="' . $href . '" class="card-link">';
     echo '<div class="card-body">';

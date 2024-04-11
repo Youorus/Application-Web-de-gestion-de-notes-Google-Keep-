@@ -249,7 +249,7 @@ abstract class Note extends Model {
             $data = $query->fetch();
             $weight = 1;
             if (sizeof($data) > 0){
-               $weight = $data[0] + 1;
+               $weight = $data[0]+ 1;
             }
             return $weight;
 
