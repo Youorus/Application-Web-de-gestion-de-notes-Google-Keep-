@@ -23,12 +23,12 @@
     </div>
 </div>
 
-<div>
-    <?php
-        echo '<h5 class="infoText"> Created ' . $messageCreate . '. Edited ' . $messageEdit . ' </h5>';
-    ?>
-
-</div>
+<!--<div>-->
+<!--    --><?php
+//        echo '<h5 class="infoText"> Created ' . $messageCreate . '. Edited ' . $messageEdit . ' </h5>';
+//    ?>
+<!---->
+<!--</div>-->
 
 
 

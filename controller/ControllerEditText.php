@@ -76,12 +76,11 @@ class ControllerEditText extends Controller
 
 
             // Si aucune erreur n'est détectée, mise à jour de la note
-            if (empty($errors)) {
+            if ($errors) {
                 $note = Note::get_textnote_by_id($idNote);
                 $note->setTitle($title);
                 $note->setContent($content);
                 $note->persist();
-
 
                 // Redirection vers l'index avec l'ID de la note en tant que paramètre
                 $this->redirect("index", "open_text_note", "$idNote");
@@ -97,4 +96,5 @@ class ControllerEditText extends Controller
         ]);
     }
 }
+
 ?>
