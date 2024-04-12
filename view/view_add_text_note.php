@@ -3,39 +3,8 @@
 <?php include "head.php"?>
 
 <script>
-    let title_note, titleError, content_note, contentError;
-
-
-    //je recupere les valeur de mes input en js et je reste focus a mes entré de text
-
-
-    function checkTitle(){
-        titleError.text("");
-        if (title_note.val().length < 3 )
-            titleError.text("The title must have more than 3 characters");
-        if (title_note.val().length > 25)
-            titleError.text("The title must have less than 25 characters");
-    }
-
-    async function checkTitleExist() {
-        const data = await $.post("AddTextNote/validate/", {test: title_note.val()});
-        //console.log(title_note.val());
-        if (data === "true") {
-            titleError.text("This title already exists");
-        }
-    }
-
-    $(function (){
-        title_note = $("#title_note");
-        titleError = $("#titleError");
-        content_note = $("#content_note");
-        contentError = $("#contentError");
-
-        title_note.bind("input", checkTitle);
-        title_note.bind("blur", checkTitleExist);
-
-        $("input:text:first").focus();
-    })
+    const minLenght = <?= $minLenght ?>;
+    const maxLenght = <?= $maxLenght ?>;
 </script>
 
 
@@ -84,14 +53,9 @@
     </div>
 </form>
 
-<!-- Styles pour les messages d'erreur -->
-<style>
-    .error-message {
-        color: red;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-</style>
+
+
+<script src="scripts/text_note_validate.js"></script>
 
 </body>
 </html>

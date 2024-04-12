@@ -20,6 +20,9 @@ class ControllerEditText extends Controller
         // Récupération de l'utilisateur actuel
         $user = $this->get_user_or_redirect();
 
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+
         // Récupération de la date actuelle
         $actualDate = new DateTime();
 
@@ -43,6 +46,8 @@ class ControllerEditText extends Controller
             "title" => $title,
             "content" => $content,
             "messageCreate" => $messageCreate,
+            "minLenght" =>  $minLenght,
+            "maxLenght" =>  $maxLenght,
             "messageEdit" => $messageEdit,
             "note" => $note
         ]);
@@ -55,6 +60,7 @@ class ControllerEditText extends Controller
         $user = $this->get_user_or_redirect();
         // Initialisation des erreurs
         $errors = [];
+
 
         // Initialisation des variables pour le titre et le contenu de la note
         $title = '';
