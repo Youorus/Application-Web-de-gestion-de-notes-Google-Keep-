@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.4.28-MariaDB, for osx10.10 (x86_64)
 --
--- Host: 127.0.0.1    Database: prwb_2324_xyy
+-- Host: 127.0.0.1    Database: prwb_2324_a06
 -- ------------------------------------------------------
 -- Server version	10.4.28-MariaDB
 
@@ -16,7 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
-
 -- Table structure for table `checklist_note_items`
 --
 
@@ -157,7 +156,6 @@ INSERT INTO `text_notes` VALUES (20,NULL),(21,'1793'),(22,'La simplicité ne pr�
 UNLOCK TABLES;
 
 --
-
 -- Table structure for table `users`
 --
 
@@ -165,15 +163,6 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mail` varchar(256) NOT NULL,
-  `hashed_password` varchar(512) NOT NULL,
-  `full_name` varchar(256) NOT NULL,
-  `role` enum('user','admin') NOT NULL DEFAULT 'user',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
                          `id` int(11) NOT NULL AUTO_INCREMENT,
                          `mail` varchar(256) NOT NULL,
                          `hashed_password` varchar(512) NOT NULL,
@@ -190,6 +179,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'boverhaegen@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Boris','user'),(2,'bepenelle@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Benoît','user'),(3,'xapigeolet@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Xavier','user'),(4,'mamichel@epfc.eu','56ce92d1de4f05017cf03d6cd514d6d1','Marc','user');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -202,6 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-
--- Dump completed on 2024-03-21  6:00:12
 -- Dump completed on 2024-03-04 18:09:57

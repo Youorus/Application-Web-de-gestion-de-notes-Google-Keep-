@@ -33,7 +33,7 @@
                     echo ' <span class="material-symbols-outlined"> edit </span>';
                     echo '</a>';
                 }elseif($note->getType() == NoteType::ChecklistNote && $note->isEditor()){
-                    echo '<a href="index/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
+                    echo '<a href="Checklistnote/edit_checklistnote/'. $note->getId() .'" class="icon-link">';
                     echo ' <span class="material-symbols-outlined"> edit </span>';
                     echo '</a>';
                 }

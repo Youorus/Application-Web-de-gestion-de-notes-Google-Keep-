@@ -34,27 +34,34 @@ class ControllerSettings extends Controller
         $user = $this->get_user_or_redirect();
         $errors = [];
         $success = false;
-        $currentpassword = '';
-        $newpassword = '';
-        $confirmpassword = '';
 
-        if (isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['currentpassword'], $_POST['newpassword'], $_POST['confirmpassword'])) {
             $currentpassword = $_POST['currentpassword'];
             $newpassword = $_POST['newpassword'];
             $confirmpassword = $_POST['confirmpassword'];
 
+            // Vérifier si le mot de passe actuel est correct
             if (!$user->verifyPassword($currentpassword)) {
                 $errors[] = "Le mot de passe actuel est incorrect.";
             }
 
+            // Vérifier si le nouveau mot de passe correspond à la confirmation
             if ($newpassword !== $confirmpassword) {
                 $errors[] = "Le nouveau mot de passe et la confirmation ne correspondent pas.";
             }
 
+            // Vérifier si le nouveau mot de passe est différent de l'ancien
+            if ($user->verifyPassword($newpassword)) {
+                $errors[] = "Le nouveau mot de passe doit être différent de l'ancien.";
+            }
+
+            // Si aucune erreur, mettre à jour le mot de passe et rediriger
             if (empty($errors)) {
                 $user->setHashedPassword(Tools::my_hash($newpassword));
                 $user->persist();
-                $success = true;
+                // Redirection vers la page de paramètres
+                $this->redirect("settings");
+                return; // Important pour arrêter l'exécution après la redirection
             }
         }
 
@@ -63,48 +70,68 @@ class ControllerSettings extends Controller
 
 
 
-    public function edit_profile()  {
+
+    public function edit_profile()
+    {
         $user = $this->get_user_or_redirect();
-        $user_name = $user->getFullName();
-        $user_mail = $user->getMail();
         $errors = [];
 
-        if(isset($_POST['full_name'])) {
-            $full_name = $_POST['full_name'];
-            $user_name = $full_name;
 
-            if ($full_name != $user->getName()) {
-                $user->setName($full_name);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $full_name = isset($_POST['full_name']) ? trim($_POST['full_name']) : '';
+            $newemail = isset($_POST['email']) ? trim($_POST['email']) : '';
+
+            if (empty($full_name)) {
+                $errors[] = "Le champ du nom complet ne peut pas être vide.";
+            } elseif ($full_name != $user->getFullName()) {
+                $user->setName($full_name); // Mise à jour temporaire
                 $errors = array_merge($errors, User::validate($full_name));
             }
-        }
 
-        if(isset($_POST['email'])) {
-            $newemail = $_POST['email'];
-            $user_mail = $newemail;
+            if (empty($newemail)) {
+                $errors[] = "Le champ de l'email ne peut pas être vide.";
+            } elseif ($newemail != $user->getMail()) {
+                if (isset($_POST['full_name'])) {
+                    $full_name = $_POST['full_name'];
+                    $user_name = $full_name;
 
-            if($newemail != $user->getMail()) {
-                $emailErrors = User::validate_unicity($newemail);
-                if(!empty($emailErrors)) {
-                    $errors = array_merge($errors, $emailErrors);
-                } else {
-                    $user->setMail($newemail);
+                    if ($full_name != $user->getName()) {
+                        $user->setName($full_name);
+                        $errors = array_merge($errors, User::validate($full_name));
+                    }
                 }
+
+                if (isset($_POST['email'])) {
+                    $newemail = $_POST['email'];
+                    $user_mail = $newemail;
+
+                    if ($newemail != $user->getMail()) {
+                        $emailErrors = User::validate_unicity($newemail);
+                        if (!empty($emailErrors)) {
+                            $errors = array_merge($errors, $emailErrors);
+                        } else {
+                            $user->setMail($newemail);
+                        }
+                    }
+
+                    if (empty($errors)) {
+                        $user->persist();
+                        $this->redirect("settings", "edit_profile");
+                        return;
+                    }
+                }
+
+                (new View("edit_profile"))->show([
+                    "user" => $user,
+                    "errors" => $errors,
+                    "user_name" => $user->getFullName(),
+                    "user_mail" => $user->getMail(),
+                ]);
             }
         }
-
-        if (count($_POST) > 0 && count($errors) == 0) {
-            $user->persist_mail();
-            $this->redirect("settings", "edit_profile");
-        }
-
-        (new View("edit_profile"))->show([
-            "user" => $user,
-            "errors" => $errors,
-            "user_name" => $user_name,
-            "user_mail" => $user_mail,
-        ]);
     }
+
+
 
     public function logoutUser(): void
     {

@@ -38,10 +38,12 @@ CREATE TABLE IF NOT EXISTS `notes` (
     `pinned` boolean NOT NULL DEFAULT FALSE,
     `archived` boolean NOT NULL DEFAULT FALSE,
     `weight` double NOT NULL DEFAULT 1,
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `notes` ADD CONSTRAINT `fk_notes_users` FOREIGN KEY (`owner`) REFERENCES `users`(`id`);
+ALTER TABLE `notes` ADD CONSTRAINT `unique_title_owner` UNIQUE (`title`, `owner`);
+ALTER TABLE `notes` ADD CONSTRAINT `unique_weigh_owner` UNIQUE (`weight`, `owner`);
 
 DROP TABLE IF EXISTS `note_shares`;
 CREATE TABLE IF NOT EXISTS `note_shares` (
@@ -83,3 +85,6 @@ CREATE TABLE IF NOT EXISTS `checklist_note_items` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `checklist_note_items` ADD CONSTRAINT `fkchecklist_note_items_checklist_notes` FOREIGN KEY (`checklist_note`) REFERENCES `checklist_notes`(`id`);
+
+
+
