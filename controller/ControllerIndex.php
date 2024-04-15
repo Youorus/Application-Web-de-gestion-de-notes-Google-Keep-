@@ -6,16 +6,16 @@ require_once "model/CheckListNoteItem.php";
 require_once "model/NoteShare.php";
 
 
- function open_note(Note $note): string{
-    $type = "normal";
-    if ($note->isArchived())
-        $type = "archived";
-    elseif ($note->isShared())
-        $type = "share";
+ function open_note(Note $note): string
+ {
+     $type = "normal";
+     if ($note->isArchived())
+         $type = "archived";
+     elseif ($note->isShared())
+         $type = "share";
 
-    return $type;
-}
-
+     return $type;
+ }
 
 
 
@@ -24,6 +24,50 @@ require_once "model/NoteShare.php";
 class ControllerIndex extends Controller
 {
 
+    private function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
+    {
+        // Vérifier si la date de comparaison est nulle
+        if ($compareDate === null) {
+            return "Not yet";
+        }
+
+        // Calcul de la différence entre les dates
+        $interval = $referenceDate->diff($compareDate);
+
+        // Vérifier si la date de comparaison est dans le passé
+        if ($interval->invert === 0) {
+            // Si la différence est inférieure à une minute
+            if ($interval->s < 60) {
+                return "Just now";
+            }
+            // Si la différence est inférieure à une heure
+            if ($interval->i < 60) {
+                return "About " . $interval->i . " minutes ago";
+            }
+            // Si la différence est inférieure à un jour
+            if ($interval->h < 24) {
+                return "About " . $interval->h . " hours ago";
+            }
+            // Si la différence est inférieure à une semaine
+            if ($interval->d < 7) {
+                return "About " . $interval->d . " days ago";
+            }
+            // Si la différence est inférieure à un mois
+            if ($interval->m < 1) {
+                return "About " . floor($interval->d / 7) . " weeks ago";
+            }
+            // Si la différence est inférieure à un an
+            if ($interval->y < 1) {
+                return "About " . $interval->m . " months ago";
+            }
+            // Si la différence est supérieure ou égale à un an
+            return "About " . $interval->y . " years ago";
+        } else {
+            // Si la date de comparaison est dans le futur
+            // Utilisez simplement une chaîne vide pour indiquer une date future
+            return "";
+        }
+    }
     public function index(): void
     {
         $user = $this->get_user_or_redirect();
@@ -58,8 +102,8 @@ class ControllerIndex extends Controller
         $content = $note->getContent();
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
+        $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
 
         $noteType = open_note($note);
 

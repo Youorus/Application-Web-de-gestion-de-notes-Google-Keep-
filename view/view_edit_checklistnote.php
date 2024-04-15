@@ -85,7 +85,7 @@ $("#title").on("blur", function (){
     var title = $(this).val();
     console.log(title);
 })
-/*
+
     $("form[name='editchecklistnote']").validate({
         rules: {
             title: {
@@ -115,7 +115,7 @@ $("#title").on("blur", function (){
 
     });
 });
-*/
+
 </script>
 </body>
 </html>

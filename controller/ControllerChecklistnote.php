@@ -9,7 +9,7 @@ require_once "model/NoteShare.php";
 
 class ControllerChecklistnote extends Controller {
 
-    private function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
+    protected function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
     {
         // Vérifier si la date de comparaison est nulle
         if ($compareDate === null) {
@@ -249,13 +249,13 @@ class ControllerChecklistnote extends Controller {
 
                 if (empty($error)) {
                     $note->persist();
-                    $this->redirect("Checklistnote", "edit_checklistnote", $idNote, 0);
+                    $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
                 } else {
                     $coderror = 2;
                     if(isset($error["title"])) {
                         $coderror = 1;
                     }
-                    $this->redirect("Checklistnote", "edit_checklistnote", $idNote, $coderror);
+                    $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", "$coderror");
                 }
             }
         }
@@ -274,7 +274,7 @@ class ControllerChecklistnote extends Controller {
         $checklistnoteitem->delete_item();
 
 
-        $this->redirect("index", "edit_checklistnote", $idNote);
+        $this->redirect("Checklistnote", "edit_checklistnote", "$idNote");
     }
 
     public function add_item()
@@ -290,14 +290,14 @@ class ControllerChecklistnote extends Controller {
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower($content)) {
-                $this->redirect("index", "edit_checklistnote", $idNote, 2);
+                $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 2);
             }
         }
 
         if (empty($errors)) {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
-            $this->redirect("index", "edit_checklistnote", $idNote, 0);
+            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
         }
 
     }
@@ -321,7 +321,7 @@ class ControllerChecklistnote extends Controller {
 
         }
 
-        $this->redirect("Checklistnote", "index" . $idNote);
+        $this->redirect("Checklistnote", "index", "$idNote");
 
         //$this->redirect("index", "open_checklist_note");
     }
