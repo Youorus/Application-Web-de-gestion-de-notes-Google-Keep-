@@ -20,6 +20,9 @@ class ControllerEditText extends Controller
         // Récupération de l'utilisateur actuel
         $user = $this->get_user_or_redirect();
 
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+
         // Récupération de la date actuelle
         $actualDate = new DateTime();
 
@@ -43,6 +46,8 @@ class ControllerEditText extends Controller
             "title" => $title,
             "content" => $content,
             "messageCreate" => $messageCreate,
+            "minLenght" =>  $minLenght,
+            "maxLenght" =>  $maxLenght,
             "messageEdit" => $messageEdit,
             "note" => $note
         ]);
@@ -55,6 +60,7 @@ class ControllerEditText extends Controller
         $user = $this->get_user_or_redirect();
         // Initialisation des erreurs
         $errors = [];
+
 
         // Initialisation des variables pour le titre et le contenu de la note
         $title = '';
@@ -76,12 +82,11 @@ class ControllerEditText extends Controller
 
 
             // Si aucune erreur n'est détectée, mise à jour de la note
-            if (empty($errors)) {
+            if ($errors) {
                 $note = Note::get_textnote_by_id($idNote);
                 $note->setTitle($title);
                 $note->setContent($content);
                 $note->persist();
-
 
                 // Redirection vers l'index avec l'ID de la note en tant que paramètre
                 $this->redirect("index", "open_text_note", "$idNote");
@@ -97,4 +102,5 @@ class ControllerEditText extends Controller
         ]);
     }
 }
+
 ?>
