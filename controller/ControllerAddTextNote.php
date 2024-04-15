@@ -13,6 +13,9 @@ class ControllerAddTextNote extends Controller
         $content_note = '';
         $idnote = "";
 
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+
         if (isset($_POST["title_note"]) && isset($_POST["content_note"])) {
             $title_note = trim($_POST["title_note"]);
             $content_note = trim($_POST["content_note"]);
@@ -42,7 +45,7 @@ class ControllerAddTextNote extends Controller
         }
 
         // Affichage de la vue avec les erreurs
-        (new View("add_text_note"))->show(["errors" => $errors, "title_note" => $title_note, "content_note" => $content_note]);
+        (new View("add_text_note"))->show(["errors" => $errors, "title_note" => $title_note, "content_note" => $content_note, "minLenght" =>  $minLenght, "maxLenght" =>  $maxLenght]);
     }
 
 //    public function add_text_note(): void
