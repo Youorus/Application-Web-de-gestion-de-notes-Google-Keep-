@@ -7,16 +7,7 @@
 
 
     //je recupere les valeur de mes input en js et je reste focus a mes entré de text
-    $(function (){
-        title_note = $("#title_note");
-        titleError = $("#titleError");
-        content_note = $("#content_note");
-        contentError = $("#contentError");
 
-        title_note.bind("input", checkTitle);
-
-        $("input:text:first").focus();
-    })
 
     function checkTitle(){
         titleError.text("");
@@ -26,20 +17,31 @@
             titleError.text("The title must have less than 25 characters");
     }
 
-    // async  function checkTitle() {
-    //
-    //     const data = await $.getJSON("addtextnote/validate/" + title_note.val())
-    //     if (data) {
-    //         titleError.text("");
-    //     }
-    // }
+    async function checkTitleExist() {
+        const data = await $.post("AddTextNote/validate/", {test: title_note.val()});
+        //console.log(title_note.val());
+        if (data === "true") {
+            titleError.text("This title already exists");
+        }
+    }
 
+    $(function (){
+        title_note = $("#title_note");
+        titleError = $("#titleError");
+        content_note = $("#content_note");
+        contentError = $("#contentError");
+
+        title_note.bind("input", checkTitle);
+        title_note.bind("blur", checkTitleExist);
+
+        $("input:text:first").focus();
+    })
 </script>
 
 
 <body>
 
-<form id="addTextNote" method="POST" action="AddTextNote/add_text_note">
+
 
 <div class="navbar navbar-dark bg-dark fixed">
     <div class="container">
@@ -60,11 +62,12 @@
     </div>
 </div>
 
+<form id="addTextNote" method="POST" action="AddTextNote">
 
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" id="title_note" class="form-control" value="<?= isset($title_note) ? $title_note : '' ?>" name="title_note">
+            <input type="text" id="title_note" class="form-control" value="<?= trim($title_note) ?>" name="title_note">
             <h2 class="error-text" id="titleError"></h2>
             <!-- Section pour afficher les erreurs -->
             <?php if (isset($errors)): ?>
@@ -75,7 +78,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Text</label>
-            <textarea class="form-control" id="content_note" value="<?= isset($content_note) ? $content_note : '' ?>" rows="10" name="content_note"></textarea>
+            <textarea class="form-control" id="content_note" value="<?= $content_note ?>" rows="10" name="content_note"></textarea>
             <h2 class="error-text" id="contentError"></h2>
         </div>
     </div>
