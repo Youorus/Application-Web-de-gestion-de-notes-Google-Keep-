@@ -118,6 +118,26 @@ class ControllerIndex extends Controller
 
 
 
+    public function decrementWeight(): void {
+        $user = $this->get_user_or_redirect();
+
+        if (isset($_POST["leftButton"]) && isset($POST["previousNote"])) {
+            var_dump($_POST["leftButton"]);
+            var_dump($POST["previousNote"]);
+        }
+    }
+
+    public function incrementWeight(): void {
+        $user = $this->get_user_or_redirect();
+
+        if (isset($_POST["rightButton"]) && isset($POST["previousNote"])) {
+            var_dump($_POST["rightButton"]);
+            var_dump($POST["previousNote"]);
+        }
+    }
+
+
+
 
     public function share_notes()
     {

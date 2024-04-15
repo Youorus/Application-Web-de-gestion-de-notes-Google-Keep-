@@ -90,6 +90,7 @@ class ControllerAddTextNote extends Controller
 //    }
 
 
+
     public function validate(): void{
         $user = $this->get_user_or_redirect();
         $res = "false";
