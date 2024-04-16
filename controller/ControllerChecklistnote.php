@@ -185,46 +185,47 @@ class ControllerChecklistnote extends Controller {
         $idNote = intval($_GET['param1']);
         $coderror = isset($_GET['param2']) ? intval($_GET['param2']) : null;
 
-
-
-        $minLenght = Configuration::get("title_min_lenght");
-        $maxLenght = Configuration::get("title_max_lenght") ;
-        $minItemLenght = Configuration::get("item_min_length") ;
-        $maxItemLenght = Configuration::get("item_max_length") ;
+        $minLength = Configuration::get("title_min_lenght");
+        $maxLength = Configuration::get("title_max_lenght");
+        $minItemLength = Configuration::get("item_min_length");
+        $maxItemLength = Configuration::get("item_max_length");
 
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
         $actualDate = new DateTime();
         $title = $note->getTitle();
-
-        if (isset($_POST['title'])) {
-            return print_r($_POST);
-        }
         $content = $note->getItems();
-
         $sortedItems = $this->sort_items($content);
-
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
-
         $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
-
         $noteType = $this->open_note($note);
 
-
+        $error = "";
         if($coderror == 1) {
             $error = "Le titre doit contenir au moins 3 caractères";
-        } else if ($coderror == 2) {
-            $error = "les items doivent être unique";
-        } else {
-            $error = "";
+        } elseif ($coderror == 2) {
+            $error = "Les items doivent être uniques";
         }
 
-
-        (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "coderror" => $coderror, "msgerror" => $error]);
-
+        // Passer les variables à la vue
+        (new View("edit_checklistnote"))->show([
+            "title" => $title,
+            "content" => $sortedItems,
+            "messageCreate" => $messageCreate,
+            "messageEdit" => $messageEdit,
+            "note" => $note,
+            "noteType" => $noteType,
+            "coderror" => $coderror,
+            "msgerror" => $error,
+            "minLength" => $minLength,         
+            "maxLength" => $maxLength,
+            "minItemLength" => $minItemLength,
+            "maxItemLength" => $maxItemLength
+        ]);
     }
+
 
 
 
