@@ -2,7 +2,6 @@ let title_note, titleError, itemsArray, itemError;
 
 function checkTitle() {
     titleError.text("");
-
     if (title_note < minLenght) {
         titleError.text("The title must have more than " + minLenght + " characters");
     } else if (title_note > maxLenght) {
@@ -34,14 +33,14 @@ function collectItems() {
 
 function checkItem() {
     itemError.text("");
-    let currentItemValue = item.val().trim();
+    let currentItemValue = itemcontent.val().trim();
 
-    if (currentItemValue.length < config.itemMinLength) {
-        itemError.text("Item must have at least " + config.itemMinLength + " characters.");
+    if (currentItemValue.length < minItemlenght) {
+        itemError.text("Item must have at least " + minLenght + " characters.");
         return;
     }
-    if (currentItemValue.length > config.itemMaxLength) {
-        itemError.text("Item must have less than " + config.itemMaxLength + " characters.");
+    if (currentItemValue.length > maxItemLenght) {
+        itemError.text("Item must have less than " + maxItemLenght + " characters.");
         return;
     }
 
