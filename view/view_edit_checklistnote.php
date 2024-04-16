@@ -27,6 +27,8 @@
 <div class="open-text">
     <label class="form-label">Title</label>
     <input id="title" name="title" type="text" class="form-control"  value="<?= $title ?>">
+    <h2 class="error-text" id="titleError"></h2>
+
     <?php if($coderror == 1) {
         echo "$msgerror";
     } ?>
@@ -42,8 +44,8 @@
                         <div class="input-group-text">
                             <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" disabled>
                         </div>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox" >
-                        <input type="hidden" name="item_id" value="<?= $item->getId(); ?>">
+                        <input type="text" id="itemcontent" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
+                        <input type="hidden" id="item_id" name="item_id" value="<?= $item->getId(); ?>">
                     </div>
                 </form>
                 <form action="Checklistnote/delete_item" method="post">
@@ -54,9 +56,11 @@
                     </button>
                 </form>
             </div>
+            <h2 class="error-text" id="itemError"></h2>
         <?php endforeach; ?>
         <?php if($coderror == 2) {
             echo "$msgerror";
+
         } ?>
         <div class="my-3">
             <label class="form-label">New Items</label>
@@ -75,47 +79,31 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.js"></script>
 
-<script type="text/javascript">
-console.log("hello");
+<script src="scripts/checklist_note_validate.js"></script>
 
-$("#title").on("blur", function (){
-    var title = $(this).val();
-    console.log(title);
-})
 
-    $("form[name='editchecklistnote']").validate({
-        rules: {
-            title: {
-                minLength: 3,
-                maxLength: 25,
-                required: true
+<script>
+    /*
+    $(document).ready(function() {
+        let titleInput = $("#title");
+        let titleError = $("#titleError");
+
+        function checkTitleLength() {
+            let titleLength = titleInput.val().trim().length;
+            if (titleLength < 3) {
+                titleError.text("Le titre doit contenir au moins 3 caractères.");
+            } else {
+                titleError.empty(); // Utilisez .empty() pour effacer le contenu
             }
-
-        },
-        // On définit ici les messages d'erreur propre à chaque champ
-        messages: {
-            title: "title must be between 3 and 25"
-        },
-        submitHandler: function(form) {
-            $.ajax({
-                type: "POST",
-                url: "index/editchecklistnote", // on envoie le tout dans la moulinette php du fichier form-process.php pour l'envoi du message
-                data: "title=" + title,
-                success : function(text){
-                    if (text == "success"){ //si c'est ok, applique la fonction formSuccess
-                        formSuccess();
-                    }
-                }
-            });
         }
 
-
+        titleInput.on("input", checkTitleLength);
     });
-});
-
+    
+     */
 </script>
+
+
 </body>
 </html>

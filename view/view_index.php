@@ -28,7 +28,7 @@ include "utils/navbar.php";
 
 <div class="fixed-icons">
     <a href="AddTextNote"> <i class="fa-regular fa-file"> </i></a>
-    <a href="Checklistnote/index"> <i class="fa-solid fa-list-check"></i></a>
+    <a href="Checklistnote/form"> <i class="fa-solid fa-list-check"></i></a>
 
 </div>
 

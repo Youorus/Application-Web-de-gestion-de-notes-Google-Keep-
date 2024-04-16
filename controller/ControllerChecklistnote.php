@@ -225,6 +225,9 @@ class ControllerChecklistnote extends Controller {
             $user = $this->get_user_or_redirect();
             $ownerId = $user->getId();
 
+            $minLenght = Configuration::get("title_min_lenght");
+            $maxLenght = Configuration::get("title_max_lenght") ;
+
             $note = $user->get_One_note_by_id($idNote);
             $note->setOwner($ownerId);
             //return var_dump($note);
@@ -324,6 +327,16 @@ class ControllerChecklistnote extends Controller {
         $this->redirect("Checklistnote", "index", "$idNote");
 
         //$this->redirect("index", "open_checklist_note");
+    }
+
+    public function validate(): void{
+        $user = $this->get_user_or_redirect();
+        $res = "false";
+        if (isset($_POST["test"])){
+            if($user->title_exist($_POST["test"]))
+                $res = "true";
+        }
+        echo $res;
     }
 
 
