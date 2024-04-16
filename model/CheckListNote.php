@@ -33,14 +33,21 @@ class CheckListNote extends Note
 
 
     public function persist(): CheckListNote | array  {
+        // Vérifier si la note parente existe dans la table 'notes'
+        if (!parent::get_checklistnote_by_id($this->getId())) {
+            // Si la note parente n'existe pas, retourner une erreur
+            return ['error' => 'Parent note does not exist.'];
+        }
+        $lastWeight = parent::getLastWeightNote();
+
         if (self::get_checklistnote_by_id($this->getId())) {
-            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
-                           edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
-                           WHERE id = :id",
+            // Si la note checklist existe, mettre à jour les données
+            self::execute("UPDATE notes SET title = :title, created_at = :createdAt, 
+                       edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
+                       WHERE id = :id",
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitle(),
-                    'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
                     'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
@@ -48,28 +55,32 @@ class CheckListNote extends Note
                     'weight' => $this->getWeight()
                 ]);
         } else {
+            // Sinon, insérer une nouvelle note checklist et lier à la note parente
             self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
-                           VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
-                    'title' => $this->getTitle(),
+                    'title' => $this->getTitleNote(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
                     'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
+                    'weight' => $lastWeight + 1
                 ]);
             $this->id = self::lastInsertId();
             self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
                 ['id' => $this->id]);
         }
+
+        // Persister les éléments de la checklist en utilisant l'ID de la note parente
         foreach ($this->getItems() as $item) {
-            $item->setChecklistNote($this->id);
+            $item->setChecklistNote($this->getId());
             $item->persist();
         }
 
         return $this;
     }
+
 
 
 

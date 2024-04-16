@@ -142,6 +142,9 @@ abstract class Note extends Model {
 
 
 
+
+
+
     public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
         $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
         $data = $query->fetch(); // un seul résultat au maximum
@@ -150,6 +153,16 @@ abstract class Note extends Model {
         } else {
             return new CheckListNote($data["id"]);
         }
+    }
+
+    public  function getLastWeightNote(): int {
+        $query = self::execute("SELECT MAX(weight) AS last_weight FROM notes", []);
+        $data = $query->fetchAll();
+        $results = "";
+        foreach ($data as $row){
+            $results = $row['last_weight'];
+        }
+        return $results;
     }
 
 
@@ -208,6 +221,8 @@ abstract class Note extends Model {
         }
         return $results;
     }
+
+
 
     public function setId(int $id): void {
         $this->id = $id;

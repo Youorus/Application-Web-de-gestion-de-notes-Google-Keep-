@@ -102,7 +102,7 @@ $("#title").on("blur", function (){
         submitHandler: function(form) {
             $.ajax({
                 type: "POST",
-                url: "index/editchecklistnote", // on envoie le tout dans la moulinette php du fichier form-process.php pour l'envoi du message
+                url: "Checklistnote/editchecklistnote", // on envoie le tout dans la moulinette php du fichier form-process.php pour l'envoi du message
                 data: "title=" + title,
                 success : function(text){
                     if (text == "success"){ //si c'est ok, applique la fonction formSuccess

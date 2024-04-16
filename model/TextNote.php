@@ -54,10 +54,10 @@ class TextNote extends Note {
 
 
         // Vérifier si la note existe déjà dans la base de données
-        if (!parent::get_textnote_by_id($this->getId())) {
+        if (parent::get_textnote_by_id($this->getId()) !== false) {
             // Si la note n'existe pas, l'insérer dans la base de données
 
-            $lastWeight = self::getLastWeightNote();
+            $lastWeight = parent::getLastWeightNote();
 
             // Insérer une nouvelle note dans 'notes'
             parent::execute(
@@ -85,14 +85,16 @@ class TextNote extends Note {
 
             // Mettre à jour la note existante dans 'notes'
             parent::execute(
-                "UPDATE notes SET title = :title, edited_at = :editedAt, 
-            pinned = :pinned, archived = :archived WHERE id = :id",
+                "UPDATE notes SET title = :title, edited_at = :editedAt, owner = :owner,
+            pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitleNote(),
+                    'owner' => $this->getOwner(),
                     'editedAt' => $currentDateTime->format('Y-m-d H:i:s'), // Mise à jour de la date de modification
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
+                    'weight' => $this->getWeight()
                 ]
             );
 
@@ -134,15 +136,7 @@ class TextNote extends Note {
         return  NoteType::TextNote;
     }
 
-    public  function getLastWeightNote(): int {
-        $query = self::execute("SELECT MAX(weight) AS last_weight FROM notes", []);
-        $data = $query->fetchAll();
-        $results = "";
-        foreach ($data as $row){
-            $results = $row['last_weight'];
-        }
-        return $results;
-    }
+
 
 
     public static function geteditDateTime(int $id): string|null{

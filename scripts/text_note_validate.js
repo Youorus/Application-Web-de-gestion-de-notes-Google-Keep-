@@ -6,9 +6,9 @@
 
     function checkTitle(){
     titleError.text("");
-    if (title_note.val().length < 3 )
+    if (title_note.val().length < minLenght )
     titleError.text("The title must have more than " + minLenght + " characters");
-    if (title_note.val().length > 25)
+    if (title_note.val().length > maxLenght)
     titleError.text("The title must have less than " + maxLenght + " characters");
 }
 
@@ -23,7 +23,6 @@
 
     async function checkTitleExist() {
     const data = await $.post("AddTextNote/validate/", {test: title_note.val()});
-    //console.log(title_note.val());
     if (data === "true") {
     titleError.text("This title already exists");
 }
