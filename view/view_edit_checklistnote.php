@@ -37,6 +37,7 @@
 </form>
     <div class="checklist-items">
         <label class="form-label">Items</label>
+        <script> console.log("hello")</script>
         <?php foreach ($content as $item): ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form action="Checklistnote/check_uncheck" method="post" class="flex-grow-1 me-2">
@@ -84,6 +85,16 @@
 
 
 <script>
+
+        var config = {
+        itemMinLength: <?= ini_get('item_min_length') ?>,
+        itemMaxLength: <?= ini_get('item_max_length') ?>,
+        titleMinLength: <?= ini_get('title_min_lenght') ?>,
+        titleMaxLength: <?= ini_get('title_max_lenght') ?>
+        };
+
+</script>
+<script>
     /*
     $(document).ready(function() {
         let titleInput = $("#title");
@@ -120,7 +131,7 @@
 
         titleInput.on("input", checkTitleLength);
     });
-    
+
      */
 </script>
 
