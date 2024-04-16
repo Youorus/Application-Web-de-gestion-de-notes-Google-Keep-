@@ -2,6 +2,13 @@
 <html lang="en">
 <?php include "head.php"?>
 
+<script>
+    const minLenght = <?= $minLenght ?>;
+    const maxLenght = <?= $maxLenght ?>;
+    const minItemlenght = <?= $minItemLenght ?>
+    const maxItemLenght = <?= $maxItemLenght ?>
+
+</script>
 
 <div class="navbar navbar-dark bg-dark fixed">
     <div class="container">
@@ -37,7 +44,6 @@
 </form>
     <div class="checklist-items">
         <label class="form-label">Items</label>
-        <script> console.log("hello")</script>
         <?php foreach ($content as $item): ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form action="Checklistnote/check_uncheck" method="post" class="flex-grow-1 me-2">
@@ -69,7 +75,7 @@
                 <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">
                     <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
                     <div class="input-group">
-                        <input type="text" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
+                        <input type="text" id="itemcontent" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
                         <button class="btn add-btn" type="submit" aria-label="Add">
                             <i class="bi bi-plus-lg"></i>
                             <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
@@ -84,16 +90,7 @@
 <script src="scripts/checklist_note_validate.js"></script>
 
 
-<script>
 
-        var config = {
-        itemMinLength: <?= ini_get('item_min_length') ?>,
-        itemMaxLength: <?= ini_get('item_max_length') ?>,
-        titleMinLength: <?= ini_get('title_min_lenght') ?>,
-        titleMaxLength: <?= ini_get('title_max_lenght') ?>
-        };
-
-</script>
 <script>
     /*
     $(document).ready(function() {

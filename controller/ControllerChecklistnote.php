@@ -72,6 +72,12 @@ class ControllerChecklistnote extends Controller {
         $title = $note->getTitle();
         $content = $note->getItems();
 
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+        $minItemLenght = Configuration::get("item_min_length") ;
+        $maxItemLenght = Configuration::get("item_max_length") ;
+
+
         $sortedItems = $this->sort_items($content);
 
         $createDate = $note->getDateTime();
@@ -180,6 +186,11 @@ class ControllerChecklistnote extends Controller {
         $coderror = isset($_GET['param2']) ? intval($_GET['param2']) : null;
 
 
+
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+        $minItemLenght = Configuration::get("item_min_length") ;
+        $maxItemLenght = Configuration::get("item_max_length") ;
 
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
