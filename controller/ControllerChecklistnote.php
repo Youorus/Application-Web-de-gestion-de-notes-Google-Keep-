@@ -9,7 +9,7 @@ require_once "model/NoteShare.php";
 
 class ControllerChecklistnote extends Controller {
 
-    protected function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
+    private function getMessageForDateDifference(DateTime $referenceDate, ?DateTime $compareDate): string
     {
         // Vérifier si la date de comparaison est nulle
         if ($compareDate === null) {
@@ -325,6 +325,11 @@ class ControllerChecklistnote extends Controller {
 
         //$this->redirect("index", "open_checklist_note");
     }
+
+
+
+
+
 
 
 
