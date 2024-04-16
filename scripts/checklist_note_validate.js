@@ -3,10 +3,10 @@ let title_note, titleError, itemsArray, itemError;
 function checkTitle() {
     titleError.text("");
 
-    if (title_note < config.titleMinLength) {
-        titleError.text("The title must have more than " + config.titleMinLength + " characters");
-    } else if (title_note > config.titleMaxLength) {
-        titleError.text("The title must have less than " + config.titleMaxLength + " characters");
+    if (title_note < minLenght) {
+        titleError.text("The title must have more than " + minLenght + " characters");
+    } else if (title_note > maxLenght) {
+        titleError.text("The title must have less than " + maxLenght + " characters");
     }
 }
 
