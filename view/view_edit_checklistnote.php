@@ -37,26 +37,25 @@
 </form>
     <div class="checklist-items">
         <label class="form-label">Items</label>
-        <?php foreach ($content as $item): ?>
+        <?php foreach ($content as $index => $item): ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form action="Checklistnote/check_uncheck" method="post" class="flex-grow-1 me-2">
                     <div class="input-group">
                         <div class="input-group-text">
                             <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" disabled>
                         </div>
-                        <input type="text"  class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
-                        <input type="hidden" id="item_id" name="item_id" value="<?= $item->getId(); ?>">
+                        <input type="text" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
+                        <input type="hidden" class="item-id" name="item_id[]" value="<?= $item->getId(); ?>">
                     </div>
                 </form>
                 <form action="Checklistnote/delete_item" method="post">
-                    <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
-                    <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
+                    <input type="hidden" class="item-id" name="id_item" value="<?= $item->getId(); ?>">
                     <button class="btn delete-btn" type="submit" aria-label="Delete">
                         <i class="bi bi-dash-lg"></i>
                     </button>
                 </form>
             </div>
-            <h2 class="error-text item-error"> </h2>
+             <!-- Class instead of ID for error message -->
         <?php endforeach; ?>
         <?php if($coderror == 2) {
             echo "$msgerror";
@@ -69,6 +68,7 @@
                     <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
                     <div class="input-group">
                         <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
+                        <h2 class="error-text item-error"></h2>
                         <button class="btn add-btn" type="submit" aria-label="Add">
                             <i class="bi bi-plus-lg"></i>
                             <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
@@ -81,71 +81,48 @@
 </div>
 
 
-
-
 <script>
     $(function () {
-        // Configuration des sélecteurs
         let titleInput = $("#title");
         let titleError = $("#titleError");
-        let itemInput = $("#itemcontent"); // Assurez-vous que cet ID est unique ou utilisez une classe si plusieurs inputs.
-        let itemError = $("#itemError");
+        let itemInputs = $("#content"); // Utilise la classe au lieu de l'ID
+        let itemErrors = $(".item-error"); // Utilise la classe pour les messages d'erreur
 
-        // Les valeurs de configuration devraient être injectées dans la vue et disponibles ici
-        const minLength = <?= $minLength ?>; // Assurez-vous que ces valeurs sont correctement injectées
+        // Les valeurs de configuration
+        const minLength = <?= $minLength ?>;
         const maxLength = <?= $maxLength ?>;
         const minItemLength = <?= $minItemLength ?>;
         const maxItemLength = <?= $maxItemLength ?>;
 
-        // Fonction pour vérifier la longueur du titre
         function checkTitle() {
             let titleLength = titleInput.val().trim().length;
+            titleError.text("");
             if (titleLength < minLength) {
                 titleError.text("The title must have more than " + minLength + " characters");
             } else if (titleLength > maxLength) {
                 titleError.text("The title must have less than " + maxLength + " characters");
-            } else {
-                titleError.text(""); // Effacer le texte d'erreur si la condition est satisfaite
             }
         }
 
-        // Fonction pour vérifier la longueur et l'unicité de l'item
-        function checkItem() {
-            let itemValue = itemInput.val().trim();
-            if (itemValue.length < minItemLength) {
-                itemError.text("Item must have at least " + minItemLength + " characters.");
-                return;
-            } else if (itemValue.length > maxItemLength) {
-                itemError.text("Item must have less than " + maxItemLength + " characters.");
-                return;
-            }
-
-            // Collecte et vérification de l'unicité des items
-            let itemsArray = collectItems();
-            if (itemsArray.includes(itemValue)) {
-                itemError.text("Il ne peut pas y avoir 2 items ou plus du même nom.");
-            } else {
-                console.log("L'item peut être ajouté."); // Pour le débogage
-                itemError.text(""); // Effacer l'erreur
-            }
-        }
-
-        // Collecter les valeurs des items existants
-        function collectItems() {
-            let items = [];
-            $('.item-content').each(function () {
-                let value = $(this).val().trim();
-                if (value) items.push(value);
+        function checkItems() {
+            itemInputs.each(function(index) {
+                let itemInput = $(this);
+                let itemValue = itemInput.val().trim();
+                let itemError = itemErrors.eq(index); // Sélectionne le message d'erreur correspondant
+                itemError.text("");
+                if (itemValue.length < minItemLength) {
+                    itemError.text("Item must have at least " + minItemLength + " characters.");
+                } else if (itemValue.length > maxItemLength) {
+                    itemError.text("Item must have less than " + maxItemLength + " characters.");
+                }
             });
-            return items;
         }
 
-        // Attachement des gestionnaires d'événements
         titleInput.on("input", checkTitle);
-        itemInput.on("input", checkItem);
+        itemInputs.on("input", checkItems); // Attache l'événement à chaque input d'item
     });
-
 </script>
+
 
 
 </body>
