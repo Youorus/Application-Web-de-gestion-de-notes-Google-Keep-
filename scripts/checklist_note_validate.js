@@ -56,7 +56,7 @@ function checkItem() {
 $(function () {
     title_note = $("#title");
     titleError = $("#titleError");
-    content_note = $("#itemcontent");
+    contentItem = $("#itemcontent");
     contentError = $("#itemError");
 
     title_note.bind("input", checkTitle);

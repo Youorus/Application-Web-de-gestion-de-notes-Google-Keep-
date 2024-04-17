@@ -219,7 +219,7 @@ class ControllerChecklistnote extends Controller {
             "noteType" => $noteType,
             "coderror" => $coderror,
             "msgerror" => $error,
-            "minLength" => $minLength,         
+            "minLength" => $minLength,
             "maxLength" => $maxLength,
             "minItemLength" => $minItemLength,
             "maxItemLength" => $maxItemLength

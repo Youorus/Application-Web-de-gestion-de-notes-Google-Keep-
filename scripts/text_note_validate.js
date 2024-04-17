@@ -36,7 +36,6 @@
     contentError = $("#contentError");
 
     title_note.bind("input", checkTitle);
-    title_note.bind("blur", checkTitleExist);
     content_note.bind("input", checkContent);
 
     $("input:text:first").focus();

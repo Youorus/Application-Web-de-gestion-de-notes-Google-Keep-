@@ -2,13 +2,6 @@
 <html lang="en">
 <?php include "head.php"?>
 
-<script>
-    const minLenght = <?= $minLenght ?>;
-    const maxLenght = <?= $maxLenght ?>;
-    const minItemlenght = <?= $minItemLenght ?>
-    const maxItemLenght = <?= $maxItemLenght ?>
-
-</script>
 
 <div class="navbar navbar-dark bg-dark fixed">
     <div class="container">
@@ -51,7 +44,7 @@
                         <div class="input-group-text">
                             <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" disabled>
                         </div>
-                        <input type="text" id="itemcontent" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
+                        <input type="text"  class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
                         <input type="hidden" id="item_id" name="item_id" value="<?= $item->getId(); ?>">
                     </div>
                 </form>
@@ -63,7 +56,7 @@
                     </button>
                 </form>
             </div>
-            <h2 class="error-text" id="itemError"></h2>
+            <h2 class="error-text item-error"> </h2>
         <?php endforeach; ?>
         <?php if($coderror == 2) {
             echo "$msgerror";
@@ -87,29 +80,71 @@
     </div>
 </div>
 
-<script src="scripts/checklist_note_validate.js"></script>
 
 
 
 <script>
-    /*
-    $(document).ready(function() {
+    $(function () {
+        // Configuration des sélecteurs
         let titleInput = $("#title");
         let titleError = $("#titleError");
+        let itemInput = $("#itemcontent"); // Assurez-vous que cet ID est unique ou utilisez une classe si plusieurs inputs.
+        let itemError = $("#itemError");
 
-        function checkTitleLength() {
+        // Les valeurs de configuration devraient être injectées dans la vue et disponibles ici
+        const minLength = <?= $minLength ?>; // Assurez-vous que ces valeurs sont correctement injectées
+        const maxLength = <?= $maxLength ?>;
+        const minItemLength = <?= $minItemLength ?>;
+        const maxItemLength = <?= $maxItemLength ?>;
+
+        // Fonction pour vérifier la longueur du titre
+        function checkTitle() {
             let titleLength = titleInput.val().trim().length;
-            if (titleLength < 3) {
-                titleError.text("Le titre doit contenir au moins 3 caractères.");
+            if (titleLength < minLength) {
+                titleError.text("The title must have more than " + minLength + " characters");
+            } else if (titleLength > maxLength) {
+                titleError.text("The title must have less than " + maxLength + " characters");
             } else {
-                titleError.empty(); // Utilisez .empty() pour effacer le contenu
+                titleError.text(""); // Effacer le texte d'erreur si la condition est satisfaite
             }
         }
 
-        titleInput.on("input", checkTitleLength);
+        // Fonction pour vérifier la longueur et l'unicité de l'item
+        function checkItem() {
+            let itemValue = itemInput.val().trim();
+            if (itemValue.length < minItemLength) {
+                itemError.text("Item must have at least " + minItemLength + " characters.");
+                return;
+            } else if (itemValue.length > maxItemLength) {
+                itemError.text("Item must have less than " + maxItemLength + " characters.");
+                return;
+            }
+
+            // Collecte et vérification de l'unicité des items
+            let itemsArray = collectItems();
+            if (itemsArray.includes(itemValue)) {
+                itemError.text("Il ne peut pas y avoir 2 items ou plus du même nom.");
+            } else {
+                console.log("L'item peut être ajouté."); // Pour le débogage
+                itemError.text(""); // Effacer l'erreur
+            }
+        }
+
+        // Collecter les valeurs des items existants
+        function collectItems() {
+            let items = [];
+            $('.item-content').each(function () {
+                let value = $(this).val().trim();
+                if (value) items.push(value);
+            });
+            return items;
+        }
+
+        // Attachement des gestionnaires d'événements
+        titleInput.on("input", checkTitle);
+        itemInput.on("input", checkItem);
     });
 
-     */
 </script>
 
 
