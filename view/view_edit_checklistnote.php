@@ -66,9 +66,10 @@
             <div class="d-flex justify-content-between align-items-center">
                 <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">
                     <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
+                    <h2 class="error-text item-error"></h2>
                     <div class="input-group">
+
                         <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
-                        <h2 class="error-text item-error"></h2>
                         <button class="btn add-btn" type="submit" aria-label="Add">
                             <i class="bi bi-plus-lg"></i>
                             <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
