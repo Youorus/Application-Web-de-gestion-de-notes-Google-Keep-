@@ -245,6 +245,7 @@ class ControllerChecklistnote extends Controller {
             //return var_dump($note);
             if ($note) {
 
+
                 if($note->isPinned()) {
                     $note->setPinned(1);
                 }
@@ -263,8 +264,14 @@ class ControllerChecklistnote extends Controller {
                 //return print_r($error);
 
                 if (empty($error)) {
+                    $weight = $note->getWeightByIdNote($idNote);
+                    $maxWeight = $note->getMaxWeight($ownerId);
+                    if($weight != $maxWeight) {
+                        $note->setWeight($maxWeight);
+                    }
                     $note->persist();
                     $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
+
                 } else {
                     $coderror = 2;
                     if(isset($error["title"])) {

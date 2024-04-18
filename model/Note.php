@@ -199,7 +199,7 @@ abstract class Note extends Model {
         return $this->weight;
     }
 
-    public static function getWeightByIdNote(int $idNote): int {
+    public function getWeightByIdNote(int $idNote): int {
         $query = self::execute("SELECT weight FROM notes WHERE id = :id", ['id' => $idNote]);
         $data = $query->fetchAll();
         $results = "";
