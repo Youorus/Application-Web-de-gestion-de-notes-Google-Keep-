@@ -301,28 +301,30 @@ class ControllerChecklistnote extends Controller {
 
     public function add_item()
     {
-        //$idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
         $error = "";
-        $coderror = "";
 
         $checklistnote = new CheckListNote($idNote);
         $allItems = $checklistnote->getItems();
 
+        // Vérification si le contenu est vide ou trop court
+        if (empty(trim($content))) {
+            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 3); // Code 3 pour indiquer un contenu invalide
+        }
+
         foreach ($allItems as $item) {
-            if (strtolower(trim($item->getContent())) === strtolower($content)) {
+            if (strtolower(trim($item->getContent())) === strtolower(trim($content))) {
                 $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 2);
             }
         }
 
-        if (empty($errors)) {
-            $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
-            $checklistnoteitem->persist();
-            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
-        }
-
+        // Si le contenu est valide et unique
+        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+        $checklistnoteitem->persist();
+        $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
     }
+
 
     public function check_uncheck()
     {
