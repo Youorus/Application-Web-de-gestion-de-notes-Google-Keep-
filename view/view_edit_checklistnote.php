@@ -2,13 +2,6 @@
 <html lang="en">
 <?php include "head.php"?>
 
-<script>
-    const minLenght = <?= $minLenght ?>;
-    const maxLenght = <?= $maxLenght ?>;
-    const minItemlenght = <?= $minItemLenght ?>
-    const maxItemLenght = <?= $maxItemLenght ?>
-
-</script>
 
 <div class="navbar navbar-dark bg-dark fixed">
     <div class="container">
@@ -44,41 +37,39 @@
 </form>
     <div class="checklist-items">
         <label class="form-label">Items</label>
-        <?php foreach ($content as $item): ?>
+        <?php foreach ($content as $index => $item): ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <form action="Checklistnote/check_uncheck" method="post" class="flex-grow-1 me-2">
+                <form class="flex-grow-1 me-2" onsubmit="return false;">
                     <div class="input-group">
                         <div class="input-group-text">
-                            <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" disabled>
+                            <input class="form-check-input mt-0 checkbox-item" type="checkbox" name="checked" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" data-item-id="<?= $item->getId(); ?>">
                         </div>
-                        <input type="text" id="itemcontent" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
-                        <input type="hidden" id="item_id" name="item_id" value="<?= $item->getId(); ?>">
+                        <input type="text" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" disabled>
+                        <input type="hidden" class="item-id" value="<?= $item->getId(); ?>">
                     </div>
                 </form>
                 <form action="Checklistnote/delete_item" method="post">
-                    <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
-                    <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
+                    <input type="hidden" class="item-id" name="id_item" value="<?= $item->getId(); ?>">
                     <button class="btn delete-btn" type="submit" aria-label="Delete">
                         <i class="bi bi-dash-lg"></i>
                     </button>
                 </form>
             </div>
-            <h2 class="error-text" id="itemError"></h2>
+             <!-- Class instead of ID for error message -->
         <?php endforeach; ?>
         <?php if($coderror == 2) {
             echo "$msgerror";
-
         } ?>
         <div class="my-3">
             <label class="form-label">New Items</label>
             <div class="d-flex justify-content-between align-items-center">
                 <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">
                     <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
+                    <h2 class="error-text item-error" style="color: red;"></h2>
                     <div class="input-group">
-                        <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input" >
+                        <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input">
                         <button class="btn add-btn" type="submit" aria-label="Add">
                             <i class="bi bi-plus-lg"></i>
-                            <input type="hidden" id="id_item" name="id_item" value="<?= $item->getId(); ?>">
                         </button>
                     </div>
                 </form>
@@ -87,22 +78,52 @@
     </div>
 </div>
 
-<script src="scripts/checklist_note_validate.js"></script>
+<script>
+        $(document).ready(function() {
+        $('.checkbox-item').change(function() {
+            var checkbox = $(this);
+            var itemId = checkbox.data('item-id');
+            var isChecked = checkbox.is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: 'Checklistnote/check_uncheck',
+                type: 'POST',
+                data: {
+                    item_id: itemId,
+                    checked: isChecked
+                },
+                error: function() {
+                    // Rétablit l'état précédent de la checkbox en cas d'erreur
+                    checkbox.prop('checked', !isChecked);
+                }
+            });
+        });
+    });
+</script>
+
 
 
 
 <script>
-    /*
-    $(document).ready(function() {
+    $(function () {
         let titleInput = $("#title");
         let titleError = $("#titleError");
+        let itemInputs = $("#content"); // Utilise la classe au lieu de l'ID
+        let itemErrors = $(".item-error"); // Utilise la classe pour les messages d'erreur
 
-        function checkTitleLength() {
+        // Les valeurs de configuration
+        const minLength = <?= $minLength ?>;
+        const maxLength = <?= $maxLength ?>;
+        const minItemLength = <?= $minItemLength ?>;
+        const maxItemLength = <?= $maxItemLength ?>;
+
+        function checkTitle() {
             let titleLength = titleInput.val().trim().length;
-            if (titleLength < 3) {
-                titleError.text("Le titre doit contenir au moins 3 caractères.");
-            } else {
-                titleError.empty(); // Utilisez .empty() pour effacer le contenu
+            titleError.text("");
+            if (titleLength < minLength) {
+                titleError.text("The title must have more than " + minLength + " characters");
+            } else if (titleLength > maxLength) {
+                titleError.text("The title must have less than " + maxLength + " characters");
             }
 <<<<<<< HEAD
 
@@ -126,11 +147,25 @@
 >>>>>>> daac007c2b88a72714d6cbd3e8f606162b2c09f6
         }
 
-        titleInput.on("input", checkTitleLength);
-    });
+        function checkItems() {
+            itemInputs.each(function(index) {
+                let itemInput = $(this);
+                let itemValue = itemInput.val().trim();
+                let itemError = itemErrors.eq(index); // Sélectionne le message d'erreur correspondant
+                itemError.text("");
+                if (itemValue.length < minItemLength) {
+                    itemError.text("Item must have at least " + minItemLength + " characters.");
+                } else if (itemValue.length > maxItemLength) {
+                    itemError.text("Item must have less than " + maxItemLength + " characters.");
+                }
+            });
+        }
 
-     */
+        titleInput.on("input", checkTitle);
+        itemInputs.on("input", checkItems); // Attache l'événement à chaque input d'item
+    });
 </script>
+
 
 
 </body>

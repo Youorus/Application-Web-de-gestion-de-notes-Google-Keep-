@@ -219,7 +219,7 @@ class ControllerChecklistnote extends Controller {
             "noteType" => $noteType,
             "coderror" => $coderror,
             "msgerror" => $error,
-            "minLength" => $minLength,         
+            "minLength" => $minLength,
             "maxLength" => $maxLength,
             "minItemLength" => $minItemLength,
             "maxItemLength" => $maxItemLength
@@ -245,6 +245,7 @@ class ControllerChecklistnote extends Controller {
             //return var_dump($note);
             if ($note) {
 
+
                 if($note->isPinned()) {
                     $note->setPinned(1);
                 }
@@ -263,8 +264,14 @@ class ControllerChecklistnote extends Controller {
                 //return print_r($error);
 
                 if (empty($error)) {
+                    $weight = $note->getWeightByIdNote($idNote);
+                    $maxWeight = $note->getMaxWeight($ownerId);
+                    if($weight != $maxWeight) {
+                        $note->setWeight($maxWeight);
+                    }
                     $note->persist();
                     $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
+
                 } else {
                     $coderror = 2;
                     if(isset($error["title"])) {
@@ -294,52 +301,48 @@ class ControllerChecklistnote extends Controller {
 
     public function add_item()
     {
-        //$idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
         $error = "";
-        $coderror = "";
 
         $checklistnote = new CheckListNote($idNote);
         $allItems = $checklistnote->getItems();
 
+        // Vérification si le contenu est vide ou trop court
+        if (empty(trim($content))) {
+            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 3); // Code 3 pour indiquer un contenu invalide
+        }
+
         foreach ($allItems as $item) {
-            if (strtolower(trim($item->getContent())) === strtolower($content)) {
+            if (strtolower(trim($item->getContent())) === strtolower(trim($content))) {
                 $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 2);
             }
         }
 
-        if (empty($errors)) {
-            $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
-            $checklistnoteitem->persist();
-            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
-        }
-
+        // Si le contenu est valide et unique
+        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+        $checklistnoteitem->persist();
+        $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
     }
+
 
     public function check_uncheck()
     {
-
         $user = $this->get_user_or_redirect();
-
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $idNote = intval($_POST['idnote']);
             $itemId = $_POST['item_id'];
             $checked = isset($_POST['checked']) ? 1 : 0;
-
             $item = CheckListNoteItem::get_item_by_id($itemId);
             if ($item) {
                 $item->setChecked($checked);
                 $item->persist();
             }
-
-
         }
 
-        $this->redirect("Checklistnote", "index", "$idNote");
-
-        //$this->redirect("index", "open_checklist_note");
     }
+
+
+
 
     public function validate(): void{
         $user = $this->get_user_or_redirect();
