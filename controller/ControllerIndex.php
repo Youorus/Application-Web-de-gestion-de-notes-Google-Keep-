@@ -80,6 +80,22 @@ class ControllerIndex extends Controller
 
     }
 
+
+        public function delete(): void {
+        $idNote = intval($_GET['param1']);
+        (new View("delete_note"))->show(["idNote" => $idNote]);
+    }
+
+    public function validate(): void {
+$this->redirect("index");
+    }
+
+    public function close(): void{
+        $idNote = intval($_GET['param1']);
+
+        $this->redirect("index", "open_text_note", $idNote);
+    }
+
     public function archive_notes(): void
     {
         $user = $this->get_user_or_redirect();
@@ -133,19 +149,21 @@ class ControllerIndex extends Controller
             $yx = Note::getWeightByIdNote(intval($previousNote));
             $x = Note::getWeightByIdNote(intval($actualNote));
 
-            // Permutation des poids avec une variable temporaire
-            $tempWeight = $yx;
-            $yx = $x;
-            $x = $tempWeight;
 
             // Mettre à jour les poids dans la base de données
+            $noteX->setWeight(-1);
             $noteX->setOwner($user->getId());
-            $noteX->setWeight($yx);
 
-            $noteYx->setOwner($user->getId());
-            $noteYx->setWeight($x);
             $noteX->persist();
+
+            $noteYx->setWeight($x);
+            $noteX->setOwner($user->getId());
             $noteYx->persist();
+
+            $noteX->setWeight($yx);
+            $noteX->setOwner($user->getId());
+            $noteX->persist();
+
 
             $this->redirect("index");
         } else {
@@ -187,14 +205,16 @@ class ControllerIndex extends Controller
 
         if ($note) {
             $note->setPinned(0);
+            //$note->setOwner($user->getId());
             $note->persist();
         }
         if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
         } else {
-            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+            $this->redirect("checklistnote", "index", $_GET['param1']);
         }
     }
+
 
     public function pin(): void
     {
@@ -204,13 +224,13 @@ class ControllerIndex extends Controller
 
         if ($note) {
             $note->setPinned(1);
-            var_dump($note);
+            //note->setOwner($user->getId());
             $note->persist();
         }
         if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
         } else {
-            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+            $this->redirect("checklistnote", "index", $_GET['param1']);
         }
 
     }

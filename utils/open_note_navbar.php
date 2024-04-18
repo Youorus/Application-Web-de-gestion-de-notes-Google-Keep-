@@ -20,9 +20,10 @@
             <?php
             if ($noteType == "archived"){
                 // delete
-                echo '<a href="delete/note/'. $note->getId() .'" class="icon-link">';
-                echo ' <span data-target="#confirmDeleteModal" style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </span>';
-                echo '</a>';
+                echo '<form action="delete" method="post">';
+                echo ' <input type="hidden" id="id_item" name="idNote" value="' . $note->getId() . '" >';
+                echo ' <button style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </button>';
+                echo '</form>';
                 // unarchived
                 echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive
 </span></a>';

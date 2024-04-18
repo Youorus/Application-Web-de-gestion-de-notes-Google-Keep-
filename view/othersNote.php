@@ -6,6 +6,7 @@ for ($i = 0; $i < count($notesOthers); $i++) {
     echo '<div class="card">';
     displayNoteCard($notesOthers[$i]);
     echo '</div>';
+    include "chevronsOthers.php";
     echo '</div>';
 }
     ?>

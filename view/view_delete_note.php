@@ -6,30 +6,33 @@
     <title>Modal Bootstrap</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <!-- The Modal -->
 <div class="modal fade" id="myModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class=" modal-content">
 
             <!-- Modal Header -->
-            <div class="modal-header">
+            <div class="bg-back modal-header">
                 <h4 class="modal-title">Modal Header</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <!-- Modal Body -->
-            <div class="modal-body">
-                Are you sure you want to delete this note?
+            <div class="bg-back modal-body">
+                Are you sure you want to delete <span class="text-danger">"<?= $title ?></span> ?
+
+
             </div>
 
             <!-- Modal Footer -->
-            <div class="modal-footer">
+            <div class=" bg-back modal-footer">
                 <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
-                <a href="validate"><button type="button" class="btn btn-success">Validate</button></a>
-                <a href="close"><button type="button" class="btn btn-danger" data-dismiss="modal">Close</button></a>
+                <a class="btn btn-success" href="delete/validate/<?= $idNote ?>">Validate</a>
+                <a class="btn btn-danger" href="delete/close/<?= $idNote ?>">Close</a>
             </div>
 
         </div>
