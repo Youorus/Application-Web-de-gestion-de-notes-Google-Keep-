@@ -319,27 +319,21 @@ class ControllerChecklistnote extends Controller {
 
     public function check_uncheck()
     {
-
         $user = $this->get_user_or_redirect();
-
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $idNote = intval($_POST['idnote']);
             $itemId = $_POST['item_id'];
             $checked = isset($_POST['checked']) ? 1 : 0;
-
             $item = CheckListNoteItem::get_item_by_id($itemId);
             if ($item) {
                 $item->setChecked($checked);
                 $item->persist();
             }
-
-
         }
 
-        $this->redirect("Checklistnote", "index", "$idNote");
-
-        //$this->redirect("index", "open_checklist_note");
     }
+
+
+
 
     public function validate(): void{
         $user = $this->get_user_or_redirect();

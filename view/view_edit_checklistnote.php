@@ -39,13 +39,13 @@
         <label class="form-label">Items</label>
         <?php foreach ($content as $index => $item): ?>
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <form action="Checklistnote/check_uncheck" method="post" class="flex-grow-1 me-2">
+                <form class="flex-grow-1 me-2" onsubmit="return false;">
                     <div class="input-group">
                         <div class="input-group-text">
-                            <input class="form-check-input mt-0" type="checkbox" name="checked" value="1" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" disabled>
+                            <input class="form-check-input mt-0 checkbox-item" type="checkbox" name="checked" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" data-item-id="<?= $item->getId(); ?>">
                         </div>
-                        <input type="text" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" aria-label="Text input with checkbox">
-                        <input type="hidden" class="item-id" name="item_id[]" value="<?= $item->getId(); ?>">
+                        <input type="text" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" disabled>
+                        <input type="hidden" class="item-id" value="<?= $item->getId(); ?>">
                     </div>
                 </form>
                 <form action="Checklistnote/delete_item" method="post">
@@ -59,7 +59,6 @@
         <?php endforeach; ?>
         <?php if($coderror == 2) {
             echo "$msgerror";
-
         } ?>
         <div class="my-3">
             <label class="form-label">New Items</label>
@@ -80,6 +79,31 @@
         </div>
     </div>
 </div>
+
+<script>
+        $(document).ready(function() {
+        $('.checkbox-item').change(function() {
+            var checkbox = $(this);
+            var itemId = checkbox.data('item-id');
+            var isChecked = checkbox.is(':checked') ? 1 : 0;
+
+            $.ajax({
+                url: 'Checklistnote/check_uncheck',
+                type: 'POST',
+                data: {
+                    item_id: itemId,
+                    checked: isChecked
+                },
+                error: function() {
+                    // Rétablit l'état précédent de la checkbox en cas d'erreur
+                    checkbox.prop('checked', !isChecked);
+                }
+            });
+        });
+    });
+</script>
+
+
 
 
 <script>
