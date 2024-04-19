@@ -1,5 +1,5 @@
 
-    let title_note, titleError, content_note, contentError;
+    let title_note, titleError, content_note, contentError, backBtn, myModal;
 
     //je recupere les valeur de mes input en js et je reste focus a mes entré de text
 
@@ -28,14 +28,26 @@
 }
 }
 
+    function modalShow() {
+        if (title_note.val() !== title || content_note.val() !== content) {
+            $("#myModalSave").modal("show");
+        } else {
+            window.location.href = "index";
+        }
+    }
+
+
     $(function (){
     title_note = $("#title_note");
     titleError = $("#titleError");
     content_note = $("#content_note");
     contentError = $("#contentError");
+        backBtn = $("#back");
 
+        backBtn.bind("click", modalShow);
     title_note.bind("input", checkTitle);
     content_note.bind("input", checkContent);
+
 
     $("input:text:first").focus();
 })

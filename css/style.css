@@ -27,6 +27,11 @@ a{
     background-color: var(--couleur-fond);
 }
 
+.formDelete button{
+    border: none;
+    background-color: transparent;
+}
+
 body{
     background-color: var(--couleur-fond);
 }

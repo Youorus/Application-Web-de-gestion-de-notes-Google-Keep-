@@ -5,6 +5,8 @@
 <script>
     const minLenght = <?= $minLenght ?>;
     const maxLenght = <?= $maxLenght ?>;
+    const title = "<?= $title ?>";
+    const content = "<?= $content ?>"
 </script>
 
 <form id="EditTextNote" method="POST" action="EditText/edited_note/<?= $note->getId() ?>" >
@@ -13,7 +15,7 @@
     <div class="container">
         <!-- Bouton de retour -->
         <div class="navbar-icon">
-            <a href="index">
+            <a id="back" type="button" data-bs-toggle="modal" data-bs-target="#myModalSave">
                 <span class="material-symbols-outlined"> arrow_back_ios </span>
             </a>
         </div>
@@ -57,6 +59,39 @@
         </div>
     </div>
 </form>
+
+
+<div class="modal fade" id="myModalSave">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class=" modal-content">
+
+            <!-- Modal Header -->
+            <div class="bg-back modal-header">
+                <h4 class="modal-title">Modal Header</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="bg-back modal-body">
+                <span>Are you sure you want to leave this form </span> ?
+                <br>
+                <span>Change you made will not be saved </span> ?
+
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class=" bg-back modal-footer">
+                <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
+                <a class="btn btn-success" data-bs-dismiss="modal" >Cancel</a>
+                <a class="btn btn-danger" href="index" >Leave</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
 <script src="scripts/text_note_validate.js"></script>
 

@@ -1,8 +1,10 @@
 <?php
-require_once 'model/TextNote.php';
-require_once 'framework/View.php';
-require_once 'framework/Controller.php';
-require_once 'controller/ControllerIndex.php';
+require_once "framework/Controller.php";
+require_once "model/Note.php";
+require_once "model/TextNote.php";
+require_once "model/CheckListNoteItem.php";
+require_once "model/NoteShare.php";
+
 
 class ControllerEditText extends Controller
 {
@@ -36,19 +38,13 @@ class ControllerEditText extends Controller
         $editDate = $note->getDateTimeEdit();
 
         // Calcul des messages relatifs aux dates de création et de dernière édition
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
-
-
 
         // Affichage de la vue pour l'édition de la note
         (new View("edit_text_note"))->show([
             "title" => $title,
             "content" => $content,
-            "messageCreate" => $messageCreate,
             "minLenght" =>  $minLenght,
             "maxLenght" =>  $maxLenght,
-            "messageEdit" => $messageEdit,
             "note" => $note
         ]);
     }
