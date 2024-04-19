@@ -125,10 +125,8 @@
             } else if (titleLength > maxLength) {
                 titleError.text("The title must have less than " + maxLength + " characters");
             }
-<<<<<<< HEAD
 
-        },
-        // On définit ici les messages d'erreur propre à chaque champ
+        }
         messages: {
             title: "title must be between 3 and 25"
         },
@@ -137,15 +135,15 @@
                 type: "POST",
                 url: "Checklistnote/editchecklistnote", // on envoie le tout dans la moulinette php du fichier form-process.php pour l'envoi du message
                 data: "title=" + title,
-                success : function(text){
-                    if (text == "success"){ //si c'est ok, applique la fonction formSuccess
+                success: function (text) {
+                    if (text == "success") { //si c'est ok, applique la fonction formSuccess
                         formSuccess();
                     }
                 }
             });
-=======
->>>>>>> daac007c2b88a72714d6cbd3e8f606162b2c09f6
+
         }
+    }
 
         function checkItems() {
             itemInputs.each(function(index) {
