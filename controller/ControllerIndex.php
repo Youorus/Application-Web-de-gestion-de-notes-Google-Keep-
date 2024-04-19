@@ -107,6 +107,8 @@ $this->redirect("index");
 
 
 
+
+
     public function open_text_note()
     {
         $idNote = intval($_GET['param1']);

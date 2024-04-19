@@ -20,9 +20,9 @@
             <?php
             if ($noteType == "archived"){
                 // delete
-                echo '<form class="formDelete" action="delete" method="post">';
+                echo '<form class="formDelete icon-link" action="delete" method="post">';
                 echo ' <input type="hidden" id="id_item" name="idNote" value="' . $note->getId() . '" >';
-                echo ' <button style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </button>';
+                echo ' <button id="deleteModal"  data-bs-toggle="modal" data-bs-target="#myModalDelete" style="font-variation-settings: \'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24; color: #FF0000;" class="material-symbols-outlined delete-icon"> delete_forever </button>';
                 echo '</form>';
                 // unarchived
                 echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive</span></a>';
@@ -87,23 +87,73 @@
 
 
 <!-- Modal pour la suppression -->
-<div class="modal fade" id="confirmDeleteModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div class="modal fade" id="myModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="custom-modal  modal-content">
+
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 class="modal-title">Confirmation de la suppression</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+
             <!-- Modal Body -->
             <div class="modal-body">
-                Êtes-vous sûr de vouloir supprimer cette note ?
+                <span>Do you really want to delete note <span class="text-danger">"<?= $title ?></span> and All Its dependencies ?</span>
+                <br>
+                <br>
+                <span>This process can not be undone.</span>
+
+
             </div>
+
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <a href="delete/note/<?php echo $note->getId(); ?>" class="btn btn-danger">Supprimer</a>
+                <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
+                <a class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</a>
+                <a class="btn btn-danger" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Yes,delete it!</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class=" custom-modal modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Deleted</h1>
+            </div>
+            <div class="modal-body">
+                This note has been deleted.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="delete" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    const idNote = <?= $note->getId()?>;
+    let deleteButton = $("#deleteModal");
+    let deleteClose = $("#delete");
+
+
+    async function deleteNote() {
+        await $.get("delete/validate/" + idNote);
+        window.location.href = "index";
+    }
+
+    deleteClose.bind("click", deleteNote);
+
+    deleteButton.click(function(event) {
+        // Empêche la redirection par défaut
+        event.preventDefault();
+        // Affiche le modal
+        $("#myModalDelete").modal("show");
+    });
+
+
+
+
+
+</script>

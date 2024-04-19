@@ -12,27 +12,28 @@
 
 <!-- The Modal -->
 <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class=" modal-content">
+    <div class=" modal-dialog modal-dialog-centered">
+        <div class=" custom-modal modal-content">
 
             <!-- Modal Header -->
-            <div class="bg-back modal-header">
-                <h4 class="modal-title">Modal Header</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header">
+                <h4 class="modal-title">Are you sure ?</h4>
             </div>
 
             <!-- Modal Body -->
-            <div class="bg-back modal-body">
-                Are you sure you want to delete <span class="text-danger">"<?= $title ?></span> ?
-
+            <div class="modal-body">
+                <span>Do you really want to delete note <span class="text-danger">"<?= $title ?></span> and All Its dependencies ?</span>
+                <br>
+                <br>
+                <span>This process can not be undone.</span> ?
 
             </div>
 
             <!-- Modal Footer -->
-            <div class=" bg-back modal-footer">
+            <div class=" modal-footer">
                 <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
-                <a class="btn btn-success" href="delete/validate/<?= $idNote ?>">Validate</a>
-                <a class="btn btn-danger" href="delete/close/<?= $idNote ?>">Close</a>
+                <a class="btn btn-secondary" href="delete/close/<?= $idNote ?>">Cancel</a>
+                <a class="btn btn-danger" href="delete/validate/<?= $idNote ?>">Yes,delete it!</a>
             </div>
 
         </div>

@@ -63,17 +63,18 @@
 
 <div class="modal fade" id="myModalSave">
     <div class="modal-dialog modal-dialog-centered">
-        <div class=" modal-content">
+        <div class="custom-modal modal-content">
 
             <!-- Modal Header -->
             <div class="bg-back modal-header">
                 <h4 class="modal-title">Modal Header</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <!-- Modal Body -->
             <div class="bg-back modal-body">
                 <span>Are you sure you want to leave this form </span> ?
+                <br>
                 <br>
                 <span>Change you made will not be saved </span> ?
 
@@ -83,8 +84,8 @@
             <!-- Modal Footer -->
             <div class=" bg-back modal-footer">
                 <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
-                <a class="btn btn-success" data-bs-dismiss="modal" >Cancel</a>
-                <a class="btn btn-danger" href="index" >Leave</a>
+                <a class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</a>
+                <a class="btn btn-danger" href="index" >Leave Page</a>
             </div>
 
         </div>

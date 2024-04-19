@@ -42,7 +42,18 @@ class ControllerDelete extends Controller
         $this->redirect("index");
     }
 
-
+    public function validateNote(): void{
+        $idNote = intval($_GET['param1']);
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+        $res = "false";
+        if ($note) {
+            $note->delete();
+            $this->redirect("index");
+            $res = "true";
+        }
+        echo $res;
+    }
     public function close(): void{
         $idNote = intval($_GET['param1']);
 
