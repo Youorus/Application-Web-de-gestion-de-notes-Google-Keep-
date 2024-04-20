@@ -34,6 +34,7 @@ class ControllerEditText extends Controller
         // Récupération des détails de la note
         $title = $note->getTitle();
         $content = $note->getContent();
+
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
 

@@ -38,7 +38,6 @@
 <!--</div>-->
 
 
-
     <div class="open-text">
         <div class="mb-3">
             <label class="form-label">Title</label>
@@ -53,7 +52,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Text</label>
-            <textarea class="form-control" id="content_note" value="<?= $content ?>" rows="10" name="content_note"></textarea>
+            <textarea class="form-control" id="content_note" rows="10" name="content_note"><?= $content ?></textarea>
             <h2 class="error-text" id="contentError"></h2>
 
         </div>

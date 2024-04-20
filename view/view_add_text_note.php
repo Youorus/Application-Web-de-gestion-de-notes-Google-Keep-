@@ -39,11 +39,9 @@
             <input type="text" id="title_note" class="form-control" value="<?= trim($title_note) ?>" name="title_note">
             <h2 class="error-text" id="titleError"></h2>
             <!-- Section pour afficher les erreurs -->
-            <?php if (count($errors) != 0): ?>
+            <?php if (isset($errors)): ?>
                 <?php foreach ($errors as $error): ?>
-                    <?php if (is_string($error)): ?>
-                        <h2 class="error-text"><?= $error ?></h2>
-                    <?php endif; ?>
+                    <h2 class="error-text"><?php echo $error; ?></h2>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
