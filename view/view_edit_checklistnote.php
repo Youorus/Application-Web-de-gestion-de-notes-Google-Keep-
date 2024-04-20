@@ -65,7 +65,10 @@
 
             </div>
         </form>
-        <div class="error-text item-error" style="color: red;"><?= $errors['item'] ?? '' ?></div>
+        <div class="error-text" style="color: red;">
+            <?= $errors['item'] ?? '' ?>
+            <?= $errors['unique'] ?? '' ?>
+        </div>
     </div>
 </div>
 
