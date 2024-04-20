@@ -67,16 +67,7 @@
                     </button>
                 </div>
             </form>
-        <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">
-            <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
-            <div class="input-group">
-                <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input">
-                <button class="btn add-btn" type="submit" aria-label="Add">
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-
-            </div>
-        </form>
+            <br>
         <div id="item-error" class="error-text" style="color: red;">
             <?= $errors['item'] ?? '' ?>
             <?= $errors['unique'] ?? '' ?>
@@ -129,7 +120,7 @@
         }
 
         titleInput.on("input", checkTitle);
-        itemInputs.on("focus", checkItems); // Attache l'événement à chaque input d'item
+        itemInputs.on("input", checkItems); // Attache l'événement à chaque input d'item
     });
 </script>
 
