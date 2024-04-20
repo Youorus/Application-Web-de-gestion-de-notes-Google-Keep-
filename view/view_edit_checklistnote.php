@@ -46,7 +46,8 @@
             </div>
         </form>
         <form action="Checklistnote/delete_item" method="post">
-            <input type="hidden" name="id_item" value="<?= $item->getId(); ?>">
+            <input type="hidden" id="idnote" name="id_item" value="<?= $item->getId(); ?>">
+            <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
             <button class="btn delete-btn" type="submit" aria-label="Delete">
                 <i class="bi bi-dash-lg"></i>
             </button>
@@ -66,7 +67,6 @@
                     </button>
                 </div>
             </form>
-
         <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">
             <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
             <div class="input-group">
