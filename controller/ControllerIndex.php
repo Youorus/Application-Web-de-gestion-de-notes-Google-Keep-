@@ -404,17 +404,18 @@ $this->redirect("index");
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower($content)) {
-                $this->redirect("index", "edit_checklistnote", $idNote, 2);
+                $this->redirect("index", "edit_checklistnote", $idNote);
             }
         }
 
         if (empty($errors)) {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
-            $this->redirect("index", "edit_checklistnote", $idNote, 0);
+            $this->redirect("index", "edit_checklistnote", $idNote);
         }
 
     }
+
 
 
     public function add_share() {
