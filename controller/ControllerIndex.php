@@ -132,59 +132,6 @@ $this->redirect("index");
 
 
 
-
-
-
-
-    public function decrementWeight(): void {
-        $user = $this->get_user_or_redirect();
-
-        if (isset($_POST["leftButton"]) && isset($_POST["preNote"])) {
-            $actualNote = $_POST["leftButton"];
-            $previousNote = $_POST["preNote"];
-
-            // Récupération des notes entières
-            $noteYx = $user->get_One_note_by_id($previousNote);
-            $noteX = $user->get_One_note_by_id($actualNote);
-
-            // Récupération des poids des notes
-            $yx = Note::getWeightByIdNote(intval($previousNote));
-            $x = Note::getWeightByIdNote(intval($actualNote));
-
-
-            // Mettre à jour les poids dans la base de données
-            $noteX->setWeight(-1);
-            $noteX->setOwner($user->getId());
-
-            $noteX->persist();
-
-            $noteYx->setWeight($x);
-            $noteX->setOwner($user->getId());
-            $noteYx->persist();
-
-            $noteX->setWeight($yx);
-            $noteX->setOwner($user->getId());
-            $noteX->persist();
-
-
-            $this->redirect("index");
-        } else {
-            var_dump("test");
-        }
-    }
-
-    public function incrementWeight(): void {
-        $user = $this->get_user_or_redirect();
-
-        if (isset($_POST["rightButton"]) && isset($_POST["nextNote"])) {
-            var_dump($_POST["rightButton"]);
-            var_dump($_POST["nextNote"]);
-        }
-    }
-
-
-
-
     public function share_notes()
     {
         $userId = $_GET['param1'];
@@ -207,7 +154,8 @@ $this->redirect("index");
 
         if ($note) {
             $note->setPinned(0);
-            //$note->setOwner($user->getId());
+            $note->setOwner($user->getId());
+            $note->setTitle($note->getTitle());
             $note->persist();
         }
         if ($note->getType() == NoteType::TextNote) {
@@ -226,7 +174,8 @@ $this->redirect("index");
 
         if ($note) {
             $note->setPinned(1);
-            //note->setOwner($user->getId());
+            $note->setOwner($user->getId());
+            $note->setTitle($note->getTitle());
             $note->persist();
         }
         if ($note->getType() == NoteType::TextNote) {

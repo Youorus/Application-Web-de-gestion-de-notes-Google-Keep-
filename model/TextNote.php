@@ -78,15 +78,15 @@ class TextNote extends Note {
             // Si la note existe, mettre à jour les données dans la base de données
             // Mettre à jour la note existante dans 'notes'
             parent::execute(
-                "UPDATE notes SET title = :title, edited_at = :editedAt, 
-            pinned = :pinned, archived = :archived, weight = :weight WHERE id = :id",
+                "UPDATE notes SET title = :title, edited_at = :editedAt, owner = :owner,
+            pinned = :pinned, archived = :archived WHERE id = :id",
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitleNote(),
+                    'owner'=> $this->getOwner(),
                     'editedAt' => $currentDateTime->format('Y-m-d H:i:s'), // Mise à jour de la date de modification
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
-                    'weight' => $this->getWeight()
                 ]
             );
             // Mettre à jour le contenu dans 'text_notes'
