@@ -68,7 +68,7 @@
                 <h2 class="error-text item-error" style="color: red;"></h2>
                 <div class="input-group">
                     <input type="text" id="content" name="content" class="form-control" placeholder="New Item" aria-label="New item input">
-                    <button class="btn add-btn" type="submit" aria-label="Add">
+                    <button class="btn btn-primary" type="submit" aria-label="Add">
                         <i class="bi bi-plus-lg"></i>
                     </button>
                 </div>
