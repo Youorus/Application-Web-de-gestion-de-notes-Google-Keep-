@@ -331,6 +331,7 @@ class ControllerChecklistnote extends Controller {
             if ($item) {
                 $item->setChecked($checked);
                 $item->persist();
+
             }
             return var_dump(array("res"));
         }
