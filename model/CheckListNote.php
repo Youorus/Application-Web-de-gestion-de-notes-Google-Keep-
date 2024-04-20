@@ -31,23 +31,16 @@ class CheckListNote extends Note
     }
 
 
-
-    public function persist(): CheckListNote | array  {
-        // Vérifier si la note parente existe dans la table 'notes'
-        if (!parent::get_checklistnote_by_id($this->getId())) {
-            // Si la note parente n'existe pas, retourner une erreur
-            return ['error' => 'Parent note does not exist.'];
-        }
-        $lastWeight = parent::getLastWeightNote();
-
+    public function persist(): CheckListNote|array
+    {
         if (self::get_checklistnote_by_id($this->getId())) {
-            // Si la note checklist existe, mettre à jour les données
-            self::execute("UPDATE notes SET title = :title, created_at = :createdAt, 
-                       edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
-                       WHERE id = :id",
+            self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
+                           edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
+                           WHERE id = :id",
                 [
                     'id' => $this->getId(),
                     'title' => $this->getTitle(),
+                    'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
                     'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
@@ -55,33 +48,28 @@ class CheckListNote extends Note
                     'weight' => $this->getWeight()
                 ]);
         } else {
-            // Sinon, insérer une nouvelle note checklist et lier à la note parente
             self::execute("INSERT INTO notes (title, owner, created_at, edited_at, pinned, archived, weight)
-                       VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
+                           VALUES (:title, :owner, :createdAt, :editedAt, :pinned, :archived, :weight)",
                 [
-                    'title' => $this->getTitleNote(),
+                    'title' => $this->getTitle(),
                     'owner' => $this->getOwner(),
                     'createdAt' => $this->getDateTime()->format('Y-m-d H:i:s'),
                     'editedAt' => $this->getDateTimeEdit() ? $this->getDateTimeEdit()->format('Y-m-d H:i:s') : null,
                     'pinned' => $this->getPinned(),
                     'archived' => $this->getArchived(),
-                    'weight' => $lastWeight + 1
+                    'weight' => $this->getWeight()
                 ]);
             $this->id = self::lastInsertId();
             self::execute("INSERT INTO checklist_notes (id) VALUES (:id)",
                 ['id' => $this->id]);
         }
-
-        // Persister les éléments de la checklist en utilisant l'ID de la note parente
         foreach ($this->getItems() as $item) {
-            $item->setChecklistNote($this->getId());
+            $item->setChecklistNote($this->id);
             $item->persist();
         }
 
         return $this;
     }
-
-
 
 
     public function getType(): NoteType
@@ -112,11 +100,9 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
     }
 
 
-
-
-
-    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
-        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
+    public static function get_checklistnote_by_id(int $id): CheckListNote|false
+    {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id" => $id]);
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
             return false;
@@ -125,7 +111,8 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
         }
     }
 
-    public function validate_checklistnote(): array {
+    public function validate_checklistnote(): array
+    {
         $errors = [];
 
         if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
@@ -145,24 +132,19 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
 
     public function getTitle(): string
     {
-        if(empty($this->getTitleNote())){
+        if (empty($this->getTitleNote())) {
             $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
             $data = $query->fetchAll();
             $results = "";
-            foreach ($data as $row){
+            foreach ($data as $row) {
                 $results = $row['title'];
 
             }
 
-        }else{
+        } else {
             $results = $this->getTitleNote();
         }
         return $results;
     }
-
-
-
-
 }
-
 
