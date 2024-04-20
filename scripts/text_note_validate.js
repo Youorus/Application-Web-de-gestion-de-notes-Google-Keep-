@@ -16,7 +16,7 @@
     contentError.text("");
     if (content_note.val() !== "") {
     if (content_note.val().length < minLenght) {
-    contentError.text("The title must have more than " + minLenght + " characters");
+    contentError.text("The Content must have more than " + minLenght + " characters");
 }
 }
 }
@@ -46,6 +46,7 @@
 
         backBtn.bind("click", modalShow);
     title_note.bind("input", checkTitle);
+        title_note.bind("blur", checkTitleExist);
     content_note.bind("input", checkContent);
 
 

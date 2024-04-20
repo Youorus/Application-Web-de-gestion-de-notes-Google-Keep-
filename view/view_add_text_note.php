@@ -31,7 +31,7 @@
     </div>
 </div>
 
-<form id="addTextNote" method="POST" action="AddTextNote">
+<form id="addTextNote" method="POST" action="addTextNote">
 
     <div class="open-text">
         <div class="mb-3">
@@ -39,9 +39,11 @@
             <input type="text" id="title_note" class="form-control" value="<?= trim($title_note) ?>" name="title_note">
             <h2 class="error-text" id="titleError"></h2>
             <!-- Section pour afficher les erreurs -->
-            <?php if (isset($errors)): ?>
+            <?php if (count($errors) != 0): ?>
                 <?php foreach ($errors as $error): ?>
-                    <h2 class="error-text" ><?php echo $error; ?></h2>
+                    <?php if (is_string($error)): ?>
+                        <h2 class="error-text"><?= $error ?></h2>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>

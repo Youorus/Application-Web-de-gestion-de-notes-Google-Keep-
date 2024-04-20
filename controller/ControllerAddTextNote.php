@@ -20,9 +20,19 @@ class ControllerAddTextNote extends Controller
             $title_note = trim($_POST["title_note"]);
             $content_note = trim($_POST["content_note"]);
 
+
+
             // Validation de la longueur du titre
 
-            $errors[] = TextNote::validate($title_note);
+
+            if (TextNote::validate($title_note) > 0)
+                $errors[] = "The title must have more than 3 characters";
+            if (TextNote::validate($title_note) < 0)
+                $errors[] = "The title must have less than 25 characters";
+
+            if (empty($errors))
+                var_dump("test");
+
 
             if($user->title_exist( $title_note)){
                 $errors[] = "this title is already exist";
@@ -30,8 +40,10 @@ class ControllerAddTextNote extends Controller
 
 
             if (empty($errors)){
+
                 // Création de la note si la validation est réussie
                 $note = new TextNote(0, $content_note);
+                var_dump($note);
                 $note->setOwner($user->getId());
                 $note->setTitle($title_note);
                 $note->persist(); // Enregistrement de la note
