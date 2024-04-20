@@ -323,18 +323,39 @@ class ControllerChecklistnote extends Controller {
     public function check_uncheck()
     {
         $user = $this->get_user_or_redirect();
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $itemId = $_POST['item_id'];
-            $checked = isset($_POST['checked']) ? 1 : 0;
+       // if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            if (isset($_GET['param1'])) {
+            $itemId = $_GET['param1'];
+            $checked = $_GET['param2'];
             $item = CheckListNoteItem::get_item_by_id($itemId);
             if ($item) {
                 $item->setChecked($checked);
                 $item->persist();
             }
+            return var_dump(array("res"));
         }
+        return var_dump(array("ko"));
 
     }
+/*
+    public function check_uncheck()
+    {
+        $user = $this->get_user_or_redirect();
+        // if ($_SERVER["REQUEST_METHOD"] === "GET") {
+        if (isset($_GET['item_id'])) {
+            $itemId = $_GET['item_id'];
+            $checked = isset($_GET['checked']) ? 1 : 0;
+            $item = CheckListNoteItem::get_item_by_id($itemId);
+            if ($item) {
+                $item->setChecked($checked);
+                $item->persist();
+            }
+            return var_dump(array("res"));
+        }
+        return var_dump(array("ko"));
 
+    }
+*/
 
 
 

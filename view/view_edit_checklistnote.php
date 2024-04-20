@@ -36,7 +36,7 @@
     <label class="form-label">Items</label>
     <?php foreach ($items as $index => $item): ?>
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <form class="flex-grow-1 me-2" onsubmit="return false;">
+        <form class="flex-grow-1 me-2" ">
             <div class="input-group">
                 <div class="input-group-text">
                     <input class="form-check-input mt-0 checkbox-item" type="checkbox" name="checked" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" data-item-id="<?= $item->getId(); ?>">
@@ -65,35 +65,14 @@
 
             </div>
         </form>
-        <div class="error-text" style="color: red;">
+        <div id="item-error" class="error-text" style="color: red;">
             <?= $errors['item'] ?? '' ?>
             <?= $errors['unique'] ?? '' ?>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        $('.checkbox-item').change(function() {
-            var checkbox = $(this);
-            var itemId = checkbox.data('item-id');
-            var isChecked = checkbox.is(':checked') ? 1 : 0;
 
-            $.ajax({
-                url: 'Checklistnote/check_uncheck',
-                type: 'POST',
-                data: {
-                    item_id: itemId,
-                    checked: isChecked
-                },
-                error: function() {
-                    // Rétablit l'état précédent de la checkbox en cas d'erreur
-                    checkbox.prop('checked', !isChecked);
-                }
-            });
-        });
-    });
-</script>
 
 
 
@@ -104,7 +83,7 @@
         let titleInput = $("#title");
         let titleError = $("#titleError");
         let itemInputs = $("#content"); // Utilise la classe au lieu de l'ID
-        let itemErrors = $(".item-error"); // Utilise la classe pour les messages d'erreur
+        let itemErrors = $("#item-error"); // Utilise la classe pour les messages d'erreur
 
         // Les valeurs de configuration
         const minLength = <?= $minLength ?>;
@@ -137,7 +116,7 @@
         }
 
         titleInput.on("input", checkTitle);
-        itemInputs.on("input", checkItems); // Attache l'événement à chaque input d'item
+        itemInputs.on("focus", checkItems); // Attache l'événement à chaque input d'item
     });
 </script>
 
