@@ -243,92 +243,7 @@ $this->redirect("index");
 
 
 
-    public function edit_checklistnote()
-    {
-        $idNote = intval($_GET['param1']);
-        $coderror = isset($_GET['param2']) ? intval($_GET['param2']) : null;
 
-
-
-        $user = $this->get_user_or_redirect();
-        $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
-        $title = $note->getTitle();
-
-        if (isset($_POST['title'])) {
-            return print_r($_POST);
-        }
-        $content = $note->getItems();
-
-        $sortedItems = $this->sort_items($content);
-
-        $createDate = $note->getDateTime();
-        $editDate = $note->getDateTimeEdit();
-
-        $messageCreate = getMessageForDateDifference($actualDate, $createDate);
-        $messageEdit = getMessageForDateDifference($actualDate, $editDate);
-
-        $noteType = open_note($note);
-
-
-        if($coderror == 1) {
-            $error = "Le titre doit contenir au moins 3 caractères";
-        } else if ($coderror == 2) {
-            $error = "les items doivent être unique";
-        } else {
-            $error = "";
-        }
-
-
-        (new View("edit_checklistnote"))->show(["title" => $title, "content" => $sortedItems, "messageCreate" => $messageCreate, "messageEdit" => $messageEdit, "note" => $note, "noteType" => $noteType, "coderror" => $coderror, "msgerror" => $error]);
-
-    }
-
-
-
-    public function editchecklistnote()
-    {
-        if (isset($_POST['idnote'], $_POST['title'])) {
-            $error = [];
-            $idNote = $_POST['idnote'];
-            $user = $this->get_user_or_redirect();
-            $ownerId = $user->getId();
-
-            $note = $user->get_One_note_by_id($idNote);
-            $note->setOwner($ownerId);
-            //return var_dump($note);
-            if ($note) {
-
-                if($note->isPinned()) {
-                    $note->setPinned(1);
-                }
-                if(!empty($_POST['title'])) {
-                    $note->setTitle($_POST['title']);
-                } else {
-                    $note->setTitle(" ");
-                }
-
-                $editDate = new DateTime();
-                $note->setDateTimeEdit($editDate);
-                //return print_r($note);
-
-                $error = $note->validate_checklistnote();
-
-                //return print_r($error);
-
-                if (empty($error)) {
-                    $note->persist();
-                    $this->redirect("index", "edit_checklistnote", $idNote, 0);
-                } else {
-                    $coderror = 2;
-                    if(isset($error["title"])) {
-                        $coderror = 1;
-                    }
-                    $this->redirect("index", "edit_checklistnote", $idNote, $coderror);
-                }
-            }
-        }
-    }
 
 
 
@@ -346,6 +261,7 @@ $this->redirect("index");
         $this->redirect("index", "edit_checklistnote", $idNote);
     }
 
+
     public function add_item()
     {
         //$idnoteitem = $_POST['id_item'];
@@ -359,17 +275,19 @@ $this->redirect("index");
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower($content)) {
-                $this->redirect("index", "edit_checklistnote", $idNote, 2);
+                $this->redirect("index", "edit_checklistnote", $idNote);
             }
         }
 
         if (empty($errors)) {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
-            $this->redirect("index", "edit_checklistnote", $idNote, 0);
+            $this->redirect("index", "edit_checklistnote", $idNote);
         }
 
     }
+
+
 
 
     public function add_share() {

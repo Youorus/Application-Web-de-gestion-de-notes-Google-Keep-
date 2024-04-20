@@ -72,10 +72,6 @@ class ControllerChecklistnote extends Controller {
         $title = $note->getTitle();
         $content = $note->getItems();
 
-        $minLenght = Configuration::get("title_min_lenght");
-        $maxLenght = Configuration::get("title_max_lenght") ;
-        $minItemLenght = Configuration::get("item_min_length") ;
-        $maxItemLenght = Configuration::get("item_max_length") ;
 
 
         $sortedItems = $this->sort_items($content);
@@ -180,108 +176,74 @@ class ControllerChecklistnote extends Controller {
     }
 
 
-    public function edit_checklistnote()
+    public function editchecklistnote()
     {
-        $idNote = intval($_GET['param1']);
-        $coderror = isset($_GET['param2']) ? intval($_GET['param2']) : null;
-
-        $minLength = Configuration::get("title_min_lenght");
-        $maxLength = Configuration::get("title_max_lenght");
-        $minItemLength = Configuration::get("item_min_length");
-        $maxItemLength = Configuration::get("item_max_length");
+        $idNote = $_POST['idnote'] ?? $_GET['param1'] ?? null;
+        $errors = [];
 
         $user = $this->get_user_or_redirect();
         $note = $user->get_One_note_by_id($idNote);
-        $actualDate = new DateTime();
+
+        $minLenght = Configuration::get("title_min_lenght");
+        $maxLenght = Configuration::get("title_max_lenght") ;
+        $minItemLength = Configuration::get("item_min_length") ;
+        $maxItemLength = Configuration::get("item_max_length") ;
+
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $title = $_POST['title'] ?? '';
+
+            if (strlen(trim($title)) < $minLenght) {
+                $errors['title'] = "Le titre doit contenir au moins " . $minLenght . " caractères.";
+            }
+
+            if (strlen(trim($title)) > $maxLenght) {
+                $errors['title'] = "Le titre doit contenir au moins " . $maxLenght . " caractères.";
+            }
+
+            if (empty($errors)) {
+                $note->setTitle($title);
+                $note->setDateTimeEdit(new DateTime());
+
+                if($note->isPinned()) {
+                    $note->setPinned(1);
+                }
+                $weight = $note->getWeightByIdNote($idNote);
+                $maxWeight = $note->getMaxWeight($user->getId());
+                if($weight != $maxWeight) {
+                    $note->setWeight($maxWeight);
+                }
+
+                $note->persist();
+                $this->redirect("Checklistnote", "index", $idNote);
+            }
+        }
+
         $title = $note->getTitle();
-        $content = $note->getItems();
-        $sortedItems = $this->sort_items($content);
+        $items = $note->getItems();
+        $actualDate = new DateTime();
         $createDate = $note->getDateTime();
         $editDate = $note->getDateTimeEdit();
         $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
         $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
         $noteType = $this->open_note($note);
 
-        $error = "";
-        if($coderror == 1) {
-            $error = "Le titre doit contenir au moins 3 caractères";
-        } elseif ($coderror == 2) {
-            $error = "Les items doivent être uniques";
-        }
-
-        // Passer les variables à la vue
         (new View("edit_checklistnote"))->show([
+            "note" => $note,
             "title" => $title,
-            "content" => $sortedItems,
+            "items" => $items,
             "messageCreate" => $messageCreate,
             "messageEdit" => $messageEdit,
-            "note" => $note,
             "noteType" => $noteType,
-            "coderror" => $coderror,
-            "msgerror" => $error,
-            "minLength" => $minLength,
-            "maxLength" => $maxLength,
+            "errors" => $errors,
+            "minLength" => $minLenght,
+            "maxLength" => $maxLenght,
             "minItemLength" => $minItemLength,
             "maxItemLength" => $maxItemLength
         ]);
     }
 
-
-
-
-    public function editchecklistnote()
-    {
-        if (isset($_POST['idnote'], $_POST['title'])) {
-            $error = [];
-            $idNote = $_POST['idnote'];
-            $user = $this->get_user_or_redirect();
-            $ownerId = $user->getId();
-
-            $minLenght = Configuration::get("title_min_lenght");
-            $maxLenght = Configuration::get("title_max_lenght") ;
-
-            $note = $user->get_One_note_by_id($idNote);
-            $note->setOwner($ownerId);
-            //return var_dump($note);
-            if ($note) {
-
-
-                if($note->isPinned()) {
-                    $note->setPinned(1);
-                }
-                if(!empty($_POST['title'])) {
-                    $note->setTitle($_POST['title']);
-                } else {
-                    $note->setTitle(" ");
-                }
-
-                $editDate = new DateTime();
-                $note->setDateTimeEdit($editDate);
-                //return print_r($note);
-
-                $error = $note->validate_checklistnote();
-
-                //return print_r($error);
-
-                if (empty($error)) {
-                    $weight = $note->getWeightByIdNote($idNote);
-                    $maxWeight = $note->getMaxWeight($ownerId);
-                    if($weight != $maxWeight) {
-                        $note->setWeight($maxWeight);
-                    }
-                    $note->persist();
-                    $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
-
-                } else {
-                    $coderror = 2;
-                    if(isset($error["title"])) {
-                        $coderror = 1;
-                    }
-                    $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", "$coderror");
-                }
-            }
-        }
-    }
 
 
 
@@ -296,55 +258,109 @@ class ControllerChecklistnote extends Controller {
         $checklistnoteitem->delete_item();
 
 
-        $this->redirect("Checklistnote", "edit_checklistnote", "$idNote");
+        $this->redirect("Checklistnote", "editchecklistnote", $idNote);
     }
 
     public function add_item()
     {
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
-        $error = "";
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+
+        $errors = [];
+
+        // Récupération des configurations de longueur minimale et maximale pour les items
+        $minItemLength = Configuration::get("item_min_length");
+        $maxItemLength = Configuration::get("item_max_length");
 
         $checklistnote = new CheckListNote($idNote);
         $allItems = $checklistnote->getItems();
 
-        // Vérification si le contenu est vide ou trop court
-        if (empty(trim($content))) {
-            $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 3); // Code 3 pour indiquer un contenu invalide
+        if (strlen(trim($content)) < $minItemLength) {
+            $errors['item'] = "Item must have at least $minItemLength characters.";
+        } elseif (strlen(trim($content)) > $maxItemLength) {
+            $errors['item'] = "Item must have less than $maxItemLength characters.";
         }
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower(trim($content))) {
-                $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 2);
+                $errors['unique'] = "Les items doivent être uniques.";
             }
         }
 
-        // Si le contenu est valide et unique
-        $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
-        $checklistnoteitem->persist();
-        $this->redirect("Checklistnote", "edit_checklistnote", "$idNote", 0);
+        if (empty($errors)) {
+            $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
+            $checklistnoteitem->persist();
+            $this->redirect("Checklistnote", "editchecklistnote", $idNote);
+        }
+
+        $title = $note->getTitle();
+        $items = $note->getItems();
+        $actualDate = new DateTime();
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+        $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
+        $noteType = $this->open_note($note);
+
+        (new View("edit_checklistnote"))->show([
+            "note" => $note,
+            "title" => $title,
+            "items" => $items,
+            "messageCreate" => $messageCreate,
+            "messageEdit" => $messageEdit,
+            "noteType" => $noteType,
+            "errors" => $errors,
+            "minItemLength" => $minItemLength,
+            "maxItemLength" => $maxItemLength
+        ]);
     }
+
 
 
     public function check_uncheck()
     {
         $user = $this->get_user_or_redirect();
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $itemId = $_POST['item_id'];
-            $checked = isset($_POST['checked']) ? 1 : 0;
+       // if ($_SERVER["REQUEST_METHOD"] === "GET") {
+            if (isset($_GET['param1'])) {
+            $itemId = $_GET['param1'];
+            $checked = $_GET['param2'];
+            $item = CheckListNoteItem::get_item_by_id($itemId);
+            if ($item) {
+                $item->setChecked($checked);
+                $item->persist();
+
+            }
+            return var_dump(array("res"));
+        }
+        return var_dump(array("ko"));
+
+    }
+/*
+    public function check_uncheck()
+    {
+        $user = $this->get_user_or_redirect();
+        // if ($_SERVER["REQUEST_METHOD"] === "GET") {
+        if (isset($_GET['item_id'])) {
+            $itemId = $_GET['item_id'];
+            $checked = isset($_GET['checked']) ? 1 : 0;
             $item = CheckListNoteItem::get_item_by_id($itemId);
             if ($item) {
                 $item->setChecked($checked);
                 $item->persist();
             }
+            return var_dump(array("res"));
         }
+        return var_dump(array("ko"));
 
     }
+*/
 
 
 
-
-    public function validate(): void{
+    private function validate(): void{
         $user = $this->get_user_or_redirect();
         $res = "false";
         if (isset($_POST["test"])){
