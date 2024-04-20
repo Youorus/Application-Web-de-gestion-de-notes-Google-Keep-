@@ -186,8 +186,8 @@ class ControllerChecklistnote extends Controller {
 
         $minLenght = Configuration::get("title_min_lenght");
         $maxLenght = Configuration::get("title_max_lenght") ;
-        $minItemLenght = Configuration::get("item_min_length") ;
-        $maxItemLenght = Configuration::get("item_max_length") ;
+        $minItemLength = Configuration::get("item_min_length") ;
+        $maxItemLength = Configuration::get("item_max_length") ;
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -239,8 +239,8 @@ class ControllerChecklistnote extends Controller {
             "errors" => $errors,
             "minLength" => $minLenght,
             "maxLength" => $maxLenght,
-            "minItemLength" => $minItemLenght,
-            "maxItemLength" => $maxItemLenght
+            "minItemLength" => $minItemLength,
+            "maxItemLength" => $maxItemLength
         ]);
     }
 
@@ -265,6 +265,10 @@ class ControllerChecklistnote extends Controller {
     {
         $idNote = $_POST['idnote'];
         $content = $_POST['content'];
+        $user = $this->get_user_or_redirect();
+        $note = $user->get_One_note_by_id($idNote);
+
+
         $errors = [];
 
         // Récupération des configurations de longueur minimale et maximale pour les items
@@ -275,15 +279,14 @@ class ControllerChecklistnote extends Controller {
         $allItems = $checklistnote->getItems();
 
         if (strlen(trim($content)) < $minItemLength) {
-            $errors['item'] = "L'item doit faire au moins $minItemLength caractères.";
+            $errors['item'] = "Item must have at least $minItemLength characters.";
         } elseif (strlen(trim($content)) > $maxItemLength) {
-            $errors['item'] = "L'item doit faire au maximum $maxItemLength caractères.";
+            $errors['item'] = "Item must have less than $maxItemLength characters.";
         }
 
         foreach ($allItems as $item) {
             if (strtolower(trim($item->getContent())) === strtolower(trim($content))) {
                 $errors['unique'] = "Les items doivent être uniques.";
-                break;
             }
         }
 
@@ -291,12 +294,28 @@ class ControllerChecklistnote extends Controller {
             $checklistnoteitem = new CheckListNoteItem(0, $idNote, $content, 0);
             $checklistnoteitem->persist();
             $this->redirect("Checklistnote", "editchecklistnote", $idNote);
-        } else {
-            (new View("edit_checklistnote"))->show([
-                'note' => $checklistnote,
-                'errors' => $errors
-            ]);
         }
+
+        $title = $note->getTitle();
+        $items = $note->getItems();
+        $actualDate = new DateTime();
+        $createDate = $note->getDateTime();
+        $editDate = $note->getDateTimeEdit();
+        $messageCreate = $this->getMessageForDateDifference($actualDate, $createDate);
+        $messageEdit = $this->getMessageForDateDifference($actualDate, $editDate);
+        $noteType = $this->open_note($note);
+
+        (new View("edit_checklistnote"))->show([
+            "note" => $note,
+            "title" => $title,
+            "items" => $items,
+            "messageCreate" => $messageCreate,
+            "messageEdit" => $messageEdit,
+            "noteType" => $noteType,
+            "errors" => $errors,
+            "minItemLength" => $minItemLength,
+            "maxItemLength" => $maxItemLength
+        ]);
     }
 
 
