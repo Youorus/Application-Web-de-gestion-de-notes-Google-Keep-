@@ -216,7 +216,7 @@ class ControllerChecklistnote extends Controller {
                 }
 
                 $note->persist();
-                $this->redirect("Checklistnote", "editchecklistnote", $idNote);
+                $this->redirect("Checklistnote", "index", $idNote);
             }
         }
 
