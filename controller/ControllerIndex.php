@@ -194,6 +194,8 @@ $this->redirect("index");
 
         if ($note) {
             $note->setArchived(0);
+            $note->setOwner($user->getId());
+            $note->setTitle($note->getTitle());
             $note->persist();
         }
 
@@ -212,6 +214,8 @@ $this->redirect("index");
 
         if ($note) {
             $note->setArchived(1);
+            $note->setOwner($user->getId());
+            $note->setTitle($note->getTitle());
             $note->persist();
         }
 
