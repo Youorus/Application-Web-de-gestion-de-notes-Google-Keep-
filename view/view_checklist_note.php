@@ -54,10 +54,6 @@
             $.ajax({
                 url: 'Checklistnote/check_uncheck/' + itemId + '/' + isChecked ,
                 type: 'GET',
-                data: {
-                    item_id: itemId,
-                    checked: isChecked
-                },
                 success: function (res){
 
                     if(isChecked === 0) {
@@ -70,10 +66,8 @@
 
                     console.log(res);
 
-
                 },
                 error: function() {
-                    // Rétablit l'état précédent de la checkbox en cas d'erreur
                     checkbox.prop('checked', !isChecked);
                 }
             });
