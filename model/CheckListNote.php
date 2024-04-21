@@ -31,8 +31,8 @@ class CheckListNote extends Note
     }
 
 
-    public function persist(): CheckListNote|array
-    {
+
+    public function persist(): CheckListNote | array  {
         if (self::get_checklistnote_by_id($this->getId())) {
             self::execute("UPDATE notes SET title = :title, owner = :owner, created_at = :createdAt, 
                            edited_at = :editedAt, pinned = :pinned, archived = :archived, weight = :weight 
@@ -72,6 +72,7 @@ class CheckListNote extends Note
     }
 
 
+
     public function getType(): NoteType
     {
         return NoteType::ChecklistNote;
@@ -100,9 +101,11 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
     }
 
 
-    public static function get_checklistnote_by_id(int $id): CheckListNote|false
-    {
-        $query = self::execute("select * FROM checklist_notes where id = :id", ["id" => $id]);
+
+
+
+    public static function get_checklistnote_by_id(int $id) : CheckListNote | false {
+        $query = self::execute("select * FROM checklist_notes where id = :id", ["id"=>$id]);
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
             return false;
@@ -111,14 +114,12 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
         }
     }
 
-    public function validate_checklistnote(): array
-    {
+    public function validate_checklistnote(): array {
         $errors = [];
 
         if (strlen($this->getTitle()) < 3 || strlen($this->getTitle()) > 25) {
             $errors['title'] = "The title must be between 3 and 25 characters.";
         }
-
 
         $itemNames = [];
         foreach ($this->getItems() as $item) {
@@ -133,19 +134,22 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
 
     public function getTitle(): string
     {
-        if (empty($this->getTitleNote())) {
+        if(empty($this->getTitleNote())){
             $query = self::execute("SELECT notes.title from notes WHERE notes.id = :id", ["id" => $this->id]);
             $data = $query->fetchAll();
             $results = "";
-            foreach ($data as $row) {
+            foreach ($data as $row){
                 $results = $row['title'];
 
             }
 
-        } else {
+        }else{
             $results = $this->getTitleNote();
         }
         return $results;
     }
-}
 
+
+
+
+}
