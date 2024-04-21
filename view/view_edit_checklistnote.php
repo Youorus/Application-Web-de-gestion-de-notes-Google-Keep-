@@ -25,29 +25,35 @@
 
 <form name="editchecklistnote" id="editchecklistnote" action="Checklistnote/editchecklistnote" method="post">
     <div class="open-text">
-        <label for="title" class="form-label">Title</label>
+        <label class="form-label">Title</label>
         <input id="title" name="title" type="text" class="form-control" value="<?= htmlspecialchars($title) ?>">
         <div class="error-text" id="titleError"><?= $errors['title'] ?? '' ?></div>
-        <input type="hidden" name="idnote" value="<?= $note->getId(); ?>">
-    </div>
-
-    <div class="checklist-items">
-        <label class="form-label">Items</label>
-        <?php foreach ($items as $item): ?>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="input-group">
-                    <div class="input-group-text">
-                        <input class="form-check-input mt-0 checkbox-item" type="checkbox" name="items[<?= $item->getId() ?>][checked]" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input">
-                    </div>
-                    <input type="text" class="form-control item-content" name="items[<?= $item->getId() ?>][content]" value="<?= htmlspecialchars($item->getContent()); ?>">
-                </div>
-                <!-- Suppression d'un item (optionnel si nécessaire) -->
-                <!-- <button class="btn delete-btn" type="button" onclick="deleteItem(<?= $item->getId(); ?>);">Delete</button> -->
-            </div>
-        <?php endforeach; ?>
+        <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
     </div>
 </form>
 
+<div class="checklist-items">
+    <label class="form-label">Items</label>
+    <?php foreach ($items as $index => $item): ?>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <form class="flex-grow-1 me-2" ">
+            <div class="input-group">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0 checkbox-item" type="checkbox" name="checked" <?= $item->getChecked() ? 'checked' : ''; ?> aria-label="Checkbox for following text input" data-item-id="<?= $item->getId(); ?>">
+                </div>
+                <input type="text" class="form-control item-content" value="<?= htmlspecialchars($item->getContent()); ?>" disabled>
+                <input type="hidden" class="item-id" value="<?= $item->getId(); ?>">
+            </div>
+            </form>
+            <form action="Checklistnote/delete_item" method="post">
+                <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">
+                <input type="hidden" name="id_item" value="<?= $item->getId(); ?>">
+                <button class="btn delete-btn" type="submit" aria-label="Delete">
+                    <i class="bi bi-dash-lg"></i>
+                </button>
+            </form>
+        </div>
+    <?php endforeach; ?>
     <div class="my-3">
         <label class="form-label">New Items</label>
         <form action="Checklistnote/add_item" method="post" class="flex-grow-1 me-2">

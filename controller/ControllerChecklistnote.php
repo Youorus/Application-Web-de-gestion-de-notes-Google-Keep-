@@ -199,13 +199,9 @@ class ControllerChecklistnote extends Controller {
 
             if (strlen(trim($title)) < $minLenght) {
                 $errors['title'] = "Le titre doit contenir au moins " . $minLenght . " caractères.";
-            }
-
-            if (strlen(trim($title)) > $maxLenght) {
+            } else if (strlen(trim($title)) > $maxLenght) {
                 $errors['title'] = "Le titre doit contenir au moins " . $maxLenght . " caractères.";
-            }
-
-            if($user->title_exist($title)){
+            } else if($user->title_exist($title)){
                 $errors['title'] = "this title is already exist";
             }
 
