@@ -1,5 +1,6 @@
 <?php
 require_once 'model/TextNote.php';
+require_once 'model/CheckListNote.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 require_once 'model/NoteShare.php';

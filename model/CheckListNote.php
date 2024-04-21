@@ -1,8 +1,8 @@
 <?php
 
 require_once "Note.php";
-class CheckListNote extends Note
-{
+
+class CheckListNote extends Note{
     protected ?int $id;
 
     public function getId(): int
