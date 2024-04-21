@@ -2,7 +2,7 @@
 require_once "framework/Model.php";
 require_once "model/Note.php"; 
 
-class NoteShare {
+class NoteShare extends Model {
 private int $noteid;
 private int $user;
 private int $editor;
@@ -22,7 +22,7 @@ return $error;
 
 
     public static function get_noteShare_byID(int $id): NoteShare | false {
-        $query = self::execute("SELECT * FROM note_shares WHERE id = :id", ["id" => $id]);
+        $query = self::execute("SELECT * FROM note_shares WHERE note_shares.note = :id", ["id" => $id]);
         $data = $query->fetch();
         if ($query->rowCount() == 0) {
             return false;
@@ -31,6 +31,22 @@ return $error;
         }
     }
 
+
+    public function persist(): void {
+        // Vérifier si le partage existe déjà pour cette note et cet utilisateur
+        $query = "SELECT COUNT(*) FROM note_shares WHERE note = :note AND user = :user";
+        $result = self::execute($query, ['note' => $this->noteid, 'user' => $this->user])->fetchColumn();
+
+        if ($result > 0) {
+            // Si le partage existe déjà, mettre à jour l'éditeur
+            $query = "UPDATE note_shares SET editor = :editor WHERE note = :note AND user = :user";
+            self::execute($query, ['editor' => $this->editor, 'note' => $this->noteid, 'user' => $this->user]);
+        } else {
+            // Si le partage n'existe pas, l'insérer dans la base de données
+            $query = "INSERT INTO note_shares (note, editor, user) VALUES (:note, :editor, :user)";
+            self::execute($query, ['note' => $this->noteid, 'editor' => $this->editor, 'user' => $this->user]);
+        }
+    }
 
 //public function delete() {
 //    $query = "DELETE FROM note_shares WHERE note = :note AND user = :user";

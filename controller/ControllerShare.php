@@ -27,12 +27,15 @@ class ControllerShare extends Controller
         $idNote = "";
 
         if (isset($_POST["userId"]) && isset($_POST["permission"]) && isset($_POST["idNote"])){
-            $id = intval($_POST["userId"]);
+            $idUser = intval($_POST["userId"]);
             $permission = intval($_POST["permission"]);
             $idNote = intval($_POST["idNote"]);
 
             $note = NoteShare::get_noteShare_byID($idNote);
-            var_dump($note);
+            if ($note === false){
+                $noteShare = new NoteShare($idNote,$permission,$idUser);
+                $noteShare->persist();
+            }
         }
     }
 
