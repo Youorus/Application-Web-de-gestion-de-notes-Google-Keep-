@@ -70,18 +70,22 @@ class ControllerEditText extends Controller
 
             // Validation de la longueur du titre
 
-            $errors[] = TextNote::validate($title);
+            if (TextNote::validate($title) > 0)
+                $errors[] = "The title must have more than 3 characters";
+            if (TextNote::validate($title) < 0)
+                $errors[] = "The title must have less than 25 characters";
+
 
             if($user->title_exist($title)){
                 $errors[] = "this title is already exist";
             }
 
 
-
             // Si aucune erreur n'est détectée, mise à jour de la note
-            if ($errors) {
+            if (empty($errors)) {
                 $note = Note::get_textnote_by_id($idNote);
                 $note->setTitle($title);
+                $note->setOwner($user->getId());
                 $note->setContent($content);
                 $note->persist();
 

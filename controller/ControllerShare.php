@@ -36,6 +36,7 @@ class ControllerShare extends Controller
             if ($note === false){
                 $noteShare = new NoteShare($idNote,$permission,$idUser);
                 $noteShare->persist();
+                $this->redirect("index");
             }
         }
     }

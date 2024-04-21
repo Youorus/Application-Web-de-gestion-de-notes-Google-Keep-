@@ -30,9 +30,6 @@ class ControllerAddTextNote extends Controller
             if (TextNote::validate($title_note) < 0)
                 $errors[] = "The title must have less than 25 characters";
 
-            if (empty($errors))
-                var_dump("test");
-
 
             if($user->title_exist( $title_note)){
                 $errors[] = "this title is already exist";
@@ -43,7 +40,6 @@ class ControllerAddTextNote extends Controller
 
                 // Création de la note si la validation est réussie
                 $note = new TextNote(0, $content_note);
-                var_dump($note);
                 $note->setOwner($user->getId());
                 $note->setTitle($title_note);
                 $note->persist(); // Enregistrement de la note

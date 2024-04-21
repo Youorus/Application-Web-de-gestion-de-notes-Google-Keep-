@@ -49,7 +49,6 @@ class TextNote extends Note {
 
 
     public function persist(): TextNote | array {
-        var_dump($this);
         $currentDateTime = new DateTime('now');
         // Vérifier si la note existe déjà dans la base de données
         if (!parent::get_textnote_by_id($this->getId())) {
