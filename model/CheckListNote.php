@@ -34,7 +34,6 @@ class CheckListNote extends Note
 
     public function persist(): CheckListNote | array  {
         // Vérifier si la note parente existe dans la table 'notes'
-        
         $lastWeight = parent::getLastWeightNote();
 
         if (self::get_checklistnote_by_id($this->getId())) {
