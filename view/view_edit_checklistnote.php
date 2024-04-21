@@ -7,7 +7,7 @@
     <div class="container">
         <!-- Bouton de retour -->
         <div class="navbar-icon">
-            <a href="index">
+            <a id="back" type="button" data-bs-toggle="modal" data-bs-target="#myModalSave">
                 <span class="material-symbols-outlined"> arrow_back_ios </span>
             </a>
         </div>
@@ -74,6 +74,39 @@
 </div>
 
 
+<div class="modal fade" id="myModalSave">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="custom-modal modal-content">
+
+            <!-- Modal Header -->
+            <div class="bg-back modal-header">
+                <h4 class="modal-title">Modal Header</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="bg-back modal-body">
+                <span>Are you sure you want to leave this form </span> ?
+                <br>
+                <br>
+                <span>Change you made will not be saved </span> ?
+
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class=" bg-back modal-footer">
+                <!-- Utilisation de PHP pour inclure la variable $idNote dans les liens -->
+                <a class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</a>
+                <a class="btn btn-danger" href="index" >Leave Page</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 
 
 
@@ -85,6 +118,7 @@
         let titleError = $("#titleError");
         let itemInputs = $("#content"); // Utilise la classe au lieu de l'ID
         let itemErrors = $("#item-error"); // Utilise la classe pour les messages d'erreur
+        let backBtn = $("#back");
 
         // Les valeurs de configuration
         const minLength = <?= $minLength ?>;
@@ -102,6 +136,14 @@
             }
         }
 
+        function modalShow() {
+            if (title_note.val() !== title || content_note.val() !== content) {
+                $("#myModalSave").modal("show");
+            } else {
+                window.location.href = "index";
+            }
+        }
+
         function checkItems() {
             itemInputs.each(function(index) {
                 let itemInput = $(this);
@@ -115,6 +157,8 @@
                 }
             });
         }
+
+        backBtn.bind("click", modalShow);
 
         titleInput.on("input", checkTitle);
         itemInputs.on("focus", checkItems); // Attache l'événement à chaque input d'item
