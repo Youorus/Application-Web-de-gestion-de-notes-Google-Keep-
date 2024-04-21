@@ -28,14 +28,37 @@
                 echo '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined">unarchive</span></a>';
             } elseif ($noteType == "share"){
                 // edite share
-                if ($note->getType() == NoteType::TextNote && $note->isEditor()){
-                    echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
-                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                if ($note->getType() == NoteType::TextNote && $note->isEditor() || $note->getType() == NoteType::ChecklistNote && $note->isEditor() ){
+                    // share
+                    echo '<a  href="Share/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span  class="material-symbols-outlined"> share </span>';
                     echo '</a>';
-                }elseif($note->getType() == NoteType::ChecklistNote && $note->isEditor()){
-                    echo '<a href="Checklistnote/editchecklistnote/'. $note->getId() .'" class="icon-link">';
-                    echo ' <span class="material-symbols-outlined"> edit </span>';
+                    // pinned
+                    echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><span style="font-variation-settings: \'FILL\' 1, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24;" class="material-symbols-outlined"> push_pin </span></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> push_pin </span></a>';
+
+                    // archived
+                    echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> unarchive </span> </a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> archive </span></a>';
+
+                    if ($note->getType() == NoteType::TextNote){
+                        echo '<a href="EditText/note/'. $note->getId() .'" class="icon-link">';
+                        echo ' <span class="material-symbols-outlined"> edit </span>';
+                        echo '</a>';
+                    }else{
+                        echo '<a href="Checklistnote/editchecklistnote/'. $note->getId() .'" class="icon-link">';
+                        echo ' <span class="material-symbols-outlined"> edit </span>';
+                        echo '</a>';
+                    }
+                }else{
+                    // share
+                    echo '<a  href="Share/note/'. $note->getId() .'" class="icon-link">';
+                    echo ' <span  class="material-symbols-outlined"> share </span>';
                     echo '</a>';
+                    // pinned
+                    echo $note->isPinned() ? '<a href="index/unpin/' . $note->getId() . '" class="icon-link"><span style="font-variation-settings: \'FILL\' 1, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24;" class="material-symbols-outlined"> push_pin </span></a>' : '<a href="index/pin/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> push_pin </span></a>';
+
+                    // archived
+                    echo $note->isArchived() ? '<a href="index/unarchive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> unarchive </span> </a>' : '<a href="index/archive/' . $note->getId() . '" class="icon-link"><span class="material-symbols-outlined"> archive </span></a>';
+
                 }
 
             } elseif ($noteType == "edited"){

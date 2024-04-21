@@ -64,6 +64,7 @@ abstract class Note extends Model {
     }
 
 
+
     public function isShared(): bool{
         $query = self::execute("SELECT COUNT(*) FROM `note_shares` WHERE note_shares.note = :id", ["id" => $this->id]);
         $data = $query->fetch();
