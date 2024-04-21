@@ -256,6 +256,7 @@ class ControllerChecklistnote extends Controller {
         //return print_r($_POST);
         $idnoteitem = $_POST['id_item'];
         $idNote = $_POST['idnote'];
+        var_dump($idNote);
 
         $checklistnoteitem = new CheckListNoteItem($idnoteitem, 0, "", 0);
         $checklistnoteitem->delete_item();
