@@ -1,0 +1,336 @@
+
+:root {
+    --couleur-fond: #222529;
+    --couleur-texte: #dee2e6;
+    --couleur-bordure: #495056;
+    --couleur-bouton: #0f6efd;
+    --error-color: #fc545d;
+    --couleur-icon: #ffc107;
+  }
+
+a{
+    text-decoration: none;
+    color: var(--couleur-texte);
+}
+  *{
+    color: var(--couleur-texte);
+  }
+
+  title{
+      color: var(--couleur-texte);
+      font-style: italic;
+  }
+
+.custom-modal {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte); /* Pour changer la couleur du texte en blanc */
+    border-color: var(--couleur-bordure);
+}
+.custom-modal div {
+    border-color: var(--couleur-bordure);
+}
+.bg-back{
+    background-color: var(--couleur-fond);
+}
+
+.form-control:focus{
+    color: var(--couleur-texte);
+}
+
+.formDelete button{
+    border: none;
+    background-color: transparent;
+}
+
+body{
+    background-color: var(--couleur-fond);
+}
+.form-check{
+    margin: 3%;
+}
+.card-text{
+    padding: 3%;
+}
+.card-body{
+    padding: 0;
+}
+.card-title{
+    padding: 3%;
+}
+
+
+.bord {
+    border-width: 0 0 1px 0;
+    border-color: var(--couleur-bordure);
+    border-style: solid;
+}
+
+.card {
+    background-color: var(--couleur-fond);
+    border: 1px solid var(--couleur-bordure);
+    border-bottom: none;
+}
+.card-other {
+    background-color: var(--couleur-fond);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 5px;
+}
+.iconBox{
+    border-top: 1px solid var(--couleur-bordure);
+    border-bottom: 1px solid var(--couleur-bordure);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.iconBox span i{
+    color: var(--couleur-bouton);
+}
+
+.offcanvas-start {
+    width: 220px;
+}
+.fixed-icons {
+    position: fixed;
+    top: 80%;
+    right: 5%;
+}
+
+.fixed-icons i {
+    font-size: 40px;
+    margin: 10px;
+    color: var(--couleur-icon);
+}
+
+  .input{
+    display: flex;
+  }
+  .icon{
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    color:  var(--couleur-texte);
+    font-size: 20px;
+    position: relative;
+    border: 1px solid   var(--couleur-bordure);
+    border-right: none;
+    left: 4%;
+    padding: 20px;
+  }
+.box-login{
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+.box-signup{
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+  .signup-box {
+      text-align: center;
+    background-color: var(--couleur-fond);
+      width: 25%;
+    border: 1px solid var(--couleur-bordure);
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  /*style de pour telephone */
+@media only screen and (max-width: 600px) {
+.custom{
+    width: 30%;
+}
+
+    .signup-box {
+    margin-top: 25%;
+        width: 95%;
+    }
+}
+
+.bt-default{
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+@media only screen and (min-width: 601px) and (max-width: 900px) {
+    .signup-box {
+        margin-top: 25%;
+        width: 60%;
+    }
+    .card{
+        width: 18rem;
+    }
+
+}
+
+
+
+  .signup-box h2 {
+    text-align: center;
+    color: var(--couleur-texte);
+  }
+
+
+.icon-link {
+    margin-right: 20px;
+}
+
+.input-group-text {
+    background-color: var(--couleur-bouton);
+    border: none;
+}
+
+.open-text{
+    margin: 1% 5% 0 5%;
+}
+.infoText{
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 5%;
+    margin-top: 3%;
+}
+.form-label{
+    font-size: larger;
+}
+.form-control {
+    background-color: var(--couleur-bordure) !important;
+    color: var(--couleur-texte);
+    border-color: var(--couleur-bordure);
+}
+
+  .signup-box hr {
+    margin: 15px 0;
+    color: var(--couleur-texte);
+  }
+
+  .error{
+      text-align: center;
+      color: var(--error-color);
+  }
+
+  .check-text{
+      text-decoration: line-through;
+  }
+
+.error-text {
+    color: var(--error-color);
+    font-size: 17px;
+    margin-top: 5px;
+}
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .form-group input {
+    width: calc(100% - 30px); /* RÃ©duire la largeur de l'input pour accueillir l'icÃ´ne */
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--couleur-bordure);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+   background-color: var(--couleur-fond);
+    display: inline-block;
+  }
+
+.checkBoxFinish{
+    margin-left: 15px;
+}
+
+  .form-group i {
+    margin-right: 10px;
+  }
+
+  .errors li {
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--error-color);
+  }
+
+.edit-cancel{
+    text-decoration: none;
+    width: 20%;
+    padding: 10px;
+    background-color: var(--error-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.edit-save{
+    width: 20%;
+    padding: 10px;
+    background-color: var(--couleur-bouton);
+    color: #fff;
+    border: none;
+    margin-left: 5%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+  .signup-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--couleur-bouton);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .navbar-nav .nav-link{
+    text-align: start;
+  }
+
+
+  .signup-btn:hover {
+    background-color: #0056b3;
+  }
+
+
+.note-container {
+    margin: 20px;
+}
+.note-title {
+    margin-bottom: 20px;
+}
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.checklist-item input[type="checkbox"]:checked + label {
+
+    color: #6c757d;
+}
+
+.delete-btn {
+    background-color: red; /
+    color: white;
+    border: none;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.add-btn {
+    background-color: blue; /* Fond bleu */
+    color: white; /* Icône et texte en blanc */
+    border: none; /* Retirer la bordure du bouton par défaut */
+}
+
+/* Vous pouvez ajouter :hover pour changer l'aspect au survol */
+.add-btn:hover {
+    background-color: #0000cc; /* Un bleu légèrement plus foncé pour l'effet au survol */
+}
+
+
