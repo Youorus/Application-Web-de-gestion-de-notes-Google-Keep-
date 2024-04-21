@@ -273,7 +273,7 @@ WHERE notes.owner = :id)", [
     }
 
     public function getOtherUsers(): array {
-        $query = self::execute("SELECT users.full_name FROM users WHERE NOT users.id = :id", [
+        $query = self::execute("select * FROM users WHERE NOT users.id = :id", [
             "id" => $this->id,
         ]);
 
@@ -281,7 +281,13 @@ WHERE notes.owner = :id)", [
         $results = [];
         foreach ($data as $row) {
             // Accédez à la valeur 'full_name' de chaque ligne, pas de '$data'
-            $results[] = $row['full_name'];
+            $results[] = new User(
+                $row['id'],
+                $row['mail'],
+                $row['hashed_password'],
+                $row['full_name'],
+                $row['role']
+            );;
         }
 
         return $results;

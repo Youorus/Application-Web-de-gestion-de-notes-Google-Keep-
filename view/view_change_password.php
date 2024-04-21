@@ -25,8 +25,8 @@ require_once "head.php";
             </div>
 
             <div class="btn-editProfile">
-                <span ><a href="settings/cancel" class="btn-danger edit-cancel" >Cancel</a></span>
-                <button type="submit" class="btn-success edit-save">Save</button>
+                <span ><a href="settings/cancel" class="btn btn-danger edit-cancel" >Cancel </a></span>
+                <button type="submit" class="btn btn-primary edit-save">Save</button>
             </div>
         </form>
 

@@ -202,7 +202,7 @@ $this->redirect("index");
         if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
         } else {
-            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+            $this->redirect("checklistnote", "index", $_GET['param1']);
         }
     }
 
@@ -222,7 +222,7 @@ $this->redirect("index");
         if ($note->getType() == NoteType::TextNote) {
             $this->redirect("index", "open_text_note", $_GET['param1']);
         } else {
-            $this->redirect("index", "open_checklist_note", $_GET['param1']);
+            $this->redirect("checklistnote", "index", $_GET['param1']);
         }
     }
 
