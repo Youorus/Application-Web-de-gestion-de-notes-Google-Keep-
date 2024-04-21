@@ -20,11 +20,17 @@ $error = [];
 return $error;
 }
 
-public function persist() {
-    $query = "INSERT INTO note_shares (note, user, editor) VALUES (:note, :user, :editor) ON DUPLICATE KEY UPDATE editor = :editor";
-        self::execute($query, ['note' => $this->note->getId(), 'user' => $this->user, 'editor' => $this->editor]);
-        return $this;
-}
+
+    public static function get_noteShare_byID(int $id): NoteShare | false {
+        $query = self::execute("SELECT * FROM note_shares WHERE id = :id", ["id" => $id]);
+        $data = $query->fetch();
+        if ($query->rowCount() == 0) {
+            return false;
+        } else {
+            return new NoteShare($data["note"], $data["editor"], $data["user"]);
+        }
+    }
+
 
 //public function delete() {
 //    $query = "DELETE FROM note_shares WHERE note = :note AND user = :user";

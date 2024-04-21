@@ -22,23 +22,25 @@
                 echo '<h5><i>This notes is not shared yet.</i></h5>';
             ?>
             <div class="mb-3">
-                <form id="addTextNote" method="POST" action="AddTextNote/add_text_note">
+                <form id="addTextNote" method="POST" action="Share/add">
                     <div class="input-group ">
-                        <select class="form-select dark-bg" id="inputGroupSelect01">
+                        <select class="form-select dark-bg" id="inputGroupSelect01" name="userId">
                             <option selected>-User-</option>
                             <?php if (!$note->isShared()): ?>
                                 <?php foreach ($otherUsers as $user): ?>
-                                    <option value=""> <?php echo $user; ?></option>
+                                    <option value="<?= $user->getId() ?>"> <?= $user->getFullName() ?></option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
-                        <select class="form-select dark-bg" id="inputGroupSelect01">
+                        <select class="form-select dark-bg" id="inputGroupSelect02" name="permission">
                             <option selected>-Permission-</option>
-                            <option value="editor">Editor</option>
-                            <option value="reader">Reader</option>
+                            <option  value="1">Editor</option>
+                            <option  value="0">Reader</option>
                         </select>
                         <button class="btn btn-primary" type="submit">+</button>
                     </div>
+                    <input name="idNote" value="<?= $idNote ?>" type="hidden">
+                </form>
         </div>
 
 
