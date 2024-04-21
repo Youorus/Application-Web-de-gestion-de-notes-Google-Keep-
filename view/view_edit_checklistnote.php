@@ -25,7 +25,7 @@
 
 <form name="editchecklistnote" id="editchecklistnote" action="Checklistnote/editchecklistnote" method="post">
     <div class="open-text">
-        <label class="form-label">Title</label>
+        <label class="input-group has-validation">Title</label>
         <input id="title" name="title" type="text" class="form-control" value="<?= htmlspecialchars($title) ?>">
         <div class="error-text" id="titleError"><?= $errors['title'] ?? '' ?></div>
         <input type="hidden" id="idnote" name="idnote" value="<?= $note->getId(); ?>">

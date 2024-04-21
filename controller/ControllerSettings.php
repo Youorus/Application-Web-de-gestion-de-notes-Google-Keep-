@@ -70,8 +70,8 @@ class ControllerSettings extends Controller
 
 
 
-
-    public function edit_profile()
+/*
+    public function edit_profile(): void
     {
         $user = $this->get_user_or_redirect();
         $errors = [];
@@ -106,29 +106,76 @@ class ControllerSettings extends Controller
                     $user_mail = $newemail;
 
                     if ($newemail != $user->getMail()) {
-                        $emailErrors = User::validate_unicity($newemail);
+                        $emailErrors = User::validate_unicity($user_mail);
                         if (!empty($emailErrors)) {
                             $errors = array_merge($errors, $emailErrors);
                         } else {
-                            $user->setMail($newemail);
+                            $user->setMail($user_mail);
                         }
                     }
 
                     if (empty($errors)) {
                         $user->persist();
-                        $this->redirect("settings", "edit_profile");
+                        $this->redirect("settings");
                         return;
                     }
                 }
 
-                (new View("edit_profile"))->show([
-                    "user" => $user,
-                    "errors" => $errors,
-                    "user_name" => $user->getFullName(),
-                    "user_mail" => $user->getMail(),
-                ]);
+
             }
         }
+        (new View("edit_profile"))->show([
+            "user" => $user,
+            "errors" => $errors,
+            "user_name" => $user->getFullName(),
+            "user_mail" => $user->getMail(),
+        ]);
+
+    }
+*/
+    public function edit_profile(): void
+    {
+        $user = $this->get_user_or_redirect();
+        $errors = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $full_name = $_POST['full_name'] ?? '';
+            $new_email = $_POST['email'] ?? '';
+
+            if (empty($full_name)) {
+                $errors = "Le champ du nom complet ne peut pas être vide.";
+            } elseif ($full_name != $user->getFullName()) {
+                $user->setName($full_name);
+                $errors = array_merge($errors, User::validate($full_name));
+                if (empty($errors)) {
+                    $user->persist_name();
+                }
+            }
+
+            if (empty($new_email)) {
+                $errors['email'] = "Le champ de l'email ne peut pas être vide.";
+            } elseif ($new_email != $user->getMail()) {
+                $emailErrors = User::validate_unicity($new_email);
+                if (empty($emailErrors)) {
+                    $user->setMail($new_email);
+                    $user->persist_mail();
+                } else {
+                    $errors['email'] = $emailErrors;
+                }
+            }
+
+            if (empty($errors)) {
+                $this->redirect("settings");
+            }
+        }
+
+        // Afficher la vue avec les erreurs potentielles
+        (new View("edit_profile"))->show([
+            "user" => $user,
+            "errors" => $errors,
+            "user_name" => $user->getFullName(),
+            "user_mail" => $user->getMail(),
+        ]);
     }
 
 
