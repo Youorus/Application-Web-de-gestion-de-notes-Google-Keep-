@@ -119,6 +119,7 @@ WHERE checklist_note_items.checklist_note = :id ORDER BY checklist_note_items.ch
             $errors['title'] = "The title must be between 3 and 25 characters.";
         }
 
+
         $itemNames = [];
         foreach ($this->getItems() as $item) {
             if (in_array($item->getContent(), $itemNames)) {

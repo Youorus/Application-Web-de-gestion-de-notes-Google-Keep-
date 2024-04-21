@@ -126,6 +126,9 @@ class ControllerChecklistnote extends Controller {
 
             $errors = $checklistNote->validate_checklistnote();
 
+            if($user->title_exist($title)){
+                $errors['title'] = "this title is already exist";
+            }
 
             $items = [];
             $listitems = [];
@@ -200,6 +203,10 @@ class ControllerChecklistnote extends Controller {
 
             if (strlen(trim($title)) > $maxLenght) {
                 $errors['title'] = "Le titre doit contenir au moins " . $maxLenght . " caractères.";
+            }
+
+            if($user->title_exist($title)){
+                $errors['title'] = "this title is already exist";
             }
 
             if (empty($errors)) {
@@ -357,18 +364,6 @@ class ControllerChecklistnote extends Controller {
 
     }
 */
-
-
-
-    private function validate(): void{
-        $user = $this->get_user_or_redirect();
-        $res = "false";
-        if (isset($_POST["test"])){
-            if($user->title_exist($_POST["test"]))
-                $res = "true";
-        }
-        echo $res;
-    }
 
 
 
