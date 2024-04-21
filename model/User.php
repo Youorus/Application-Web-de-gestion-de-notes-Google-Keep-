@@ -301,10 +301,25 @@ WHERE notes.owner = :id)", [
     }
 
     public function persist_mail() : User {
-        if(self::get_user_by_id($this->getId())) {
-            self::execute("UPDATE users SET mail = :mail, hashed_password = :hashed_password, full_name = :full_name, role = :role WHERE id = :id",
-                ["id" => $this->id, "mail" => $this->mail, "hashed_password" => $this->hashed_password, "full_name" => $this->full_name, "role" => $this->role]);
+        if (self::get_user_by_id($this->getId())) {
+            // Mise à jour uniquement du champ mail dans la table users
+            self::execute("UPDATE users SET mail = :mail WHERE id = :id",
+                [
+                    "id" => $this->id,
+                    "mail" => $this->mail
+                ]);
+        }
+        return $this;
+    }
 
+
+    public function persist_name() : User {
+        if (self::get_user_by_id($this->getId())) {
+            self::execute("UPDATE users SET full_name = :full_name WHERE id = :id",
+                [
+                    "id" => $this->id,
+                    "full_name" => $this->full_name
+                ]);
         }
         return $this;
     }
