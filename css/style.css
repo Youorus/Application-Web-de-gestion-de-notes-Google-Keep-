@@ -65,6 +65,16 @@ body{
     border-style: solid;
 }
 
+.custom{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/*.custom-card{*/
+/*    margin-left: 5%;*/
+/*}*/
+
 .card {
     background-color: var(--couleur-fond);
     border: 1px solid var(--couleur-bordure);
@@ -134,15 +144,12 @@ body{
   }
 
   /*style de pour telephone */
-@media only screen and (max-width: 600px) {
-.custom{
-    width: 30%;
-}
-
+@media (max-width: 640px) {
     .signup-box {
     margin-top: 25%;
         width: 95%;
     }
+
 }
 
 .bt-default{
@@ -159,9 +166,6 @@ body{
     .signup-box {
         margin-top: 25%;
         width: 60%;
-    }
-    .card{
-        width: 18rem;
     }
 
 }

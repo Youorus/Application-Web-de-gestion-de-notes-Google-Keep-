@@ -3,7 +3,7 @@ require_once 'model/TextNote.php';
 require_once 'framework/View.php';
 require_once 'framework/Controller.php';
 
-class ControllerAddTextNote extends Controller
+class ControllerAddtextnote extends Controller
 {
     public function index(): void
     {

@@ -6,7 +6,7 @@ require_once "model/CheckListNoteItem.php";
 require_once "model/NoteShare.php";
 
 
-class ControllerEditText extends Controller
+class ControllerEdittext extends Controller
 {
     public function index(): void
     {
